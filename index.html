@@ -303,46 +303,50 @@
             showLogin();
         }
         
-        async function loadDashboard() {
-            const savedEmail = sessionStorage.getItem('userEmail');
-            if (savedEmail) {
-                const userData = await callAPI(`/user/${encodeURIComponent(savedEmail)}`);
-                if (userData && userData.email) {
-                    currentUser = userData;
-                    document.getElementById("authSection").style.display = "none";
-                    document.getElementById("dashboardContent").style.display = "block";
-                    document.getElementById("userInfo").style.display = "flex";
-                    document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name} (${currentUser.email})`;
-                    document.getElementById("userReferralCode").textContent = currentUser.referral_code;
-                    document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
-                    document.getElementById("referralsNeeded").innerHTML = `${5 - (currentUser.referral_count || 0)} referrals left = 500MB`;
-                    
-                    const adminFlag = document.getElementById("adminFlagBtn");
-                    adminFlag.onclick = function() {
-                        const pwd = prompt("Enter admin code:");
-                        if (pwd === "000") {
-                            document.getElementById("adminPanel").style.display = "block";
-                            loadAdminData();
-                        } else {
-                            showToast("Wrong admin code!", "error");
-                        }
-                    };
-                    
+async function loadDashboard() {
+    const savedEmail = sessionStorage.getItem('userEmail');
+    if (savedEmail) {
+        const userData = await callAPI(`/user/${encodeURIComponent(savedEmail)}`);
+        if (userData && userData.email) {
+            currentUser = userData;
+            document.getElementById("authSection").style.display = "none";
+            document.getElementById("dashboardContent").style.display = "block";
+            document.getElementById("userInfo").style.display = "flex";
+            document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name} (${currentUser.email})`;
+            document.getElementById("userReferralCode").textContent = currentUser.referral_code;
+            document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
+            document.getElementById("referralsNeeded").innerHTML = `${5 - (currentUser.referral_count || 0)} referrals left = 500MB`;
+            
+            const adminFlag = document.getElementById("adminFlagBtn");
+            adminFlag.onclick = function() {
+                const pwd = prompt("Enter admin code:");
+                if (pwd === "000") {
+                    document.getElementById("adminPanel").style.display = "block";
                     loadAdminData();
-                    updateFreeCreditBanner();
-                    setInterval(loadAdminData, 5000);
-                    
-                    document.querySelectorAll(".admin-tab").forEach(tab => {
-                        tab.onclick = () => {
-                            document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
-                            tab.classList.add("active");
-                            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-                            document.getElementById(`${tab.dataset.tab}Tab`).classList.add("active");
-                        };
-                    });
+                } else {
+                    showToast("Wrong admin code!", "error");
                 }
-            }
+            };
+            
+            loadAdminData();
+            updateFreeCreditBanner();
+            
+            // ✅ CHECK FOR GAME TOKEN AFTER PAYMENT APPROVAL
+            await checkForGameToken();
+            
+            setInterval(loadAdminData, 5000);
+            
+            document.querySelectorAll(".admin-tab").forEach(tab => {
+                tab.onclick = () => {
+                    document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+                    tab.classList.add("active");
+                    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+                    document.getElementById(`${tab.dataset.tab}Tab`).classList.add("active");
+                };
+            });
         }
+    }
+}
         
         // ============================================
         // ADMIN FUNCTIONS
@@ -538,9 +542,32 @@
         // GAME & PAYMENT FUNCTIONS
         // ============================================
         
-        function updateFreeCreditBanner() {
-            // This will be handled by backend later
+       async function updateFreeCreditBanner() {
+    try {
+        const response = await fetch(`${API_URL}/free-credit-count`);
+        const data = await response.json();
+        const spotsLeft = 7 - data.claimedCount;
+        const spotsLeftSpan = document.getElementById("spotsLeft");
+        const banner = document.getElementById("freeDataBanner");
+        
+        if (spotsLeftSpan) {
+            spotsLeftSpan.textContent = spotsLeft > 0 ? spotsLeft : 0;
         }
+        
+        if (banner) {
+            if (spotsLeft <= 0) {
+                banner.classList.add("promo-ended");
+            } else {
+                banner.classList.remove("promo-ended");
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching free credit count:", error);
+        // Fallback to showing 0
+        const spotsLeftSpan = document.getElementById("spotsLeft");
+        if (spotsLeftSpan) spotsLeftSpan.textContent = "0";
+    }
+}
         
         function showLogin() {
             document.getElementById("loginForm").style.display = "block";
@@ -733,6 +760,31 @@
             content.classList.toggle("show");
             chevron.style.transform = content.classList.contains("show") ? "rotate(180deg)" : "rotate(0deg)";
         }
+        async function checkForGameToken() {
+    if (!currentUser) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/user-game-token/${currentUser.email}`);
+        const data = await response.json();
+        
+        if (data.hasToken) {
+            // Show the play button modal
+            document.getElementById("winReward").textContent = data.reward;
+            document.getElementById("gameAccessModal").style.display = "flex";
+            
+            // Store the token info for when user clicks play
+            window.pendingGameToken = {
+                tokenId: data.tokenId,
+                reward: data.reward,
+                amount: data.amount
+            };
+            
+            showToast("Your payment has been approved! Click Play Game Now.", "success");
+        }
+    } catch (error) {
+        console.error("Error checking game token:", error);
+    }
+}
         
         document.addEventListener("DOMContentLoaded", () => {
             loadDashboard();

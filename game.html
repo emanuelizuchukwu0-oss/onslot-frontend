@@ -447,7 +447,18 @@
         canvasX = Math.max(JET_WIDTH/2, Math.min(canvasX, canvas.width - JET_WIDTH/2));
         pointerX = canvasX;
     }
+    async function playGame() {
+    closeGameAccessModal();
     
+    if (window.pendingGameToken) {
+        // Use the token from the pending approval
+        window.location.href = `game.html?reward=${encodeURIComponent(window.pendingGameToken.reward)}&amount=${window.pendingGameToken.amount}&user=${encodeURIComponent(currentUser.email)}&token=${window.pendingGameToken.tokenId}`;
+    } else if (window.approvedGameData) {
+        window.location.href = `game.html?reward=${encodeURIComponent(window.approvedGameData.reward)}&amount=${window.approvedGameData.price}&user=${encodeURIComponent(currentUser.email)}`;
+    } else {
+        showToast("No active game session found. Please pay to play.", "error");
+    }
+}
     canvas.addEventListener("mousemove", (e) => { handlePointerMove(e.clientX); });
     canvas.addEventListener("click", () => { jump(); });
     canvas.addEventListener("touchmove", (e) => { e.preventDefault(); handlePointerMove(e.touches[0].clientX); });
