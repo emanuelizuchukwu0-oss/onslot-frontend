@@ -216,7 +216,7 @@
         let pendingWins = [];
         let selectedDailyRewardNetwork = "";
         let gameTokens = [];
-        const WEBSITE_URL = "https://onslot.onrender.com";
+       const WEBSITE_URL = "https://onslot-frontend.onrender.com";
         
         // ============================================
         // API CALL FUNCTIONS
@@ -659,9 +659,9 @@
         // REFERRAL SHARING
         // ============================================
         
-        function getReferralMessage() {
-            return `Join OnSlot and win data! Use my code: ${currentUser.referral_code}\n\n${WEBSITE_URL}`;
-        }
+      function getReferralMessage() {
+    return `Join OnSlot and win data! Use my code: ${currentUser.referral_code}\n\n${WEBSITE_URL}`;
+}
         
         function copyReferralCode() {
             const message = getReferralMessage();
