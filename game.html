@@ -190,31 +190,26 @@
     let userEmail = urlParams.get('user') || "";
     let gameToken = urlParams.get('token') || "";
     let selectedWinNetwork = "";
+    let tokenMarkedUsed = false;
     
     document.getElementById("rewardDisplay").textContent = targetReward;
     
-    // Validate token with backend
-    async function validateToken() {
-        if (!gameToken || !userEmail) {
-            alert("Invalid game session. Please pay to play.");
-            window.location.href = "index.html";
-            return false;
-        }
+    // Function to mark token as used in backend
+    async function markTokenAsUsed() {
+        if (tokenMarkedUsed || !gameToken) return;
         
         try {
-            const response = await fetch(`${API_URL}/user-game-token/${encodeURIComponent(userEmail)}`);
-            const data = await response.json();
-            
-            // Check if token exists and matches
-            if (!data.hasToken || data.tokenId != gameToken) {
-                alert("This game session has expired or been used. Please pay to play again.");
-                window.location.href = "index.html";
-                return false;
+            const response = await fetch(`${API_URL}/use-game-token/${gameToken}`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const result = await response.json();
+            if (result.success) {
+                tokenMarkedUsed = true;
+                console.log("Token marked as used");
             }
-            return true;
         } catch (error) {
-            console.error("Token validation error:", error);
-            return false;
+            console.error("Error marking token as used:", error);
         }
     }
     
@@ -278,6 +273,8 @@
                 gameEnded = true;
                 if (!winTriggered) {
                     winTriggered = true;
+                    // Mark token as used on WIN
+                    markTokenAsUsed();
                     showWinPhoneModal();
                 }
             } else {
@@ -364,6 +361,8 @@
                 gameRunning = false;
                 gameEnded = true;
                 clearInterval(timerInterval);
+                // Mark token as used on LOSS too!
+                markTokenAsUsed();
                 showGameOver();
                 return;
             }
@@ -477,12 +476,31 @@
     
     // Validate token before starting game
     (async function() {
-        const isValid = await validateToken();
-        if (isValid) {
-            // Mark token as used
-            await fetch(`${API_URL}/use-game-token/${gameToken}`, { method: 'POST' });
+        if (!gameToken) {
+            alert("Invalid game session. Please pay to play.");
+            window.location.href = "index.html";
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${API_URL}/user-game-token/${encodeURIComponent(userEmail)}`);
+            const data = await response.json();
+            
+            if (!data.hasToken || data.tokenId != gameToken) {
+                alert("This game session has expired or been used. Please pay to play again.");
+                window.location.href = "index.html";
+                return;
+            }
+            
+            // Mark token as used immediately when game starts
+            await markTokenAsUsed();
+            
             startTimer();
             gameLoop();
+        } catch (error) {
+            console.error("Token validation error:", error);
+            alert("Error validating game session. Please try again.");
+            window.location.href = "index.html";
         }
     })();
     
