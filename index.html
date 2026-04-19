@@ -596,6 +596,15 @@
                 updateAdminBadge();
             }
         }
+        async function cleanupOldTokens() {
+    if (!currentUser) return;
+    try {
+        // This tells the backend to mark any old unused tokens as used
+        await fetch(`${API_URL}/cleanup-tokens/${currentUser.email}`, { method: 'POST' });
+    } catch (error) {
+        console.error("Cleanup error:", error);
+    }
+}
         
         async function declinePayment(paymentId) {
             const result = await callAPI(`/admin/decline-payment/${paymentId}`, 'POST');
@@ -796,6 +805,7 @@
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
+        
         
         function closePaymentModal() {
             document.getElementById("paymentModal").style.display = "none";

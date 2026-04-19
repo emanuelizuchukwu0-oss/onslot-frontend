@@ -165,7 +165,7 @@
     </div>
 </div>
 
-<!-- Game Over Modal - NO "Try Again" button! Must pay again -->
+<!-- Game Over Modal -->
 <div id="gameOverModal" class="modal">
     <div class="modal-content">
         <div style="font-size: 70px;">💥</div>
@@ -190,29 +190,41 @@
     let userEmail = urlParams.get('user') || "";
     let gameToken = urlParams.get('token') || "";
     let selectedWinNetwork = "";
-    let tokenMarkedUsed = false;
+    let tokenMarked = false;
     
     document.getElementById("rewardDisplay").textContent = targetReward;
     
-    // Function to mark token as used in backend - call this IMMEDIATELY
-    async function markTokenAsUsed() {
-        if (tokenMarkedUsed || !gameToken) return false;
+    // Function to mark token as used - MULTIPLE RETRIES
+    async function markTokenAsUsed(retryCount = 0) {
+        if (tokenMarked || !gameToken) return true;
         
         try {
+            console.log(`🔄 Marking token as used (attempt ${retryCount + 1}):`, gameToken);
             const response = await fetch(`${API_URL}/use-game-token/${gameToken}`, { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
             const result = await response.json();
             if (result.success) {
-                tokenMarkedUsed = true;
-                console.log("✅ Token marked as used");
+                tokenMarked = true;
+                console.log("✅ Token marked as used successfully!");
                 return true;
+            } else {
+                console.log("❌ Failed to mark token:", result);
+                if (retryCount < 2) {
+                    await new Promise(r => setTimeout(r, 1000));
+                    return markTokenAsUsed(retryCount + 1);
+                }
+                return false;
             }
         } catch (error) {
-            console.error("Error marking token as used:", error);
+            console.error("Error marking token:", error);
+            if (retryCount < 2) {
+                await new Promise(r => setTimeout(r, 1000));
+                return markTokenAsUsed(retryCount + 1);
+            }
+            return false;
         }
-        return false;
     }
     
     async function callAPI(endpoint, method = 'GET', body = null) {
@@ -473,37 +485,62 @@
     }
     
     // ============================================
-    // START GAME - MARK TOKEN AS USED IMMEDIATELY
+    // INITIALIZE GAME - MARK TOKEN AS USED FIRST
     // ============================================
     (async function() {
+        console.log("=== GAME PAGE LOADED ===");
+        console.log("Token:", gameToken);
+        console.log("User:", userEmail);
+        console.log("Reward:", targetReward);
+        
         if (!gameToken) {
+            console.error("No token found in URL!");
             alert("Invalid game session. Please pay to play.");
             window.location.href = "index.html";
             return;
         }
         
         try {
-            // First, validate the token
+            // First, validate the token exists and is not used
+            console.log("Validating token...");
             const response = await fetch(`${API_URL}/user-game-token/${encodeURIComponent(userEmail)}`);
             const data = await response.json();
+            console.log("Token validation response:", data);
             
             if (!data.hasToken || data.tokenId != gameToken) {
+                console.error("Token is invalid or already used!");
                 alert("This game session has expired or been used. Please pay to play again.");
                 window.location.href = "index.html";
                 return;
             }
             
-            // CRITICAL: Mark token as used IMMEDIATELY when game loads
-            // This prevents the modal from showing again after loss
-            await markTokenAsUsed();
+            // CRITICAL: Mark token as used IMMEDIATELY with retries
+            console.log("Marking token as used...");
+            const marked = await markTokenAsUsed();
             
-            // Start the game
+            if (!marked) {
+                console.error("Failed to mark token as used after multiple attempts!");
+                alert("Error starting game. Please try again.");
+                window.location.href = "index.html";
+                return;
+            }
+            
+            // Double-check token is marked
+            const checkResponse = await fetch(`${API_URL}/user-game-token/${encodeURIComponent(userEmail)}`);
+            const checkData = await checkResponse.json();
+            console.log("After marking - token check:", checkData);
+            
+            if (checkData.hasToken) {
+                console.warn("Token still appears as active! This might cause issues.");
+            }
+            
+            console.log("Starting game...");
             startTimer();
             gameLoop();
             
         } catch (error) {
-            console.error("Token validation error:", error);
-            alert("Error validating game session. Please try again.");
+            console.error("Initialization error:", error);
+            alert("Error starting game. Please try again.");
             window.location.href = "index.html";
         }
     })();
