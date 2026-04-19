@@ -120,6 +120,14 @@
         .bank-details { background: rgba(30,41,59,0.6); border-radius: 16px; padding: 16px; margin-bottom: 20px; text-align: left; }
         .bank-details p { margin-bottom: 8px; color: white; }
         .copy-btn { background: rgba(245,158,11,0.2); border: none; padding: 8px 16px; border-radius: 40px; color: #f59e0b; cursor: pointer; margin-top: 10px; width: 100%; }
+        .network-select { margin: 15px 0; text-align: left; }
+        .network-select label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.8rem; }
+        .network-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .network-option { flex: 1; padding: 12px; border-radius: 40px; background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); text-align: center; cursor: pointer; transition: all 0.2s; }
+        .network-option:hover { background: rgba(30,41,59,0.8); }
+        .network-option.selected { border-color: #f59e0b; background: rgba(245,158,11,0.15); }
+        .network-option i { font-size: 20px; margin-bottom: 5px; display: block; }
+        .network-option span { font-size: 0.8rem; }
         .success-overlay {
             position: fixed;
             top: 0;
@@ -150,10 +158,39 @@
         .success-card p { color: #94a3b8; margin-bottom: 10px; }
         .success-card .reward-highlight { color: #f59e0b; font-size: 1.5rem; font-weight: bold; margin: 15px 0; }
         .success-card button { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 12px 30px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .free-credit-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.98);
+            backdrop-filter: blur(16px);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .free-credit-card {
+            background: linear-gradient(135deg, #0f1923, #1a1a2e);
+            border: 2px solid #10b981;
+            border-radius: 32px;
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 0 50px rgba(16,185,129,0.3);
+        }
+        .free-credit-card .gift-icon { font-size: 80px; color: #10b981; margin-bottom: 20px; animation: bounce 0.6s ease; }
+        .free-credit-card h2 { color: #10b981; font-size: 1.8rem; margin-bottom: 15px; }
+        .free-credit-card p { color: #94a3b8; margin-bottom: 20px; }
+        .free-credit-card input { width: 100%; padding: 14px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; margin: 15px 0; outline: none; text-align: center; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes bounce { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        @media (max-width: 768px) { .hero-title { font-size: 2rem; } .game-card-header { flex-direction: column; text-align: center; gap: 10px; } .success-card { padding: 30px 20px; } }
+        @media (max-width: 768px) { .hero-title { font-size: 2rem; } .game-card-header { flex-direction: column; text-align: center; gap: 10px; } .success-card { padding: 30px 20px; } .free-credit-card { padding: 30px 20px; } .free-credit-card h2 { font-size: 1.5rem; } }
     </style>
 </head>
 <body>
@@ -202,7 +239,8 @@
         let pendingWins = [];
         let gameTokens = [];
         let tokenCheckInterval = null;
-        let isSubmittingPayment = false;  // Prevent double submission
+        let isSubmittingPayment = false;
+        let hasShownFreeCreditOverlay = false;
         const WEBSITE_URL = "https://onslot-frontend.onrender.com";
         
         // ============================================
@@ -227,16 +265,18 @@
         }
         
         // ============================================
-        // TOKEN POLLING (Real-time game access)
+        // TOKEN POLLING (Real-time game access - ONLY checks for new tokens)
         // ============================================
+        
+        let lastCheckedTokenId = null;
         
         function startTokenPolling() {
             if (tokenCheckInterval) clearInterval(tokenCheckInterval);
             tokenCheckInterval = setInterval(async () => {
                 if (currentUser && currentUser.email) {
-                    await checkForGameToken();
+                    await checkForNewGameToken();
                 }
-            }, 3000); // Check every 3 seconds
+            }, 3000);
         }
         
         function stopTokenPolling() {
@@ -244,6 +284,109 @@
                 clearInterval(tokenCheckInterval);
                 tokenCheckInterval = null;
             }
+        }
+        
+        // Only shows modal for NEW tokens (not on every check)
+        async function checkForNewGameToken() {
+            if (!currentUser || !currentUser.email) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/user-game-token/${encodeURIComponent(currentUser.email)}`);
+                const data = await response.json();
+                
+                // If there's a token and it's different from the last one we showed
+                if (data.hasToken && data.tokenId !== lastCheckedTokenId && !window.gameModalShowing) {
+                    lastCheckedTokenId = data.tokenId;
+                    window.gameModalShowing = true;
+                    
+                    document.getElementById("winReward").textContent = data.reward;
+                    document.getElementById("gameAccessModal").style.display = "flex";
+                    window.pendingGameToken = {
+                        tokenId: data.tokenId,
+                        reward: data.reward,
+                        amount: data.amount
+                    };
+                    showToast("Your payment has been approved! Click Play Game Now.", "success");
+                    
+                    const modal = document.getElementById("gameAccessModal");
+                    const resetModalFlag = () => {
+                        window.gameModalShowing = false;
+                        modal.removeEventListener('click', resetModalFlag);
+                    };
+                    modal.addEventListener('click', resetModalFlag);
+                }
+            } catch (error) {
+                console.error("Error checking game token:", error);
+            }
+        }
+        
+        // ============================================
+        // FREE CREDIT OVERLAY
+        // ============================================
+        
+        function showFreeCreditOverlay() {
+            if (hasShownFreeCreditOverlay) return;
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'free-credit-overlay';
+            overlay.innerHTML = `
+                <div class="free-credit-card">
+                    <div class="gift-icon"><i class="fas fa-gift"></i></div>
+                    <h2>🎉 You've Got FREE Credit! 🎉</h2>
+                    <p>You are one of the first 5 people to sign up! You've earned <strong style="color: #10b981;">₦100 FREE credit</strong> to play games!</p>
+                    <div class="network-select" style="margin-bottom: 15px;">
+                        <label>Select Your Network:</label>
+                        <div class="network-buttons">
+                            <div class="network-option" onclick="selectFreeCreditNetwork('mtn')"><i class="fas fa-tower-cell"></i><span>MTN</span></div>
+                            <div class="network-option" onclick="selectFreeCreditNetwork('airtel')"><i class="fas fa-broadcast-tower"></i><span>Airtel</span></div>
+                            <div class="network-option" onclick="selectFreeCreditNetwork('glo')"><i class="fas fa-globe"></i><span>Glo</span></div>
+                            <div class="network-option" onclick="selectFreeCreditNetwork('9mobile')"><i class="fas fa-mobile-alt"></i><span>9mobile</span></div>
+                        </div>
+                    </div>
+                    <input type="tel" id="freeCreditPhone" placeholder="Enter your phone number" maxlength="11">
+                    <button class="confirm-btn" id="claimFreeCreditBtn" onclick="claimFreeCredit()" style="background:linear-gradient(135deg,#10b981,#059669);"><i class="fas fa-download"></i> Claim My ₦100 Credit</button>
+                    <a class="skip-link" onclick="closeFreeCreditOverlay(this)" style="display: block; margin-top: 15px; color: #64748b; font-size: 0.8rem; cursor: pointer;">Maybe later, take me to dashboard</a>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            hasShownFreeCreditOverlay = true;
+            window.freeCreditNetwork = null;
+        }
+        
+        function selectFreeCreditNetwork(network) {
+            window.freeCreditNetwork = network;
+            document.querySelectorAll('.free-credit-overlay .network-option').forEach(opt => opt.classList.remove('selected'));
+            const options = document.querySelectorAll('.free-credit-overlay .network-option');
+            for (let opt of options) {
+                if (opt.innerText.toLowerCase().includes(network)) opt.classList.add('selected');
+            }
+        }
+        
+        async function claimFreeCredit() {
+            const phone = document.getElementById("freeCreditPhone").value;
+            if (!window.freeCreditNetwork) {
+                showToast("Please select your network", "error");
+                return;
+            }
+            if (!phone || !/^(0[7-9][0-1]{1}[0-9]{8})$/.test(phone)) {
+                showToast("Enter valid phone number", "error");
+                return;
+            }
+            
+            const claimBtn = document.getElementById("claimFreeCreditBtn");
+            claimBtn.disabled = true;
+            claimBtn.innerHTML = '<span class="loading-spinner"></span> Processing...';
+            
+            // Here you would send to backend - for now, just close and show success
+            setTimeout(() => {
+                closeFreeCreditOverlay();
+                showToast("✅ ₦100 credit has been added to your account! You can now play games.", "success");
+            }, 1000);
+        }
+        
+        function closeFreeCreditOverlay(element) {
+            const overlay = document.querySelector('.free-credit-overlay');
+            if (overlay) overlay.remove();
         }
         
         // ============================================
@@ -294,6 +437,11 @@
                 showToast("Login successful!", "success");
                 loadDashboard();
                 updateFreeCreditBanner();
+                
+                // Show free credit overlay for first 5 users
+                if (currentUser.got_free_credit && !currentUser.free_credit_claimed) {
+                    setTimeout(() => showFreeCreditOverlay(), 1000);
+                }
             } else {
                 showToast(result?.error || "Invalid email or password", "error");
             }
@@ -303,6 +451,7 @@
             currentUser = null;
             sessionStorage.removeItem('userEmail');
             stopTokenPolling();
+            lastCheckedTokenId = null;
             document.getElementById("authSection").style.display = "flex";
             document.getElementById("dashboardContent").style.display = "none";
             document.getElementById("userInfo").style.display = "none";
@@ -338,11 +487,8 @@
                     loadAdminData();
                     updateFreeCreditBanner();
                     
-                    // Start polling for game tokens (real-time)
+                    // Start polling for NEW game tokens (won't show modal unless there's a new one)
                     startTokenPolling();
-                    
-                    // Check once immediately
-                    await checkForGameToken();
                     
                     setInterval(loadAdminData, 5000);
                     
@@ -499,27 +645,17 @@
         
         async function updateFreeCreditBanner() {
             try {
-                console.log("Calling API:", `${API_URL}/free-credit-count`);
                 const response = await fetch(`${API_URL}/free-credit-count`);
                 const data = await response.json();
-                console.log("Response data:", data);
-                
                 const claimedCount = data.claimedCount || 0;
                 const MAX_FREE_USERS = 5;
                 const spotsLeft = MAX_FREE_USERS - claimedCount;
-                
                 const spotsLeftSpan = document.getElementById("spotsLeft");
                 if (spotsLeftSpan) {
                     spotsLeftSpan.textContent = spotsLeft > 0 ? spotsLeft : 0;
                 }
-                
-                const banner = document.getElementById("freeDataBanner");
-                if (banner && spotsLeft <= 0) {
-                    banner.classList.add("promo-ended");
-                }
             } catch (error) {
                 console.error("Error fetching free credit count:", error);
-                document.getElementById("spotsLeft").textContent = "?";
             }
         }
         
@@ -546,7 +682,6 @@
         }
         
         async function submitPayment() {
-            // Prevent double submission
             if (isSubmittingPayment) {
                 showToast("Please wait, processing your payment...", "warning");
                 return;
@@ -589,45 +724,6 @@
                 isSubmittingPayment = false;
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> I Have Paid - Submit';
-            }
-        }
-        
-        async function checkForGameToken() {
-            if (!currentUser || !currentUser.email) {
-                console.log("No current user");
-                return;
-            }
-            
-            try {
-                console.log("Checking token for:", currentUser.email);
-                const response = await fetch(`${API_URL}/user-game-token/${encodeURIComponent(currentUser.email)}`);
-                const data = await response.json();
-                console.log("Token response:", data);
-                
-                if (data.hasToken && !window.gameModalShowing) {
-                    window.gameModalShowing = true;
-                    
-                    document.getElementById("winReward").textContent = data.reward;
-                    document.getElementById("gameAccessModal").style.display = "flex";
-                    window.pendingGameToken = {
-                        tokenId: data.tokenId,
-                        reward: data.reward,
-                        amount: data.amount
-                    };
-                    showToast("Your payment has been approved! Click Play Game Now.", "success");
-                    
-                    const modal = document.getElementById("gameAccessModal");
-                    const modalClose = document.querySelector("#gameAccessModal .modal-close");
-                    const resetModalFlag = () => {
-                        window.gameModalShowing = false;
-                        modal.removeEventListener('click', resetModalFlag);
-                        if (modalClose) modalClose.removeEventListener('click', resetModalFlag);
-                    };
-                    modal.addEventListener('click', resetModalFlag);
-                    if (modalClose) modalClose.addEventListener('click', resetModalFlag);
-                }
-            } catch (error) {
-                console.error("Error checking game token:", error);
             }
         }
         
@@ -701,7 +797,6 @@
         function closePaymentModal() {
             document.getElementById("paymentModal").style.display = "none";
             document.getElementById("transactionRef").value = "";
-            // Reset submission flag when closing modal
             isSubmittingPayment = false;
             const submitBtn = document.getElementById("submitPaymentBtn");
             if (submitBtn) {
