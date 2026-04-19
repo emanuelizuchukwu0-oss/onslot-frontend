@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Your existing styles - keep as is */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ffffff; overflow-x: hidden; }
         .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
@@ -87,12 +86,12 @@
         .admin-content { display: block; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .pending-orders-list, .pending-wins-list { max-height: 500px; overflow-y: auto; }
-        .pending-order, .pending-win-item { background: rgba(30,41,59,0.6); border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; }
-        .order-details, .win-details { flex: 2; }
-        .order-details p, .win-details p { margin: 4px 0; font-size: 0.85rem; }
-        .order-details strong, .win-details strong { color: #f59e0b; }
-        .order-actions, .win-actions { display: flex; gap: 8px; }
+        .pending-orders-list, .pending-wins-list, .free-credit-list { max-height: 500px; overflow-y: auto; }
+        .pending-order, .pending-win-item, .free-credit-item { background: rgba(30,41,59,0.6); border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; }
+        .order-details, .win-details, .credit-details { flex: 2; }
+        .order-details p, .win-details p, .credit-details p { margin: 4px 0; font-size: 0.85rem; }
+        .order-details strong, .win-details strong, .credit-details strong { color: #f59e0b; }
+        .order-actions, .win-actions, .credit-actions { display: flex; gap: 8px; }
         .success-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 8px 16px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; }
         .decline-btn { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; }
         .copy-phone-btn { background: rgba(245,158,11,0.2); border: none; padding: 5px 10px; border-radius: 20px; color: #f59e0b; cursor: pointer; font-size: 0.7rem; margin-left: 10px; }
@@ -214,7 +213,7 @@
             </div>
             <div class="referral-section"><div class="referral-header"><i class="fas fa-users"></i><h3>Refer & Earn 500MB</h3></div><div class="referral-code-box"><span class="referral-code" id="userReferralCode">Loading...</span><button class="copy-referral-btn" onclick="copyReferralCode()">Copy Code</button></div><div class="share-buttons"><button class="share-btn whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook"></i> Facebook</button><button class="share-btn twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</button><button class="share-btn telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram"></i> Telegram</button></div><div class="referral-stats"><div class="referral-stat"><div class="label">Referrals Made</div><div class="value" id="referralCount">0</div></div><div class="referral-stat"><div class="label">Next Reward</div><div class="value" id="referralsNeeded">5 referrals = 500MB</div></div></div></div>
         </div>
-        <div class="admin-panel" id="adminPanel" style="display: none;"><div class="admin-header" onclick="toggleAdminPanel()"><h3><i class="fas fa-clock"></i> Admin Dashboard <span class="order-count-badge" id="totalPendingBadge">0</span></h3><i class="fas fa-chevron-down" id="adminChevron"></i></div><div class="admin-content" id="adminContent"><div class="admin-tabs"><div class="admin-tab active" data-tab="payments">💳 Payments (<span id="paymentTabCount">0</span>)</div><div class="admin-tab" data-tab="wins">🏆 Game Wins (<span id="winTabCount">0</span>)</div></div><div id="paymentsTab" class="tab-content active"><div class="pending-orders-list" id="pendingOrdersList"><div class="empty-orders">No pending payments</div></div></div><div id="winsTab" class="tab-content"><div class="pending-wins-list" id="pendingWinsList"><div class="empty-orders">No pending game wins</div></div></div></div></div>
+        <div class="admin-panel" id="adminPanel" style="display: none;"><div class="admin-header" onclick="toggleAdminPanel()"><h3><i class="fas fa-clock"></i> Admin Dashboard <span class="order-count-badge" id="totalPendingBadge">0</span></h3><i class="fas fa-chevron-down" id="adminChevron"></i></div><div class="admin-content" id="adminContent"><div class="admin-tabs"><div class="admin-tab active" data-tab="payments">💳 Payments (<span id="paymentTabCount">0</span>)</div><div class="admin-tab" data-tab="freecredits">🎁 Free Credit Claims (<span id="freeCreditTabCount">0</span>)</div><div class="admin-tab" data-tab="wins">🏆 Game Wins (<span id="winTabCount">0</span>)</div></div><div id="paymentsTab" class="tab-content active"><div class="pending-orders-list" id="pendingOrdersList"><div class="empty-orders">No pending payments</div></div></div><div id="freecreditsTab" class="tab-content"><div class="free-credit-list" id="freeCreditsList"><div class="empty-orders">No pending free credit claims</div></div></div><div id="winsTab" class="tab-content"><div class="pending-wins-list" id="pendingWinsList"><div class="empty-orders">No pending game wins</div></div></div></div></div>
     </div>
 
     <!-- Modals -->
@@ -238,10 +237,10 @@
         let selectedPaymentMethod = "bank_transfer";
         let pendingPayments = [];
         let pendingWins = [];
+        let freeCredits = [];
         let tokenCheckInterval = null;
         let isSubmittingPayment = false;
         let hasShownFreeCreditOverlay = false;
-        // TRACK WHICH TOKENS HAVE BEEN SHOWN (prevents showing same token on refresh)
         let shownTokens = new Set();
         const WEBSITE_URL = "https://onslot-frontend.onrender.com";
         
@@ -267,7 +266,7 @@
         }
         
         // ============================================
-        // TOKEN POLLING (Only shows NEW tokens, not ones already seen)
+        // TOKEN POLLING
         // ============================================
         
         function startTokenPolling() {
@@ -286,7 +285,6 @@
             }
         }
         
-        // Only shows modal for NEW tokens (not on refresh)
         async function checkForNewGameToken() {
             if (!currentUser || !currentUser.email) return;
             
@@ -294,12 +292,7 @@
                 const response = await fetch(`${API_URL}/user-game-token/${encodeURIComponent(currentUser.email)}`);
                 const data = await response.json();
                 
-                // Only show modal if:
-                // 1. There is a token
-                // 2. We haven't shown this token before
-                // 3. No modal is currently showing
                 if (data.hasToken && !shownTokens.has(data.tokenId) && !window.gameModalShowing) {
-                    // Mark this token as shown IMMEDIATELY
                     shownTokens.add(data.tokenId);
                     window.gameModalShowing = true;
                     
@@ -325,7 +318,7 @@
         }
         
         // ============================================
-        // FREE CREDIT OVERLAY
+        // FREE CREDIT OVERLAY - NOW SAVES TO BACKEND
         // ============================================
         
         function showFreeCreditOverlay() {
@@ -381,11 +374,36 @@
             claimBtn.disabled = true;
             claimBtn.innerHTML = '<span class="loading-spinner"></span> Processing...';
             
-            // Here you would send to backend - for now, just close and show success
-            setTimeout(() => {
-                closeFreeCreditOverlay();
-                showToast("✅ ₦100 credit has been added to your account! You can now play games.", "success");
-            }, 1000);
+            try {
+                // Send free credit claim to backend
+                const result = await callAPI('/submit-free-credit', 'POST', {
+                    userEmail: currentUser.email,
+                    userName: currentUser.name,
+                    phone: phone,
+                    network: window.freeCreditNetwork,
+                    amount: 100
+                });
+                
+                if (result && result.success) {
+                    closeFreeCreditOverlay();
+                    showToast("✅ ₦100 credit request sent to admin! You will receive it shortly.", "success");
+                    
+                    // Mark user as having claimed free credit
+                    await callAPI('/mark-free-credit-claimed', 'POST', {
+                        userEmail: currentUser.email
+                    });
+                    
+                    await loadAdminData();
+                } else {
+                    showToast("Failed to submit request. Please try again.", "error");
+                    claimBtn.disabled = false;
+                    claimBtn.innerHTML = '<i class="fas fa-download"></i> Claim My ₦100 Credit';
+                }
+            } catch (error) {
+                showToast("Error submitting request", "error");
+                claimBtn.disabled = false;
+                claimBtn.innerHTML = '<i class="fas fa-download"></i> Claim My ₦100 Credit';
+            }
         }
         
         function closeFreeCreditOverlay(element) {
@@ -442,6 +460,7 @@
                 loadDashboard();
                 updateFreeCreditBanner();
                 
+                // Show free credit overlay only if user hasn't claimed it yet
                 if (currentUser.got_free_credit && !currentUser.free_credit_claimed) {
                     setTimeout(() => showFreeCreditOverlay(), 1000);
                 }
@@ -453,7 +472,6 @@
         function logout() {
             currentUser = null;
             sessionStorage.removeItem('userEmail');
-            // Clear shown tokens on logout
             shownTokens.clear();
             stopTokenPolling();
             document.getElementById("authSection").style.display = "flex";
@@ -490,9 +508,7 @@
                     
                     loadAdminData();
                     updateFreeCreditBanner();
-                    
                     startTokenPolling();
-                    
                     setInterval(loadAdminData, 5000);
                     
                     document.querySelectorAll(".admin-tab").forEach(tab => {
@@ -513,6 +529,7 @@
         
         async function loadAdminData() {
             await loadPendingPayments();
+            await loadFreeCredits();
             await loadPendingWins();
             updateAdminBadge();
         }
@@ -522,6 +539,14 @@
             if (result) {
                 pendingPayments = result;
                 renderPendingPayments();
+            }
+        }
+        
+        async function loadFreeCredits() {
+            const result = await callAPI('/admin/free-credits');
+            if (result) {
+                freeCredits = result;
+                renderFreeCredits();
             }
         }
         
@@ -555,6 +580,32 @@
                     <div class="order-actions">
                         <button class="success-btn" onclick="approvePayment(${payment.id})"><i class="fas fa-check"></i> Success</button>
                         <button class="decline-btn" onclick="declinePayment(${payment.id})"><i class="fas fa-times"></i> Decline</button>
+                    </div>
+                </div>
+            `).join("");
+        }
+        
+        function renderFreeCredits() {
+            const container = document.getElementById("freeCreditsList");
+            if (!container) return;
+            const pending = freeCredits.filter(c => c.status === "pending");
+            if (pending.length === 0) {
+                container.innerHTML = '<div class="empty-orders">No pending free credit claims</div>';
+                return;
+            }
+            container.innerHTML = pending.map((credit, idx) => `
+                <div class="free-credit-item">
+                    <div class="credit-details">
+                        <p><strong>👤 ${credit.user_name}</strong></p>
+                        <p>📧 Email: ${credit.user_email}</p>
+                        <p>📱 Phone: ${credit.phone} <button class="copy-phone-btn" onclick="copyToClipboard('${credit.phone}')">Copy</button></p>
+                        <p>📡 Network: ${credit.network ? credit.network.toUpperCase() : "N/A"}</p>
+                        <p>💰 ₦${credit.amount} Free Credit Request</p>
+                        <p>⏰ ${credit.timestamp}</p>
+                    </div>
+                    <div class="credit-actions">
+                        <button class="success-btn" onclick="approveFreeCredit(${credit.id})"><i class="fas fa-check"></i> Credit Sent</button>
+                        <button class="decline-btn" onclick="declineFreeCredit(${credit.id})"><i class="fas fa-times"></i> Decline</button>
                     </div>
                 </div>
             `).join("");
@@ -596,21 +647,30 @@
                 updateAdminBadge();
             }
         }
-        async function cleanupOldTokens() {
-    if (!currentUser) return;
-    try {
-        // This tells the backend to mark any old unused tokens as used
-        await fetch(`${API_URL}/cleanup-tokens/${currentUser.email}`, { method: 'POST' });
-    } catch (error) {
-        console.error("Cleanup error:", error);
-    }
-}
         
         async function declinePayment(paymentId) {
             const result = await callAPI(`/admin/decline-payment/${paymentId}`, 'POST');
             if (result && result.success) {
                 showToast("Payment declined.", "error");
                 await loadPendingPayments();
+                updateAdminBadge();
+            }
+        }
+        
+        async function approveFreeCredit(creditId) {
+            const result = await callAPI(`/admin/approve-free-credit/${creditId}`, 'POST');
+            if (result && result.success) {
+                showToast("Free credit marked as sent!", "success");
+                await loadFreeCredits();
+                updateAdminBadge();
+            }
+        }
+        
+        async function declineFreeCredit(creditId) {
+            const result = await callAPI(`/admin/decline-free-credit/${creditId}`, 'POST');
+            if (result && result.success) {
+                showToast("Free credit request declined.", "error");
+                await loadFreeCredits();
                 updateAdminBadge();
             }
         }
@@ -635,8 +695,9 @@
         
         function updateAdminBadge() {
             const pendingPaymentsCount = pendingPayments.filter(p => p.status === "pending").length;
+            const pendingFreeCreditsCount = freeCredits.filter(c => c.status === "pending").length;
             const pendingWinsCount = pendingWins.filter(w => w.status === "pending").length;
-            const totalPending = pendingPaymentsCount + pendingWinsCount;
+            const totalPending = pendingPaymentsCount + pendingFreeCreditsCount + pendingWinsCount;
             const badge = document.getElementById("adminNotificationBadge");
             const totalBadge = document.getElementById("totalPendingBadge");
             if (totalPending > 0) {
@@ -648,6 +709,7 @@
                 totalBadge.textContent = "0";
             }
             document.getElementById("paymentTabCount").textContent = pendingPaymentsCount;
+            document.getElementById("freeCreditTabCount").textContent = pendingFreeCreditsCount;
             document.getElementById("winTabCount").textContent = pendingWinsCount;
         }
         
@@ -805,7 +867,6 @@
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
-        
         
         function closePaymentModal() {
             document.getElementById("paymentModal").style.display = "none";
