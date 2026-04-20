@@ -286,6 +286,9 @@
     <footer class="footer"><p>&copy; 2024 OnSlot. All rights reserved. | Buy Cheap Data</p></footer>
 
     <script>
+        // Clear any existing sessions on page load - FRESH START
+sessionStorage.clear();
+localStorage.clear();
         const API_URL = 'https://onslot.onrender.com/api';
         let currentUser = null;
         let selectedAmount = null;
