@@ -47,19 +47,42 @@
         .auth-switch { margin-top: 20px; color: #94a3b8; }
         .auth-switch a { color: #f59e0b; text-decoration: none; cursor: pointer; }
         .dashboard-content { display: none; }
-        .fund-section, .data-section { background: rgba(15,25,35,0.6); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.2); }
+        
+        /* Fund Wallet Section */
+        .fund-section { background: rgba(15,25,35,0.6); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.2); }
         .section-title { font-size: 1.3rem; margin-bottom: 20px; color: #f59e0b; display: flex; align-items: center; gap: 10px; }
-        .amount-buttons { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
+        .fund-main-btn { width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 18px; border-radius: 60px; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .fund-main-btn:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(245,158,11,0.3); }
+        
+        /* Step 1: Account Details */
+        .account-details { background: rgba(30,41,59,0.8); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(245,158,11,0.3); }
+        .account-details p { margin: 10px 0; font-size: 0.9rem; }
+        .account-details strong { color: #f59e0b; }
+        .copy-account-btn { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 8px 16px; border-radius: 40px; color: #f59e0b; cursor: pointer; width: 100%; margin-top: 10px; }
+        
+        /* Step 2: Amount Options */
+        .amount-section { display: none; margin-top: 20px; }
+        .amount-section.show { display: block; }
+        .amount-buttons { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
         .amount-btn { background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); border-radius: 60px; padding: 12px 24px; cursor: pointer; transition: all 0.2s; font-weight: 600; }
         .amount-btn:hover { border-color: #f59e0b; background: rgba(245,158,11,0.1); }
         .amount-btn.selected { border-color: #f59e0b; background: rgba(245,158,11,0.2); color: #f59e0b; }
+        .proceed-payment-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; margin-top: 10px; display: none; }
+        .proceed-payment-btn.show { display: block; }
+        
+        /* Step 3: Payment Methods */
+        .payment-section { display: none; margin-top: 20px; }
+        .payment-section.show { display: block; }
         .payment-methods { display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
         .payment-method { flex: 1; background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
         .payment-method:hover { background: rgba(30,41,59,0.8); }
         .payment-method.selected { border-color: #f59e0b; background: rgba(245,158,11,0.15); }
         .payment-method i { font-size: 24px; margin-bottom: 5px; display: block; }
         .confirm-input { width: 100%; padding: 14px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; margin: 15px 0; outline: none; }
-        .confirm-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .submit-funding-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        /* Buy Data Section */
+        .data-section { background: rgba(15,25,35,0.6); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.2); }
         .network-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
         .network-btn { flex: 1; background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; }
         .network-btn:hover { transform: translateY(-2px); }
@@ -76,6 +99,10 @@
         .plan-size { font-size: 1rem; font-weight: 700; }
         .plan-price { font-size: 1.1rem; font-weight: bold; margin-top: 5px; color: #f59e0b; }
         .phone-input { margin: 15px 0; }
+        .buy-data-btn { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .buy-data-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        /* Referral Section */
         .referral-section { background: rgba(15,25,35,0.7); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 40px; max-width: 550px; margin-left: auto; margin-right: auto; border: 1px solid rgba(245,158,11,0.2); }
         .referral-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
         .referral-header i { font-size: 28px; color: #f59e0b; }
@@ -90,6 +117,8 @@
         .share-btn.telegram { background: #0088cc; color: white; }
         .referral-stats { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.08); }
         .referral-stat { text-align: center; flex: 1; }
+        
+        /* Admin Panel */
         .admin-panel { background: rgba(15,25,35,0.95); backdrop-filter: blur(12px); border: 1px solid rgba(245,158,11,0.3); border-radius: 28px; padding: 24px; margin-bottom: 40px; max-width: 900px; margin-left: auto; margin-right: auto; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.08); cursor: pointer; }
         .admin-header h3 { display: flex; align-items: center; gap: 10px; }
@@ -110,9 +139,6 @@
         .decline-btn { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; }
         .copy-btn { background: rgba(245,158,11,0.2); border: none; padding: 5px 10px; border-radius: 20px; color: #f59e0b; cursor: pointer; font-size: 0.7rem; margin-left: 10px; }
         .empty-orders { text-align: center; padding: 40px; color: #94a3b8; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { position: relative; max-width: 500px; width: 90%; background: rgba(15,25,35,0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; padding: 40px 32px; text-align: center; }
-        .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 20px; cursor: pointer; color: #94a3b8; }
         .toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1100; }
         .toast { background: rgba(15,25,35,0.95); backdrop-filter: blur(12px); padding: 12px 24px; border-radius: 50px; font-size: 0.875rem; display: flex; align-items: center; gap: 8px; animation: slideUp 0.3s ease; }
         .toast.success { border-left: 3px solid #10b981; }
@@ -120,8 +146,7 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .footer { background: rgba(5,5,5,0.9); padding: 40px 24px 20px; text-align: center; }
         .footer p { color: #94a3b8; font-size: 0.8rem; }
-        .bank-details { background: rgba(30,41,59,0.6); border-radius: 16px; padding: 16px; margin-bottom: 20px; text-align: left; }
-        @media (max-width: 768px) { .hero-title { font-size: 2rem; } .plans-grid { grid-template-columns: repeat(2, 1fr); } .pending-item { flex-direction: column; } .item-actions { width: 100%; justify-content: center; } }
+        @media (max-width: 768px) { .hero-title { font-size: 2rem; } .plans-grid { grid-template-columns: repeat(2, 1fr); } .pending-item { flex-direction: column; } .item-actions { width: 100%; justify-content: center; } .amount-buttons { justify-content: center; } .payment-methods { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -139,22 +164,40 @@
             <!-- Fund Wallet Section -->
             <div class="fund-section">
                 <div class="section-title"><i class="fas fa-wallet"></i> Fund Your Wallet</div>
-                <div class="amount-buttons">
-                    <div class="amount-btn" data-amount="200">₦200</div>
-                    <div class="amount-btn" data-amount="500">₦500</div>
-                    <div class="amount-btn" data-amount="1000">₦1,000</div>
-                    <div class="amount-btn" data-amount="2000">₦2,000</div>
-                    <div class="amount-btn" data-amount="5000">₦5,000</div>
-                    <div class="amount-btn" data-amount="10000">₦10,000</div>
+                <button class="fund-main-btn" id="fundMainBtn"><i class="fas fa-plus-circle"></i> Fund Wallet</button>
+                
+                <!-- Step 1: Account Details (hidden initially) -->
+                <div id="accountDetails" class="account-details" style="display: none;">
+                    <p><strong><i class="fas fa-university"></i> Bank:</strong> Moniepoint MFB</p>
+                    <p><strong><i class="fas fa-user"></i> Account Name:</strong> Sunday Ijeoma Anastasia</p>
+                    <p><strong><i class="fas fa-credit-card"></i> Account Number:</strong> <span id="accountNumber">9066051034</span></p>
+                    <button class="copy-account-btn" onclick="copyAccountNumber()"><i class="fas fa-copy"></i> Copy Account Number</button>
                 </div>
-                <div class="payment-methods">
-                    <div class="payment-method" data-method="bank_transfer" onclick="selectFundingMethod('bank_transfer')"><i class="fas fa-exchange-alt"></i><span>Bank Transfer</span></div>
-                    <div class="payment-method" data-method="ussd" onclick="selectFundingMethod('ussd')"><i class="fas fa-mobile-alt"></i><span>USSD Transfer</span></div>
-                    <div class="payment-method" data-method="pos" onclick="selectFundingMethod('pos')"><i class="fas fa-credit-card"></i><span>Local POS</span></div>
-                    <div class="payment-method" data-method="card" onclick="selectFundingMethod('card')"><i class="fas fa-credit-card"></i><span>Card Payment</span></div>
+                
+                <!-- Step 2: Amount Options (hidden initially) -->
+                <div id="amountSection" class="amount-section">
+                    <div class="amount-buttons">
+                        <div class="amount-btn" data-amount="200">₦200</div>
+                        <div class="amount-btn" data-amount="500">₦500</div>
+                        <div class="amount-btn" data-amount="1000">₦1,000</div>
+                        <div class="amount-btn" data-amount="2000">₦2,000</div>
+                        <div class="amount-btn" data-amount="5000">₦5,000</div>
+                        <div class="amount-btn" data-amount="10000">₦10,000</div>
+                    </div>
+                    <button id="proceedPaymentBtn" class="proceed-payment-btn">I Have Paid - Proceed</button>
                 </div>
-                <input type="text" id="fundingRef" class="confirm-input" placeholder="Transaction reference / Receipt code">
-                <button class="confirm-btn" onclick="submitFunding()" style="background:linear-gradient(135deg,#f59e0b,#d97706);"><i class="fas fa-check-circle"></i> I Have Paid - Fund Wallet</button>
+                
+                <!-- Step 3: Payment Methods (hidden initially) -->
+                <div id="paymentSection" class="payment-section">
+                    <div class="payment-methods">
+                        <div class="payment-method" data-method="bank_transfer" onclick="selectFundingMethod('bank_transfer')"><i class="fas fa-exchange-alt"></i><span>Bank Transfer</span></div>
+                        <div class="payment-method" data-method="ussd" onclick="selectFundingMethod('ussd')"><i class="fas fa-mobile-alt"></i><span>USSD Transfer</span></div>
+                        <div class="payment-method" data-method="pos" onclick="selectFundingMethod('pos')"><i class="fas fa-credit-card"></i><span>Local POS</span></div>
+                        <div class="payment-method" data-method="card" onclick="selectFundingMethod('card')"><i class="fas fa-credit-card"></i><span>Card Payment</span></div>
+                    </div>
+                    <input type="text" id="fundingTransactionRef" class="confirm-input" placeholder="Transaction reference / Receipt code">
+                    <button class="submit-funding-btn" onclick="submitFundingConfirm()"><i class="fas fa-check-circle"></i> Confirm & Submit</button>
+                </div>
             </div>
 
             <!-- Buy Data Section -->
@@ -168,7 +211,7 @@
                 </div>
                 <div id="plansContainer" class="plans-grid"><div class="empty-orders">Select a network to see available plans</div></div>
                 <div class="phone-input"><input type="tel" id="purchasePhone" class="confirm-input" placeholder="Enter phone number to receive data" maxlength="11"></div>
-                <button class="confirm-btn" id="buyDataBtn" onclick="submitPurchase()" style="background:linear-gradient(135deg,#f59e0b,#d97706);" disabled><i class="fas fa-shopping-cart"></i> Buy Data</button>
+                <button class="buy-data-btn" id="buyDataBtn" onclick="submitPurchase()" disabled><i class="fas fa-shopping-cart"></i> Buy Data</button>
             </div>
 
             <!-- Referral Section -->
@@ -178,9 +221,6 @@
         <!-- Admin Panel -->
         <div class="admin-panel" id="adminPanel" style="display: none;"><div class="admin-header" onclick="toggleAdminPanel()"><h3><i class="fas fa-clock"></i> Admin Dashboard <span class="order-count-badge" id="totalPendingBadge">0</span></h3><i class="fas fa-chevron-down" id="adminChevron"></i></div><div class="admin-content" id="adminContent"><div class="admin-tabs"><div class="admin-tab active" data-tab="funding">💰 Wallet Funding (<span id="fundingTabCount">0</span>)</div><div class="admin-tab" data-tab="purchases">📱 Data Purchases (<span id="purchaseTabCount">0</span>)</div></div><div id="fundingTab" class="tab-content active"><div class="pending-list" id="fundingList"><div class="empty-orders">No pending funding requests</div></div></div><div id="purchasesTab" class="tab-content"><div class="pending-list" id="purchasesList"><div class="empty-orders">No pending data purchases</div></div></div></div></div>
     </div>
-
-    <!-- Modals -->
-    <div class="modal" id="fundingModal"><div class="modal-content"><button class="modal-close" onclick="closeFundingModal()"><i class="fas fa-times"></i></button><div class="modal-icon"><i class="fas fa-money-bill-wave"></i></div><h3>Complete Your Payment</h3><p>Send <strong>₦<span id="fundAmount">0</span></strong> to this account</p><div class="bank-details"><p><strong>Bank:</strong> Moniepoint MFB</p><p><strong>Account Name:</strong> Sunday Ijeoma Anastasia</p><p><strong>Account Number:</strong> 9066051034</p><button class="copy-btn" onclick="copyAccount()">📋 Copy Account Number</button></div><input type="text" id="fundingTransactionRef" class="confirm-input" placeholder="Transaction reference"><button class="confirm-btn" onclick="submitFundingConfirm()"><i class="fas fa-check-circle"></i> I Have Paid - Submit</button></div></div>
 
     <div class="toast-container" id="toastContainer"></div>
     <footer class="footer"><p>&copy; 2024 OnSlot. All rights reserved. | Buy Cheap Data</p></footer>
@@ -248,6 +288,11 @@
             document.getElementById("userInfo").style.display = "none";
             document.getElementById("adminPanel").style.display = "none";
             showLogin();
+            // Reset funding UI
+            document.getElementById("accountDetails").style.display = "none";
+            document.getElementById("amountSection").classList.remove("show");
+            document.getElementById("paymentSection").classList.remove("show");
+            document.getElementById("proceedPaymentBtn").classList.remove("show");
         }
         
         function showLogin() { document.getElementById("loginForm").style.display = "block"; document.getElementById("signupForm").style.display = "none"; }
@@ -283,13 +328,31 @@
                         };
                     });
                     
+                    // Fund Wallet button logic
+                    const fundMainBtn = document.getElementById("fundMainBtn");
+                    fundMainBtn.onclick = () => {
+                        document.getElementById("accountDetails").style.display = "block";
+                        document.getElementById("amountSection").classList.add("show");
+                    };
+                    
+                    // Amount button selection
                     document.querySelectorAll(".amount-btn").forEach(btn => {
                         btn.onclick = () => {
                             document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
                             btn.classList.add("selected");
                             selectedAmount = parseInt(btn.dataset.amount);
+                            document.getElementById("proceedPaymentBtn").classList.add("show");
                         };
                     });
+                    
+                    // Proceed to payment button
+                    document.getElementById("proceedPaymentBtn").onclick = () => {
+                        if (!selectedAmount) {
+                            showToast("Please select an amount first", "error");
+                            return;
+                        }
+                        document.getElementById("paymentSection").classList.add("show");
+                    };
                 }
             }
         }
@@ -332,22 +395,29 @@
             document.querySelector(`.payment-method[data-method="${method}"]`).classList.add("selected");
         }
         
-        function submitFunding() {
-            if (!selectedAmount) { showToast("Please select an amount", "error"); return; }
-            document.getElementById("fundAmount").textContent = selectedAmount;
-            document.getElementById("fundingModal").style.display = "flex";
+        function copyAccountNumber() {
+            navigator.clipboard.writeText("9066051034");
+            showToast("Account number copied!", "success");
         }
         
         async function submitFundingConfirm() {
             const transactionRef = document.getElementById("fundingTransactionRef").value;
+            if (!selectedAmount) { showToast("Please select an amount", "error"); return; }
             if (!transactionRef) { showToast("Enter transaction reference", "error"); return; }
+            
             const result = await callAPI('/submit-funding', 'POST', {
                 userEmail: currentUser.email, userName: currentUser.name, userPhone: currentUser.phone,
                 amount: selectedAmount, transactionRef: transactionRef, paymentMethod: selectedFundingMethod
             });
             if (result && result.success) {
-                closeFundingModal();
+                // Reset UI
+                document.getElementById("accountDetails").style.display = "none";
+                document.getElementById("amountSection").classList.remove("show");
+                document.getElementById("paymentSection").classList.remove("show");
+                document.getElementById("proceedPaymentBtn").classList.remove("show");
+                document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
                 document.getElementById("fundingTransactionRef").value = "";
+                selectedAmount = null;
                 showToast("Funding request submitted! Admin will verify.", "success");
                 await loadAdminData();
             } else { showToast("Failed to submit request", "error"); }
@@ -368,6 +438,7 @@
             });
             if (result && result.success) {
                 showToast("Purchase request submitted! Admin will verify and send your data.", "success");
+                // Update local balance immediately for UI feedback
                 currentUser.wallet_balance -= selectedPlan.price;
                 document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`;
                 await loadAdminData();
@@ -416,6 +487,7 @@
             if (result && result.success) {
                 showToast("Funding approved! Wallet credited.", "success");
                 await loadAdminData();
+                // Refresh user balance
                 const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
                 if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
             }
@@ -458,9 +530,7 @@
         
         // ============ UTILITY ============
         function copyToClipboard(text) { navigator.clipboard.writeText(text); showToast("Copied!", "success"); }
-        function copyAccount() { navigator.clipboard.writeText("9066051034"); showToast("Account number copied!", "success"); }
         function showToast(msg, type) { const container = document.getElementById("toastContainer"); const toast = document.createElement("div"); toast.className = `toast ${type}`; toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; container.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
-        function closeFundingModal() { document.getElementById("fundingModal").style.display = "none"; document.getElementById("fundingTransactionRef").value = ""; selectedAmount = null; document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected")); }
         function toggleAdminPanel() { const content = document.getElementById("adminContent"); const chevron = document.getElementById("adminChevron"); content.classList.toggle("show"); chevron.style.transform = content.classList.contains("show") ? "rotate(180deg)" : "rotate(0deg)"; }
         
         document.addEventListener("DOMContentLoaded", () => { 
