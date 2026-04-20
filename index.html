@@ -255,19 +255,14 @@
             </div>
 
             <!-- Referral Section -->
-            <div class="referral-section"><div class="referral-header"><i class="fas fa-users"></i><h3>Refer & Earn ₦400 Credit</h3></div><div class="referral-code-box"><span class="referral-code" id="userReferralCode">Loading...</span><button class="copy-referral-btn" onclick="copyReferralCode()">Copy Code</button></div><div class="share-buttons"><button class="share-btn whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook"></i> Facebook</button><button class="share-btn twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</button><button class="share-btn telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram"></i> Telegram</button></div><div class="referral-stats"><div class="referral-stat"><div class="label">Referrals Made</div><div class="value" id="referralCount">0</div></div><div class="referral-stat"><div class="label">Reward Status</div><div class="value" id="referralRewardStatus">1 referral = ₦400 credit</div></div></div></div>
+            <div class="referral-section"><div class="referral-header"><i class="fas fa-users"></i><h3>Refer & Earn 500MB</h3></div><div class="referral-code-box"><span class="referral-code" id="userReferralCode">Loading...</span><button class="copy-referral-btn" onclick="copyReferralCode()">Copy Code</button></div><div class="share-buttons"><button class="share-btn whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook"></i> Facebook</button><button class="share-btn twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</button><button class="share-btn telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram"></i> Telegram</button></div><div class="referral-stats"><div class="referral-stat"><div class="label">Referrals Made</div><div class="value" id="referralCount">0</div></div><div class="referral-stat"><div class="label">Reward Status</div><div class="value" id="referralRewardStatus">5 referrals = 500MB (₦400 credit)</div></div></div></div>
         </div>
 
-        <!-- Admin Panel with Logout All Users Button -->
+        <!-- Admin Panel -->
         <div class="admin-panel" id="adminPanel" style="display: none;">
-            <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <div class="admin-header" onclick="toggleAdminPanel()">
                 <h3><i class="fas fa-clock"></i> Admin Dashboard <span class="order-count-badge" id="totalPendingBadge">0</span></h3>
-                <div>
-                    <button onclick="logoutAllUsers()" style="background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; margin-right: 10px;">
-                        <i class="fas fa-sign-out-alt"></i> Logout All Users
-                    </button>
-                    <i class="fas fa-chevron-down" id="adminChevron"></i>
-                </div>
+                <i class="fas fa-chevron-down" id="adminChevron"></i>
             </div>
             <div class="admin-content" id="adminContent">
                 <div class="admin-tabs">
@@ -286,9 +281,6 @@
     <footer class="footer"><p>&copy; 2024 OnSlot. All rights reserved. | Buy Cheap Data</p></footer>
 
     <script>
-        // Clear any existing sessions on page load - FRESH START
-sessionStorage.clear();
-localStorage.clear();
         const API_URL = 'https://onslot.onrender.com/api';
         let currentUser = null;
         let selectedAmount = null;
@@ -303,28 +295,7 @@ localStorage.clear();
         let hasShownReferralOverlay = false;
         let loadingOverlay = null;
         
-        // ============ LOGOUT ALL USERS FUNCTION ============
-        async function logoutAllUsers() {
-            if (confirm("⚠️ WARNING: This will log out ALL currently logged in users! This will clear all their sessions. Are you sure?")) {
-                showToast("Logging out all users...", "info");
-                try {
-                    // Clear current user's session
-                    sessionStorage.clear();
-                    localStorage.clear();
-                    currentUser = null;
-                    
-                    // Reload the page to show login screen
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                } catch (error) {
-                    console.error("Logout all users error:", error);
-                    showToast("Failed to logout all users", "error");
-                }
-            }
-        }
-        
-        // Check for existing session on page load
+        // Check for existing session on page load - PERSISTENT LOGIN
         async function checkExistingSession() {
             const savedEmail = sessionStorage.getItem('userEmail');
             if (savedEmail) {
@@ -380,14 +351,10 @@ localStorage.clear();
             }
         }
         
-        // Poll for request status (check if admin approved)
+        // Poll for request status
         let statusPollingInterval = null;
-        let currentPendingId = null;
-        let currentPendingType = null;
         
         function startStatusPolling(pendingId, type, successTitle, successMessage) {
-            currentPendingId = pendingId;
-            currentPendingType = type;
             if (statusPollingInterval) clearInterval(statusPollingInterval);
             
             statusPollingInterval = setInterval(async () => {
@@ -480,8 +447,8 @@ localStorage.clear();
                 <div class="overlay-card">
                     <div style="font-size: 60px;">🎉</div>
                     <h2>Congratulations!</h2>
-                    <p>Someone signed up using your referral code!</p>
-                    <p>You've earned <strong style="color: #10b981;">₦400 credit</strong> for your wallet!</p>
+                    <p>You've reached 5 referrals!</p>
+                    <p>You've earned <strong style="color: #10b981;">500MB (₦400 credit)</strong> for your wallet!</p>
                     <div class="network-select" style="margin-bottom: 15px;">
                         <label>Select Your Network to Receive Reward:</label>
                         <div class="network-buttons">
@@ -492,7 +459,7 @@ localStorage.clear();
                         </div>
                     </div>
                     <input type="tel" id="referralPhone" placeholder="Enter your phone number" maxlength="11">
-                    <button onclick="claimReferralReward()">Claim My ₦400 Credit</button>
+                    <button onclick="claimReferralReward()">Claim My 500MB Credit</button>
                     <a class="skip-link" onclick="closeReferralRewardOverlay()">Maybe later</a>
                 </div>
             `;
@@ -535,7 +502,7 @@ localStorage.clear();
                 const pending = await callAPI('/admin/pending-referrals');
                 const latest = pending?.find(r => r.user_email === currentUser.email && r.status === 'pending');
                 if (latest) {
-                    startStatusPolling(latest.id, 'referral', "Reward Claimed!", "Your ₦400 credit has been added to your wallet!");
+                    startStatusPolling(latest.id, 'referral', "Reward Claimed!", "Your 500MB credit (₦400) has been added to your wallet!");
                 } else {
                     hideLoadingOverlay();
                     showToast("Referral reward request sent to admin!", "success");
@@ -578,7 +545,8 @@ localStorage.clear();
                 showToast("Login successful!", "success");
                 await loadDashboard();
                 showWelcomeOverlay();
-                if (currentUser.referral_count >= 1 && !currentUser.referral_reward_claimed) {
+                // Check if user has 5 referrals and hasn't claimed reward
+                if (currentUser.referral_count >= 5 && !currentUser.referral_reward_claimed) {
                     setTimeout(() => showReferralRewardOverlay(), 1500);
                 }
             } else { showToast(result?.error || "Invalid email or password", "error"); }
@@ -614,10 +582,11 @@ localStorage.clear();
                     document.getElementById("userReferralCode").textContent = currentUser.referral_code;
                     document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
                     
-                    if (currentUser.referral_count >= 1 && !currentUser.referral_reward_claimed) {
-                        document.getElementById("referralRewardStatus").innerHTML = "🎉 Reward Ready! Click to claim 🎉";
+                    if (currentUser.referral_count >= 5 && !currentUser.referral_reward_claimed) {
+                        document.getElementById("referralRewardStatus").innerHTML = "🎉 5 Referrals! Claim your 500MB 🎉";
                     } else {
-                        document.getElementById("referralRewardStatus").innerHTML = `1 referral = ₦400 credit (You have ${currentUser.referral_count || 0})`;
+                        const needed = 5 - (currentUser.referral_count || 0);
+                        document.getElementById("referralRewardStatus").innerHTML = `${needed} more referrals = 500MB (₦400 credit)`;
                     }
                     
                     const adminFlag = document.getElementById("adminFlagBtn");
@@ -835,7 +804,7 @@ localStorage.clear();
             if (!container) return;
             const pending = pendingReferrals.filter(r => r.status === "pending");
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending referral rewards</div>'; return; }
-            container.innerHTML = pending.map(r => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${r.user_name}</strong></p><p>📧 ${r.user_email}</p><p>📱 Phone: ${r.phone} <button class="copy-btn" onclick="copyToClipboard('${r.phone}')">Copy</button></p><p>📡 Network: ${r.network ? r.network.toUpperCase() : "N/A"}</p><p>🎁 Referral Reward: ₦${r.amount} Credit</p><p>📝 1 referral completed</p><p>⏰ ${r.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})"><i class="fas fa-check"></i> Credit Sent</button><button class="decline-btn" onclick="declineReferral(${r.id})"><i class="fas fa-times"></i> Decline</button></div></div>`).join("");
+            container.innerHTML = pending.map(r => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${r.user_name}</strong></p><p>📧 ${r.user_email}</p><p>📱 Phone: ${r.phone} <button class="copy-btn" onclick="copyToClipboard('${r.phone}')">Copy</button></p><p>📡 Network: ${r.network ? r.network.toUpperCase() : "N/A"}</p><p>🎁 Referral Reward: ₦${r.amount} Credit (500MB)</p><p>📝 5 referrals completed</p><p>⏰ ${r.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})"><i class="fas fa-check"></i> Credit Sent</button><button class="decline-btn" onclick="declineReferral(${r.id})"><i class="fas fa-times"></i> Decline</button></div></div>`).join("");
         }
         
         async function approveFunding(id) {
