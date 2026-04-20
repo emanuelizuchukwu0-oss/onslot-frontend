@@ -255,7 +255,7 @@
             </div>
 
             <!-- Referral Section -->
-            <div class="referral-section"><div class="referral-header"><i class="fas fa-users"></i><h3>Refer & Earn 500MB</h3></div><div class="referral-code-box"><span class="referral-code" id="userReferralCode">Loading...</span><button class="copy-referral-btn" onclick="copyReferralCode()">Copy Code</button></div><div class="share-buttons"><button class="share-btn whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook"></i> Facebook</button><button class="share-btn twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</button><button class="share-btn telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram"></i> Telegram</button></div><div class="referral-stats"><div class="referral-stat"><div class="label">Referrals Made</div><div class="value" id="referralCount">0</div></div><div class="referral-stat"><div class="label">Reward Status</div><div class="value" id="referralRewardStatus">5 referrals = 500MB (₦400 credit)</div></div></div></div>
+            <div class="referral-section"><div class="referral-header"><i class="fas fa-users"></i><h3>Refer & Earn 500MB</h3></div><div class="referral-code-box"><span class="referral-code" id="userReferralCode">Loading...</span><button class="copy-referral-btn" onclick="copyReferralCode()">Copy Code</button></div><div class="share-buttons"><button class="share-btn whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook"></i> Facebook</button><button class="share-btn twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</button><button class="share-btn telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram"></i> Telegram</button></div><div class="referral-stats"><div class="referral-stat"><div class="label">Referrals Made</div><div class="value" id="referralCount">0</div></div><div class="referral-stat"><div class="label">Reward Status</div><div class="value" id="referralRewardStatus">5 referrals = 500MB</div></div></div></div>
         </div>
 
         <!-- Admin Panel -->
@@ -448,7 +448,7 @@
                     <div style="font-size: 60px;">🎉</div>
                     <h2>Congratulations!</h2>
                     <p>You've reached 5 referrals!</p>
-                    <p>You've earned <strong style="color: #10b981;">500MB (₦400 credit)</strong> for your wallet!</p>
+                    <p>You've earned <strong style="color: #10b981;">500MB</strong> for your wallet!</p>
                     <div class="network-select" style="margin-bottom: 15px;">
                         <label>Select Your Network to Receive Reward:</label>
                         <div class="network-buttons">
@@ -502,7 +502,7 @@
                 const pending = await callAPI('/admin/pending-referrals');
                 const latest = pending?.find(r => r.user_email === currentUser.email && r.status === 'pending');
                 if (latest) {
-                    startStatusPolling(latest.id, 'referral', "Reward Claimed!", "Your 500MB credit (₦400) has been added to your wallet!");
+                    startStatusPolling(latest.id, 'referral', "Reward Claimed!", "Your 500MB credit has been added to your wallet!");
                 } else {
                     hideLoadingOverlay();
                     showToast("Referral reward request sent to admin!", "success");
@@ -586,7 +586,7 @@
                         document.getElementById("referralRewardStatus").innerHTML = "🎉 5 Referrals! Claim your 500MB 🎉";
                     } else {
                         const needed = 5 - (currentUser.referral_count || 0);
-                        document.getElementById("referralRewardStatus").innerHTML = `${needed} more referrals = 500MB (₦400 credit)`;
+                        document.getElementById("referralRewardStatus").innerHTML = `${needed} more referrals = 500MB`;
                     }
                     
                     const adminFlag = document.getElementById("adminFlagBtn");
@@ -804,7 +804,7 @@
             if (!container) return;
             const pending = pendingReferrals.filter(r => r.status === "pending");
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending referral rewards</div>'; return; }
-            container.innerHTML = pending.map(r => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${r.user_name}</strong></p><p>📧 ${r.user_email}</p><p>📱 Phone: ${r.phone} <button class="copy-btn" onclick="copyToClipboard('${r.phone}')">Copy</button></p><p>📡 Network: ${r.network ? r.network.toUpperCase() : "N/A"}</p><p>🎁 Referral Reward: ₦${r.amount} Credit (500MB)</p><p>📝 5 referrals completed</p><p>⏰ ${r.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})"><i class="fas fa-check"></i> Credit Sent</button><button class="decline-btn" onclick="declineReferral(${r.id})"><i class="fas fa-times"></i> Decline</button></div></div>`).join("");
+            container.innerHTML = pending.map(r => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${r.user_name}</strong></p><p>📧 ${r.user_email}</p><p>📱 Phone: ${r.phone} <button class="copy-btn" onclick="copyToClipboard('${r.phone}')">Copy</button></p><p>📡 Network: ${r.network ? r.network.toUpperCase() : "N/A"}</p><p>🎁 Referral Reward: 500MB (₦400 Credit)</p><p>📝 5 referrals completed</p><p>⏰ ${r.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})"><i class="fas fa-check"></i> Credit Sent</button><button class="decline-btn" onclick="declineReferral(${r.id})"><i class="fas fa-times"></i> Decline</button></div></div>`).join("");
         }
         
         async function approveFunding(id) {
