@@ -196,7 +196,10 @@
         let pendingFunding = [];
         let pendingPurchases = [];
         
-        // ============ API CALLS ============
+        // Clear any old session data - FRESH START
+        sessionStorage.clear();
+        localStorage.clear();
+        
         async function callAPI(endpoint, method = 'GET', body = null) {
             const options = { method, headers: { 'Content-Type': 'application/json' } };
             if (body) options.body = JSON.stringify(body);
@@ -239,6 +242,7 @@
         function logout() {
             currentUser = null;
             sessionStorage.removeItem('userEmail');
+            sessionStorage.clear();
             document.getElementById("authSection").style.display = "flex";
             document.getElementById("dashboardContent").style.display = "none";
             document.getElementById("userInfo").style.display = "none";
@@ -367,7 +371,6 @@
                 currentUser.wallet_balance -= selectedPlan.price;
                 document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`;
                 await loadAdminData();
-                // Reset selection
                 document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
                 selectedPlan = null;
                 document.getElementById("buyDataBtn").disabled = true;
@@ -460,7 +463,11 @@
         function closeFundingModal() { document.getElementById("fundingModal").style.display = "none"; document.getElementById("fundingTransactionRef").value = ""; selectedAmount = null; document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected")); }
         function toggleAdminPanel() { const content = document.getElementById("adminContent"); const chevron = document.getElementById("adminChevron"); content.classList.toggle("show"); chevron.style.transform = content.classList.contains("show") ? "rotate(180deg)" : "rotate(0deg)"; }
         
-        document.addEventListener("DOMContentLoaded", () => { loadDashboard(); });
+        document.addEventListener("DOMContentLoaded", () => { 
+            sessionStorage.clear();
+            localStorage.clear();
+            loadDashboard(); 
+        });
     </script>
 </body>
 </html>
