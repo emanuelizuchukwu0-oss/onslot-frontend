@@ -298,6 +298,7 @@
             document.body.appendChild(overlay);
         }
         
+        // Loading overlay - appears briefly then disappears after 2 seconds
         function showLoadingOverlay(message = "Processing your request... Please wait a moment") {
             const existing = document.querySelector('.loading-overlay');
             if (existing) existing.remove();
@@ -308,10 +309,15 @@
                 <div class="loading-card">
                     <div class="loading-spinner"></div>
                     <p>${message}</p>
-                    <p style="font-size: 0.8rem; margin-top: 10px;">⏰ Please wait a moment for admin approval</p>
+                    <p style="font-size: 0.8rem; margin-top: 10px;">⏰ Please wait a moment</p>
                 </div>
             `;
             document.body.appendChild(overlay);
+            
+            // Auto-hide loading overlay after 2 seconds
+            setTimeout(() => {
+                hideLoadingOverlay();
+            }, 2000);
         }
         
         function hideLoadingOverlay() {
@@ -444,7 +450,7 @@
             }
         }
         
-        // ============ POLLING FUNCTIONS ============
+        // ============ POLLING FUNCTIONS - Only shows success overlay when admin clicks success ============
         
         function startFundingPolling(pendingId, amount) {
             if (statusPollingInterval) clearInterval(statusPollingInterval);
@@ -454,14 +460,12 @@
                 const item = result?.find(p => p.id == pendingId);
                 if (item && item.status === 'completed') {
                     clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
                     showFundingSuccessOverlay(amount);
                     await loadAdminData();
                     const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
                     if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
                 } else if (item && item.status === 'declined') {
                     clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
                     showToast("Your funding request was declined.", "error");
                 }
             }, 3000);
@@ -475,12 +479,10 @@
                 const item = result?.find(p => p.id == pendingId);
                 if (item && item.status === 'completed') {
                     clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
                     showPurchaseSuccessOverlay(planSize, phoneNumber);
                     await loadAdminData();
                 } else if (item && item.status === 'declined') {
                     clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
                     showToast("Your purchase was declined. Amount refunded.", "error");
                     const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
                     if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
@@ -496,14 +498,12 @@
                 const item = result?.find(r => r.id == pendingId);
                 if (item && item.status === 'completed') {
                     clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
                     showReferralSuccessOverlay();
                     await loadAdminData();
                     const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
                     if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
                 } else if (item && item.status === 'declined') {
                     clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
                     showToast("Your referral reward was declined.", "error");
                 }
             }, 3000);
@@ -685,7 +685,7 @@
             if (!selectedAmount) { showToast("Please select an amount", "error"); return; }
             if (!transactionRef) { showToast("Enter transaction reference", "error"); return; }
             
-            showLoadingOverlay("Submitting your funding request... Please wait a moment");
+            showLoadingOverlay("Submitting your funding request...");
             
             const result = await callAPI('/submit-funding', 'POST', {
                 userEmail: currentUser.email, userName: currentUser.name, userPhone: currentUser.phone,
@@ -698,7 +698,6 @@
                 if (latest) {
                     startFundingPolling(latest.id, selectedAmount);
                 } else {
-                    hideLoadingOverlay();
                     showToast("Funding request submitted! Admin will verify.", "success");
                 }
                 document.getElementById("accountDetails").style.display = "none";
@@ -724,7 +723,7 @@
             if (!phone || !/^(0[7-9][0-1]{1}[0-9]{8})$/.test(phone)) { showToast("Enter valid phone number", "error"); return; }
             if ((currentUser.wallet_balance || 0) < selectedPlan.price) { showToast("Insufficient wallet balance. Please fund your wallet.", "error"); return; }
             
-            showLoadingOverlay(`Processing your purchase of ${selectedPlan.size}... Please wait a moment`);
+            showLoadingOverlay(`Processing your purchase of ${selectedPlan.size}...`);
             
             const result = await callAPI('/submit-purchase', 'POST', {
                 userEmail: currentUser.email, userName: currentUser.name, userPhone: currentUser.phone,
@@ -738,7 +737,6 @@
                 if (latest) {
                     startPurchasePolling(latest.id, selectedPlan.size, phone);
                 } else {
-                    hideLoadingOverlay();
                     showToast("Purchase request submitted! Admin will verify.", "success");
                 }
                 currentUser.wallet_balance -= selectedPlan.price;
