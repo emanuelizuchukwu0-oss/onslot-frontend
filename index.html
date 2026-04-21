@@ -179,15 +179,25 @@
         .footer { background: rgba(5,5,5,0.9); padding: 40px 24px 20px; text-align: center; }
         .footer p { color: #94a3b8; font-size: 0.8rem; }
         @media (max-width: 768px) { .hero-title { font-size: 2rem; } .plans-grid { grid-template-columns: repeat(2, 1fr); } .pending-item { flex-direction: column; } .item-actions { width: 100%; justify-content: center; } .amount-buttons { justify-content: center; } .payment-methods { flex-direction: column; } .custom-amount-container { flex-direction: column; } .custom-amount-container button { width: 100%; } }
+        
+        /* Debug Panel */
+        .debug-panel { position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); border-radius: 10px; padding: 10px; font-size: 10px; z-index: 9999; cursor: pointer; border: 1px solid #f59e0b; }
+        .debug-panel:hover { background: rgba(0,0,0,0.9); }
     </style>
 </head>
 <body>
     <div class="bg-animation"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+    
+    <!-- Debug Panel - Click to check backend status -->
+    <div class="debug-panel" onclick="checkBackendStatus()">
+        <i class="fas fa-bug"></i> Debug
+    </div>
+    
     <nav class="navbar"><div class="nav-container"><div class="logo"><div class="logo-icon"><i class="fas fa-bolt"></i></div><span>OnSlot</span></div><div class="user-info" id="userInfo" style="display: none;"><span class="user-name" id="userNameDisplay"></span><span class="wallet-balance" id="walletBalance">₦0</span><div id="adminButtonContainer" style="position:relative; display: none;"><button class="admin-flag" id="adminFlagBtn"><i class="fas fa-flag-checkered"></i> Admin<span id="adminNotificationBadge" class="notification-badge" style="display:none;">0</span></button></div><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
 
     <div id="authSection" class="hero"><div class="hero-content"><div class="hero-badge"><span class="badge-pulse"></span>Welcome to OnSlot</div><h1 class="hero-title">Buy Cheap Data<br><span class="gradient-text">All Networks</span></h1><p class="hero-subtitle">Fund your wallet, buy data bundles at the best prices!</p>
         <div id="loginForm" class="auth-form"><div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email address"></div><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password"></div><button class="buy-btn" onclick="login()">Login <i class="fas fa-arrow-right"></i></button><div class="auth-switch">Don't have an account? <a onclick="showSignup()">Sign up</a></div></div>
-        <div id="signupForm" class="auth-form" style="display: none;"><div class="input-group"><i class="fas fa-user"></i><input type="text" id="signupName" placeholder="Full name"></div><div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="signupEmail" placeholder="Email address"></div><div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="signupPhone" placeholder="Phone number"></div><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="signupPassword" placeholder="Password"></div><div class="input-group"><i class="fas fa-gift"></i><input type="text" id="referralCodeInput" placeholder="Referral code (optional)"></div><button class="buy-btn" onclick="signup()">Create Account <i class="fas fa-user-plus"></i></button><div class="auth-switch">Already have an account? <a onclick="showLogin()">Login</a></div></div>
+        <div id="signupForm" class="auth-form" style="display: none;"><div class="input-group"><i class="fas fa-user"></i><input type="text" id="signupName" placeholder="Full name"></div><div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="signupEmail" placeholder="Email address"></div><div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="signupPhone" placeholder="Phone number"></div><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="signupPassword" placeholder="Password (min 4 chars)"></div><div class="input-group"><i class="fas fa-gift"></i><input type="text" id="referralCodeInput" placeholder="Referral code (optional)"></div><button class="buy-btn" onclick="signup()">Create Account <i class="fas fa-user-plus"></i></button><div class="auth-switch">Already have an account? <a onclick="showLogin()">Login</a></div></div>
     </div></div>
 
     <div id="dashboardContent" class="dashboard-content">
@@ -283,7 +293,7 @@
 
     <script>
         // ============================================
-        // FIXED: Admin detection based on email ending with %%
+        // FIXED VERSION - With Debug and Better Error Handling
         // ============================================
         
         const API_URL = 'https://onslot.onrender.com/api';
@@ -338,12 +348,30 @@
             ]
         };
         
-        // FIXED: Check if user is admin (email ends with %%)
+        // Check if user is admin (email ends with %%)
         function isAdminUser(email) {
             return email && email.endsWith('%%');
         }
         
-        // ============ OVERLAY FUNCTIONS (ALL KEPT) ============
+        // Debug function to check backend status
+        async function checkBackendStatus() {
+            showToast("Checking backend connection...", "info");
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                if (response.ok) {
+                    const data = await response.json();
+                    showToast(`✅ Backend is online! ${JSON.stringify(data)}`, "success");
+                    console.log("Backend health:", data);
+                } else {
+                    showToast(`❌ Backend returned error: ${response.status}`, "error");
+                }
+            } catch (error) {
+                showToast(`❌ Cannot connect to backend! Make sure ${API_URL} is running.`, "error");
+                console.error("Backend connection error:", error);
+            }
+        }
+        
+        // ============ OVERLAY FUNCTIONS ============
         
         function showWelcomeOverlay() {
             if (hasShownWelcomeOverlay) return;
@@ -525,7 +553,7 @@
             }
         }
         
-        // ============ POLLING FUNCTIONS (ALL KEPT) ============
+        // ============ POLLING FUNCTIONS ============
         
         function startFundingPolling() {
             if (fundingPollingInterval) clearInterval(fundingPollingInterval);
@@ -597,33 +625,69 @@
             if (body) options.body = JSON.stringify(body);
             try {
                 const response = await fetch(`${API_URL}${endpoint}`, options);
-                return await response.json();
+                const data = await response.json();
+                console.log(`API ${endpoint}:`, data);
+                return data;
             } catch (error) {
                 console.error('API Error:', error);
-                showToast('Network error. Please check your connection.', 'error');
+                showToast('Network error. Cannot connect to backend server.', 'error');
                 return null;
             }
         }
         
         // ============ AUTH ============
         async function signup() {
-            const name = document.getElementById("signupName").value;
-            const email = document.getElementById("signupEmail").value;
-            const phone = document.getElementById("signupPhone").value;
+            const name = document.getElementById("signupName").value.trim();
+            const email = document.getElementById("signupEmail").value.trim().toLowerCase();
+            const phone = document.getElementById("signupPhone").value.trim();
             const password = document.getElementById("signupPassword").value;
-            const referralCode = document.getElementById("referralCodeInput").value;
-            if (!name || !email || !phone || !password) { showToast("Please fill all fields", "error"); return; }
+            const referralCode = document.getElementById("referralCodeInput").value.trim();
+            
+            if (!name || !email || !phone || !password) { 
+                showToast("Please fill all fields", "error"); 
+                return; 
+            }
+            
+            if (password.length < 4) {
+                showToast("Password must be at least 4 characters", "error");
+                return;
+            }
+            
+            showLoadingOverlay("Creating account...");
             
             const result = await callAPI('/signup', 'POST', { name, email, phone, password, referralCode });
-            if (result && result.success) { showToast("Account created! Please login", "success"); showLogin(); }
-            else { showToast(result?.error || "Signup failed", "error"); }
+            
+            hideLoadingOverlay();
+            
+            if (result && result.success) { 
+                showToast("Account created! Please login", "success"); 
+                showLogin();
+                // Clear form
+                document.getElementById("signupName").value = "";
+                document.getElementById("signupEmail").value = "";
+                document.getElementById("signupPhone").value = "";
+                document.getElementById("signupPassword").value = "";
+                document.getElementById("referralCodeInput").value = "";
+            } else { 
+                showToast(result?.error || "Signup failed. Make sure backend is running.", "error"); 
+            }
         }
         
         async function login() {
-            const email = document.getElementById("loginEmail").value;
+            const email = document.getElementById("loginEmail").value.trim().toLowerCase();
             const password = document.getElementById("loginPassword").value;
-            if (!email || !password) { showToast("Please enter email and password", "error"); return; }
+            
+            if (!email || !password) { 
+                showToast("Please enter email and password", "error"); 
+                return; 
+            }
+            
+            showLoadingOverlay("Logging in...");
+            
             const result = await callAPI('/login', 'POST', { email, password });
+            
+            hideLoadingOverlay();
+            
             if (result && result.success) {
                 currentUser = result.user;
                 sessionStorage.setItem('userEmail', currentUser.email);
@@ -633,7 +697,15 @@
                 if (currentUser.referral_count >= 5 && !currentUser.referral_reward_claimed) {
                     setTimeout(() => showReferralRewardOverlay(), 1500);
                 }
-            } else { showToast(result?.error || "Invalid email or password", "error"); }
+            } else { 
+                const errorMsg = result?.error || "Invalid email or password";
+                showToast(errorMsg, "error");
+                
+                // Check if backend is reachable
+                if (errorMsg.includes("Network error") || errorMsg.includes("Failed to fetch")) {
+                    showToast("Cannot connect to backend. Make sure server is running at: " + API_URL, "error");
+                }
+            }
         }
         
         function logout() {
@@ -650,6 +722,7 @@
             document.getElementById("adminButtonContainer").style.display = "none";
             document.getElementById("adminPanelContainer").style.display = "none";
             showLogin();
+            showToast("Logged out successfully", "success");
         }
         
         function showLogin() { document.getElementById("loginForm").style.display = "block"; document.getElementById("signupForm").style.display = "none"; }
@@ -670,7 +743,7 @@
                     document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
                     document.getElementById("referralsNeeded").innerHTML = `${5 - (currentUser.referral_count || 0)} referrals left = 500MB`;
                     
-                    // FIXED: Admin detection - ONLY users with %% at the end of email see admin button
+                    // Admin detection - ONLY users with %% at the end of email see admin button
                     const isAdmin = isAdminUser(currentUser.email);
                     const adminButtonContainer = document.getElementById("adminButtonContainer");
                     const adminPanelContainer = document.getElementById("adminPanelContainer");
@@ -743,6 +816,9 @@
                         showToast(`You will be charged ₦${selectedAmount} + ₦${SERVICE_CHARGE} service charge = ₦${totalAmount}`, "info");
                         document.getElementById("paymentSection").classList.add("show");
                     };
+                } else {
+                    // User not found, clear session
+                    sessionStorage.removeItem('userEmail');
                 }
             }
         }
@@ -860,6 +936,8 @@
                 selectedPlan = null;
                 document.getElementById("buyDataBtn").disabled = true;
                 document.getElementById("purchasePhone").value = "";
+                showToast("Purchase submitted! Pending admin approval.", "success");
+                hideLoadingOverlay();
             } else { 
                 hideLoadingOverlay();
                 showToast(result?.error || "Purchase failed", "error"); 
@@ -977,16 +1055,32 @@
         
         // ============ UTILITY ============
         function copyToClipboard(text) { navigator.clipboard.writeText(text); showToast("Copied!", "success"); }
-        function showToast(msg, type) { const container = document.getElementById("toastContainer"); const toast = document.createElement("div"); toast.className = `toast ${type}`; toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; container.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
-        function toggleAdminPanel() { const content = document.getElementById("adminContent"); const chevron = document.getElementById("adminChevron"); content.classList.toggle("show"); chevron.style.transform = content.classList.contains("show") ? "rotate(180deg)" : "rotate(0deg)"; }
+        function showToast(msg, type) { 
+            const container = document.getElementById("toastContainer"); 
+            const toast = document.createElement("div"); 
+            toast.className = `toast ${type}`; 
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; 
+            container.appendChild(toast); 
+            setTimeout(() => toast.remove(), 3000); 
+        }
+        function toggleAdminPanel() { 
+            const content = document.getElementById("adminContent"); 
+            const chevron = document.getElementById("adminChevron"); 
+            if (content && chevron) {
+                content.classList.toggle("show"); 
+                chevron.style.transform = content.classList.contains("show") ? "rotate(180deg)" : "rotate(0deg)";
+            }
+        }
         
-        // Load data plans and check for existing session
+        // Initialize
         document.addEventListener("DOMContentLoaded", () => { 
             loadDataPlans();
-            const savedEmail = sessionStorage.getItem('userEmail');
-            if (savedEmail) {
-                loadDashboard();
-            }
+            showLogin();
+            
+            // Check backend on load
+            setTimeout(() => {
+                checkBackendStatus();
+            }, 1000);
         });
     </script>
 </body>
