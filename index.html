@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ffffff; overflow-x: hidden; }
         .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: float 20s ease-in-out infinite; }
@@ -21,15 +21,13 @@
         .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #f59e0b, #8b5cf6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
         .logo span { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #fff, #f59e0b); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .user-info { display: flex; align-items: center; gap: 15px; position: relative; }
-        .user-name { color: #f59e0b; font-weight: 500; cursor: pointer; }
-        .wallet-balance { background: rgba(16,185,129,0.2); padding: 5px 12px; border-radius: 30px; font-size: 0.8rem; border: 1px solid rgba(16,185,129,0.3); cursor: pointer; transition: all 0.2s; }
-        .wallet-balance:hover { background: rgba(16,185,129,0.3); }
-        .admin-flag { background: rgba(30,41,59,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 40px; color: #f59e0b; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; position: relative; transition: all 0.2s; }
-        .admin-flag:hover { background: rgba(30,41,59,0.6); transform: scale(1.05); }
-        .notification-badge { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 6px; border-radius: 50px; min-width: 20px; text-align: center; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
-        .logout-btn { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; transition: all 0.2s; }
-        .logout-btn:hover { background: #ef4444; color: white; transform: scale(1.05); }
+        .user-name { color: #f59e0b; font-weight: 500; }
+        .wallet-balance { background: rgba(16,185,129,0.2); padding: 5px 12px; border-radius: 30px; font-size: 0.8rem; border: 1px solid rgba(16,185,129,0.3); }
+        .admin-flag { background: rgba(30,41,59,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 40px; color: #f59e0b; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; position: relative; }
+        .admin-flag:hover { background: rgba(30,41,59,0.6); }
+        .notification-badge { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 6px; border-radius: 50px; min-width: 20px; text-align: center; }
+        .logout-btn { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; }
+        .logout-btn:hover { background: #ef4444; color: white; }
         .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; max-width: 800px; margin: 0 auto; padding: 120px 24px 60px; position: relative; z-index: 1; }
         .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(245,158,11,0.15); padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; margin-bottom: 24px; border: 1px solid rgba(245,158,11,0.3); }
         .badge-pulse { width: 8px; height: 8px; background: #f59e0b; border-radius: 50%; animation: badgePulse 1.5s infinite; }
@@ -39,26 +37,27 @@
         .hero-subtitle { font-size: 1.1rem; color: #94a3b8; line-height: 1.6; margin-bottom: 32px; }
         .container { max-width: 1200px; margin: 0 auto; padding: 60px 24px; position: relative; z-index: 1; }
         .auth-form { max-width: 400px; margin: 0 auto; }
-        .input-group { display: flex; align-items: center; background: rgba(30,41,59,0.6); border-radius: 60px; padding: 4px 20px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 16px; transition: all 0.2s; }
-        .input-group:focus-within { border-color: #f59e0b; transform: scale(1.02); }
+        .input-group { display: flex; align-items: center; background: rgba(30,41,59,0.6); border-radius: 60px; padding: 4px 20px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 16px; }
+        .input-group:focus-within { border-color: #f59e0b; }
         .input-group i { color: #94a3b8; font-size: 18px; }
         .input-group input { width: 100%; padding: 18px 16px; background: transparent; border: none; color: white; font-size: 1rem; outline: none; }
-        .buy-btn { width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 18px; border-radius: 60px; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
+        .buy-btn { width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 18px; border-radius: 60px; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .buy-btn:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(245,158,11,0.3); }
         .auth-switch { margin-top: 20px; color: #94a3b8; }
         .auth-switch a { color: #f59e0b; text-decoration: none; cursor: pointer; }
         .dashboard-content { display: none; }
-        .fund-section, .data-section, .referral-section, .admin-panel { background: rgba(15,25,35,0.6); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.2); transition: all 0.3s; }
+        .fund-section, .data-section, .referral-section, .admin-panel { background: rgba(15,25,35,0.6); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.2); }
         .section-title { font-size: 1.3rem; margin-bottom: 20px; color: #f59e0b; display: flex; align-items: center; gap: 10px; }
-        .fund-main-btn { width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 18px; border-radius: 60px; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
-        .fund-main-btn:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(245,158,11,0.3); }
+        .fund-main-btn { width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 18px; border-radius: 60px; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .account-details { background: rgba(30,41,59,0.8); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(245,158,11,0.3); display: none; }
+        .account-details p { margin: 10px 0; font-size: 0.9rem; }
+        .account-details strong { color: #f59e0b; }
         .copy-account-btn { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 8px 16px; border-radius: 40px; color: #f59e0b; cursor: pointer; width: 100%; margin-top: 10px; }
         .amount-section { display: none; margin-top: 20px; }
         .amount-section.show { display: block; }
         .amount-buttons { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
         .amount-btn { background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); border-radius: 60px; padding: 12px 24px; cursor: pointer; transition: all 0.2s; font-weight: 600; }
-        .amount-btn:hover { border-color: #f59e0b; background: rgba(245,158,11,0.1); transform: scale(1.05); }
+        .amount-btn:hover { border-color: #f59e0b; background: rgba(245,158,11,0.1); }
         .amount-btn.selected { border-color: #f59e0b; background: rgba(245,158,11,0.2); color: #f59e0b; }
         .custom-amount-container { margin: 15px 0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .custom-amount-container input { flex: 2; padding: 12px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; font-size: 1rem; outline: none; }
@@ -72,14 +71,14 @@
         .payment-section.show { display: block; }
         .payment-methods { display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
         .payment-method { flex: 1; background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
-        .payment-method:hover { background: rgba(30,41,59,0.8); transform: scale(1.05); }
+        .payment-method:hover { background: rgba(30,41,59,0.8); }
         .payment-method.selected { border-color: #f59e0b; background: rgba(245,158,11,0.15); }
         .payment-method i { font-size: 24px; margin-bottom: 5px; display: block; }
         .confirm-input { width: 100%; padding: 14px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; margin: 15px 0; outline: none; }
         .submit-funding-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .network-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
         .network-btn { flex: 1; background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; }
-        .network-btn:hover { transform: translateY(-2px); background: rgba(30,41,59,0.8); }
+        .network-btn:hover { transform: translateY(-2px); }
         .network-btn.selected { border-width: 2px; }
         .network-btn.mtn.selected { border-color: #f59e0b; background: rgba(245,158,11,0.15); }
         .network-btn.airtel.selected { border-color: #ef4444; background: rgba(239,68,68,0.15); }
@@ -87,13 +86,12 @@
         .network-btn.nine.selected { border-color: #8b5cf6; background: rgba(139,92,246,0.15); }
         .plans-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 20px; }
         .plan-card { background: rgba(30,41,59,0.6); border-radius: 16px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.08); }
-        .plan-card:hover { transform: translateY(-2px); background: rgba(30,41,59,0.8); }
-        .plan-card.selected { border: 2px solid #f59e0b; background: rgba(245,158,11,0.1); }
+        .plan-card:hover { transform: translateY(-2px); }
+        .plan-card.selected { border-width: 2px; }
         .plan-size { font-size: 1rem; font-weight: 700; }
         .plan-validity { font-size: 0.7rem; color: #94a3b8; margin-top: 3px; }
         .plan-price { font-size: 1.1rem; font-weight: bold; margin-top: 5px; color: #f59e0b; }
-        .buy-data-btn { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
-        .buy-data-btn:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 5px 20px rgba(245,158,11,0.3); }
+        .buy-data-btn { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .buy-data-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .referral-code-box { background: rgba(30,41,59,0.8); border-radius: 16px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .referral-code { font-size: 1.3rem; font-weight: bold; letter-spacing: 2px; color: #f59e0b; }
@@ -111,7 +109,6 @@
         .admin-header h3 { display: flex; align-items: center; gap: 10px; }
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; flex-wrap: wrap; }
         .admin-tab { padding: 8px 20px; border-radius: 30px; cursor: pointer; background: rgba(30,41,59,0.4); transition: all 0.2s; }
-        .admin-tab:hover { background: rgba(30,41,59,0.6); transform: scale(1.05); }
         .admin-tab.active { background: #f59e0b; color: #0a0a0a; }
         .order-count-badge { background: #ef4444; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 8px; border-radius: 50px; margin-left: 10px; }
         .admin-content { display: block; }
@@ -125,7 +122,6 @@
         .item-actions { display: flex; gap: 8px; }
         .success-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 8px 16px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; }
         .decline-btn { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; }
-        .copy-btn { background: rgba(245,158,11,0.2); border: none; padding: 5px 10px; border-radius: 20px; color: #f59e0b; cursor: pointer; font-size: 0.7rem; margin-left: 10px; }
         .empty-orders { text-align: center; padding: 40px; color: #94a3b8; }
         .toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1100; }
         .toast { background: rgba(15,25,35,0.95); backdrop-filter: blur(12px); padding: 12px 24px; border-radius: 50px; font-size: 0.875rem; display: flex; align-items: center; gap: 8px; animation: slideUp 0.3s ease; }
@@ -167,17 +163,17 @@
             <h1 class="hero-title">Buy Cheap Data<br><span class="gradient-text">All Networks</span></h1>
             <p class="hero-subtitle">Fund your wallet, buy data bundles at the best prices!</p>
             <div id="loginForm" class="auth-form">
-                <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email address" autocomplete="off"></div>
-                <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password" autocomplete="off"></div>
+                <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email address" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')"></div>
+                <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')"></div>
                 <button class="buy-btn" onclick="login()">Login <i class="fas fa-arrow-right"></i></button>
                 <div class="auth-switch">Don't have an account? <a onclick="showSignup()">Sign up</a></div>
             </div>
             <div id="signupForm" class="auth-form" style="display: none;">
-                <div class="input-group"><i class="fas fa-user"></i><input type="text" id="signupName" placeholder="Full name" autocomplete="off"></div>
-                <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="signupEmail" placeholder="Email address" autocomplete="off"></div>
-                <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="off"></div>
-                <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="signupPassword" placeholder="Password (min 4 chars)" autocomplete="off"></div>
-                <div class="input-group"><i class="fas fa-gift"></i><input type="text" id="referralCodeInput" placeholder="Referral code (optional)" autocomplete="off"></div>
+                <div class="input-group"><i class="fas fa-user"></i><input type="text" id="signupName" placeholder="Full name" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')"></div>
+                <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="signupEmail" placeholder="Email address" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')"></div>
+                <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="signupPhone" placeholder="Phone number" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')"></div>
+                <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="signupPassword" placeholder="Password (min 4 chars)" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')"></div>
+                <div class="input-group"><i class="fas fa-gift"></i><input type="text" id="referralCodeInput" placeholder="Referral code (optional)" autocomplete="off" readonly onfocus="this.removeAttribute('readonly')"></div>
                 <button class="buy-btn" onclick="signup()">Create Account <i class="fas fa-user-plus"></i></button>
                 <div class="auth-switch">Already have an account? <a onclick="showLogin()">Login</a></div>
             </div>
@@ -280,10 +276,10 @@
 
     <script>
         // ============================================
-        // COMPLETE FRESH START - CLEAR EVERYTHING
+        // BRAND NEW FRESH SITE - NO USERS, NO SESSIONS
         // ============================================
         
-        // FORCE CLEAR ALL STORAGE
+        // COMPLETELY CLEAR EVERYTHING
         sessionStorage.clear();
         localStorage.clear();
         
@@ -299,9 +295,6 @@
         let selectedFundingMethod = "bank_transfer";
         let selectedNetwork = null;
         let selectedPlan = null;
-        let pendingFunding = [];
-        let pendingPurchases = [];
-        let pendingReferrals = [];
         
         const planData = {
             mtn: [{ size: "500MB", price: 200 }, { size: "1GB", price: 350 }, { size: "2GB", price: 800 }, { size: "3GB", price: 1200 }, { size: "5GB", price: 1900 }],
@@ -329,7 +322,7 @@
                 return await response.json();
             } catch (error) {
                 console.error('API Error:', error);
-                showToast('Network error. Cannot connect to server.', 'error');
+                showToast('Cannot connect to server. Make sure backend is running.', 'error');
                 return null;
             }
         }
@@ -355,6 +348,7 @@
             if (result?.success) {
                 showToast("Account created! Please login", "success");
                 showLogin();
+                // Clear form
                 document.getElementById("signupName").value = "";
                 document.getElementById("signupEmail").value = "";
                 document.getElementById("signupPhone").value = "";
@@ -378,7 +372,6 @@
             
             if (result?.success) {
                 currentUser = result.user;
-                sessionStorage.setItem('userEmail', currentUser.email);
                 showToast("Login successful!", "success");
                 await loadDashboard();
             } else {
@@ -388,7 +381,6 @@
         
         function logout() {
             currentUser = null;
-            sessionStorage.removeItem('userEmail');
             document.getElementById("authSection").style.display = "flex";
             document.getElementById("dashboardContent").style.display = "none";
             document.getElementById("userInfo").style.display = "none";
@@ -401,6 +393,7 @@
         function showLogin() { 
             document.getElementById("loginForm").style.display = "block"; 
             document.getElementById("signupForm").style.display = "none";
+            // Clear login fields
             document.getElementById("loginEmail").value = "";
             document.getElementById("loginPassword").value = "";
         }
@@ -411,41 +404,31 @@
         }
         
         async function loadDashboard() {
-            const savedEmail = sessionStorage.getItem('userEmail');
-            if (savedEmail) {
-                const userData = await callAPI(`/user/${encodeURIComponent(savedEmail)}`);
-                if (userData?.email) {
-                    currentUser = userData;
-                    document.getElementById("authSection").style.display = "none";
-                    document.getElementById("dashboardContent").style.display = "block";
-                    document.getElementById("userInfo").style.display = "flex";
-                    document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
-                    document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance || 0}`;
-                    document.getElementById("userReferralCode").textContent = currentUser.referral_code;
-                    document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
-                    document.getElementById("referralsNeeded").innerHTML = `${5 - (currentUser.referral_count || 0)} left = 500MB`;
-                    
-                    const isAdmin = isAdminUser(currentUser.email);
-                    if (isAdmin) {
-                        document.getElementById("adminButtonContainer").style.display = "block";
-                        document.getElementById("adminPanelContainer").style.display = "block";
-                        document.getElementById("adminFlagBtn").onclick = () => {
-                            const panel = document.getElementById("adminPanel");
-                            panel.style.display = panel.style.display === "none" ? "block" : "none";
-                            if (panel.style.display === "block") loadAdminData();
-                        };
-                        await loadAdminData();
-                        setInterval(loadAdminData, 10000);
-                    }
-                    
-                    setupEventListeners();
-                    selectNetwork('mtn');
-                } else {
-                    sessionStorage.removeItem('userEmail');
-                    showLogin();
+            if (currentUser) {
+                document.getElementById("authSection").style.display = "none";
+                document.getElementById("dashboardContent").style.display = "block";
+                document.getElementById("userInfo").style.display = "flex";
+                document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
+                document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance || 0}`;
+                document.getElementById("userReferralCode").textContent = currentUser.referral_code;
+                document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
+                document.getElementById("referralsNeeded").innerHTML = `${5 - (currentUser.referral_count || 0)} left = 500MB`;
+                
+                const isAdmin = isAdminUser(currentUser.email);
+                if (isAdmin) {
+                    document.getElementById("adminButtonContainer").style.display = "block";
+                    document.getElementById("adminPanelContainer").style.display = "block";
+                    document.getElementById("adminFlagBtn").onclick = () => {
+                        const panel = document.getElementById("adminPanel");
+                        panel.style.display = panel.style.display === "none" ? "block" : "none";
+                        if (panel.style.display === "block") loadAdminData();
+                    };
+                    await loadAdminData();
+                    setInterval(loadAdminData, 10000);
                 }
-            } else {
-                showLogin();
+                
+                setupEventListeners();
+                selectNetwork('mtn');
             }
         }
         
@@ -552,63 +535,77 @@
             if (!isAdminUser(currentUser?.email)) return;
             
             const funding = await callAPI('/admin/pending-funding');
-            if (funding) { pendingFunding = funding; renderFundingList(); }
+            if (funding && Array.isArray(funding)) {
+                const container = document.getElementById("fundingList");
+                const pending = funding.filter(f => f.status === "pending");
+                document.getElementById("fundingTabCount").textContent = pending.length;
+                if (pending.length === 0) {
+                    container.innerHTML = '<div class="empty-orders">No pending funding</div>';
+                } else {
+                    container.innerHTML = pending.map(f => `
+                        <div class="pending-item">
+                            <div><strong>${f.user_name}</strong><br>₦${f.amount}<br>${f.transaction_ref}</div>
+                            <div><button class="success-btn" onclick="approveFunding(${f.id})">Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})">Decline</button></div>
+                        </div>
+                    `).join("");
+                }
+            }
             
             const purchases = await callAPI('/admin/pending-purchases');
-            if (purchases) { pendingPurchases = purchases; renderPurchasesList(); }
+            if (purchases && Array.isArray(purchases)) {
+                const container = document.getElementById("purchasesList");
+                const pending = purchases.filter(p => p.status === "pending");
+                document.getElementById("purchaseTabCount").textContent = pending.length;
+                if (pending.length === 0) {
+                    container.innerHTML = '<div class="empty-orders">No pending purchases</div>';
+                } else {
+                    container.innerHTML = pending.map(p => `
+                        <div class="pending-item">
+                            <div><strong>${p.user_name}</strong><br>${p.network} - ${p.plan_size}<br>${p.phone_number}</div>
+                            <div><button class="success-btn" onclick="approvePurchase(${p.id})">Approve</button><button class="decline-btn" onclick="declinePurchase(${p.id})">Decline</button></div>
+                        </div>
+                    `).join("");
+                }
+            }
             
             const referrals = await callAPI('/admin/pending-referrals');
-            if (referrals) { pendingReferrals = referrals; renderReferralsList(); }
+            if (referrals && Array.isArray(referrals)) {
+                const container = document.getElementById("referralsList");
+                const pending = referrals.filter(r => r.status === "pending");
+                document.getElementById("referralTabCount").textContent = pending.length;
+                if (pending.length === 0) {
+                    container.innerHTML = '<div class="empty-orders">No pending referrals</div>';
+                } else {
+                    container.innerHTML = pending.map(r => `
+                        <div class="pending-item">
+                            <div><strong>${r.user_name}</strong><br>${r.network}<br>${r.phone}</div>
+                            <div><button class="success-btn" onclick="approveReferral(${r.id})">Approve</button><button class="decline-btn" onclick="declineReferral(${r.id})">Decline</button></div>
+                        </div>
+                    `).join("");
+                }
+            }
             
-            updateAdminBadge();
+            updateAdminBadge(funding, purchases, referrals);
         }
         
-        function renderFundingList() {
-            const container = document.getElementById("fundingList");
-            if (!container) return;
-            const pending = pendingFunding.filter(p => p.status === "pending");
-            if (pending.length === 0) {
-                container.innerHTML = '<div class="empty-orders">No pending funding</div>';
-                return;
+        function updateAdminBadge(funding, purchases, referrals) {
+            const fundingCount = funding?.filter(f => f.status === "pending").length || 0;
+            const purchaseCount = purchases?.filter(p => p.status === "pending").length || 0;
+            const referralCount = referrals?.filter(r => r.status === "pending").length || 0;
+            const total = fundingCount + purchaseCount + referralCount;
+            const badge = document.getElementById("adminNotificationBadge");
+            const totalBadge = document.getElementById("totalPendingBadge");
+            if (total > 0) {
+                badge.style.display = "flex";
+                badge.textContent = total;
+                totalBadge.textContent = total;
+            } else {
+                badge.style.display = "none";
+                totalBadge.textContent = "0";
             }
-            container.innerHTML = pending.map(f => `
-                <div class="pending-item">
-                    <div><strong>${f.user_name}</strong><br>₦${f.amount}<br>${f.transaction_ref}</div>
-                    <div><button class="success-btn" onclick="approveFunding(${f.id})">Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})">Decline</button></div>
-                </div>
-            `).join("");
-        }
-        
-        function renderPurchasesList() {
-            const container = document.getElementById("purchasesList");
-            if (!container) return;
-            const pending = pendingPurchases.filter(p => p.status === "pending");
-            if (pending.length === 0) {
-                container.innerHTML = '<div class="empty-orders">No pending purchases</div>';
-                return;
-            }
-            container.innerHTML = pending.map(p => `
-                <div class="pending-item">
-                    <div><strong>${p.user_name}</strong><br>${p.network} - ${p.plan_size}<br>${p.phone_number}</div>
-                    <div><button class="success-btn" onclick="approvePurchase(${p.id})">Approve</button><button class="decline-btn" onclick="declinePurchase(${p.id})">Decline</button></div>
-                </div>
-            `).join("");
-        }
-        
-        function renderReferralsList() {
-            const container = document.getElementById("referralsList");
-            if (!container) return;
-            const pending = pendingReferrals.filter(r => r.status === "pending");
-            if (pending.length === 0) {
-                container.innerHTML = '<div class="empty-orders">No pending referrals</div>';
-                return;
-            }
-            container.innerHTML = pending.map(r => `
-                <div class="pending-item">
-                    <div><strong>${r.user_name}</strong><br>${r.network}<br>${r.phone}</div>
-                    <div><button class="success-btn" onclick="approveReferral(${r.id})">Approve</button><button class="decline-btn" onclick="declineReferral(${r.id})">Decline</button></div>
-                </div>
-            `).join("");
+            document.getElementById("fundingTabCount").textContent = fundingCount;
+            document.getElementById("purchaseTabCount").textContent = purchaseCount;
+            document.getElementById("referralTabCount").textContent = referralCount;
         }
         
         async function approveFunding(id) {
@@ -644,26 +641,6 @@
         async function declineReferral(id) {
             const result = await callAPI(`/admin/decline-referral/${id}`, 'POST');
             if (result?.success) { showToast("Declined", "error"); await loadAdminData(); }
-        }
-        
-        function updateAdminBadge() {
-            const fundingCount = pendingFunding.filter(f => f.status === "pending").length;
-            const purchaseCount = pendingPurchases.filter(p => p.status === "pending").length;
-            const referralCount = pendingReferrals.filter(r => r.status === "pending").length;
-            const total = fundingCount + purchaseCount + referralCount;
-            const badge = document.getElementById("adminNotificationBadge");
-            const totalBadge = document.getElementById("totalPendingBadge");
-            if (total > 0) {
-                badge.style.display = "flex";
-                badge.textContent = total;
-                totalBadge.textContent = total;
-            } else {
-                badge.style.display = "none";
-                totalBadge.textContent = "0";
-            }
-            document.getElementById("fundingTabCount").textContent = fundingCount;
-            document.getElementById("purchaseTabCount").textContent = purchaseCount;
-            document.getElementById("referralTabCount").textContent = referralCount;
         }
         
         function getReferralMessage() { return `Join OnSlot! Use my code: ${currentUser.referral_code}`; }
@@ -718,10 +695,24 @@
             }
         }
         
+        // Initialize - ABSOLUTELY FRESH, NO AUTO LOGIN
         document.addEventListener("DOMContentLoaded", () => {
+            // Clear everything again
             sessionStorage.clear();
             localStorage.clear();
+            
+            // Clear all cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            // Show login form with empty fields
             showLogin();
+            
+            // Show ready message
+            setTimeout(() => {
+                showToast("🚀 Welcome! Sign up to create your account.", "success");
+            }, 1000);
         });
     </script>
 </body>
