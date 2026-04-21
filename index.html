@@ -966,6 +966,14 @@
             document.getElementById("purchaseTabCount").textContent = pendingPurchasesCount;
             document.getElementById("referralTabCount").textContent = pendingReferralsCount;
         }
+        async function signup() {
+    const name = document.getElementById("signupName").value;
+    const email = document.getElementById("signupEmail").value.toLowerCase().trim(); // ✅ Add .toLowerCase().trim()
+    const phone = document.getElementById("signupPhone").value;
+    const password = document.getElementById("signupPassword").value;
+    const referralCode = document.getElementById("referralCodeInput").value;
+    // ... rest of the function
+}
         
         // ============ REFERRAL SHARING ============
         function getReferralMessage() { return `Join OnSlot and buy cheap data! Use my code: ${currentUser.referral_code}\n\nhttps://onslot-frontend.onrender.com`; }
