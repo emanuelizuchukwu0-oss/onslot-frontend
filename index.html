@@ -43,55 +43,40 @@
         .input-group:focus-within { border-color: #f59e0b; transform: scale(1.02); }
         .input-group i { color: #94a3b8; font-size: 18px; }
         .input-group input { width: 100%; padding: 18px 16px; background: transparent; border: none; color: white; font-size: 1rem; outline: none; }
-        /* Prevent autofill background */
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 30px rgba(30,41,59,0.6) inset !important;
-            -webkit-text-fill-color: white !important;
-        }
         .buy-btn { width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 18px; border-radius: 60px; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
         .buy-btn:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(245,158,11,0.3); }
         .auth-switch { margin-top: 20px; color: #94a3b8; }
         .auth-switch a { color: #f59e0b; text-decoration: none; cursor: pointer; }
         .dashboard-content { display: none; }
         .fund-section, .data-section, .referral-section, .admin-panel { background: rgba(15,25,35,0.6); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.2); transition: all 0.3s; }
-        .fund-section:hover, .data-section:hover, .referral-section:hover { transform: translateY(-5px); border-color: rgba(245,158,11,0.4); }
         .section-title { font-size: 1.3rem; margin-bottom: 20px; color: #f59e0b; display: flex; align-items: center; gap: 10px; }
         .fund-main-btn { width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 18px; border-radius: 60px; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
         .fund-main-btn:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(245,158,11,0.3); }
-        .account-details { background: rgba(30,41,59,0.8); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(245,158,11,0.3); display: none; animation: slideDown 0.3s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .copy-account-btn { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 8px 16px; border-radius: 40px; color: #f59e0b; cursor: pointer; width: 100%; margin-top: 10px; transition: all 0.2s; }
-        .copy-account-btn:hover { background: rgba(245,158,11,0.3); transform: scale(1.02); }
-        .amount-section { display: none; margin-top: 20px; animation: slideDown 0.3s ease; }
+        .account-details { background: rgba(30,41,59,0.8); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(245,158,11,0.3); display: none; }
+        .copy-account-btn { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 8px 16px; border-radius: 40px; color: #f59e0b; cursor: pointer; width: 100%; margin-top: 10px; }
+        .amount-section { display: none; margin-top: 20px; }
         .amount-section.show { display: block; }
         .amount-buttons { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
         .amount-btn { background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); border-radius: 60px; padding: 12px 24px; cursor: pointer; transition: all 0.2s; font-weight: 600; }
         .amount-btn:hover { border-color: #f59e0b; background: rgba(245,158,11,0.1); transform: scale(1.05); }
         .amount-btn.selected { border-color: #f59e0b; background: rgba(245,158,11,0.2); color: #f59e0b; }
         .custom-amount-container { margin: 15px 0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .custom-amount-container input { flex: 2; padding: 12px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; font-size: 1rem; outline: none; transition: all 0.2s; }
+        .custom-amount-container input { flex: 2; padding: 12px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; font-size: 1rem; outline: none; }
         .custom-amount-container input:focus { border-color: #f59e0b; }
-        .custom-amount-container button { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 12px 20px; border-radius: 40px; color: #f59e0b; cursor: pointer; transition: all 0.2s; }
-        .custom-amount-container button:hover { background: rgba(245,158,11,0.3); transform: scale(1.05); }
+        .custom-amount-container button { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 12px 20px; border-radius: 40px; color: #f59e0b; cursor: pointer; }
         .charge-note { background: rgba(245,158,11,0.1); border-radius: 12px; padding: 10px; margin: 15px 0; text-align: center; font-size: 0.8rem; }
         .charge-note i { color: #f59e0b; margin-right: 5px; }
-        .proceed-payment-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; margin-top: 10px; display: none; transition: all 0.2s; }
-        .proceed-payment-btn:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(16,185,129,0.3); }
+        .proceed-payment-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; margin-top: 10px; display: none; }
         .proceed-payment-btn.show { display: block; }
-        .payment-section { display: none; margin-top: 20px; animation: slideDown 0.3s ease; }
+        .payment-section { display: none; margin-top: 20px; }
         .payment-section.show { display: block; }
         .payment-methods { display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
         .payment-method { flex: 1; background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
         .payment-method:hover { background: rgba(30,41,59,0.8); transform: scale(1.05); }
         .payment-method.selected { border-color: #f59e0b; background: rgba(245,158,11,0.15); }
         .payment-method i { font-size: 24px; margin-bottom: 5px; display: block; }
-        .confirm-input { width: 100%; padding: 14px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; margin: 15px 0; outline: none; transition: all 0.2s; }
-        .confirm-input:focus { border-color: #f59e0b; }
-        .submit-funding-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
-        .submit-funding-btn:hover { transform: scale(1.02); }
+        .confirm-input { width: 100%; padding: 14px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; margin: 15px 0; outline: none; }
+        .submit-funding-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .network-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
         .network-btn { flex: 1; background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; }
         .network-btn:hover { transform: translateY(-2px); background: rgba(30,41,59,0.8); }
@@ -112,11 +97,9 @@
         .buy-data-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .referral-code-box { background: rgba(30,41,59,0.8); border-radius: 16px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .referral-code { font-size: 1.3rem; font-weight: bold; letter-spacing: 2px; color: #f59e0b; }
-        .copy-referral-btn { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 8px 20px; border-radius: 40px; color: #f59e0b; cursor: pointer; transition: all 0.2s; }
-        .copy-referral-btn:hover { background: rgba(245,158,11,0.3); transform: scale(1.05); }
+        .copy-referral-btn { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 8px 20px; border-radius: 40px; color: #f59e0b; cursor: pointer; }
         .share-buttons { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-        .share-btn { flex: 1; padding: 12px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
-        .share-btn:hover { transform: scale(1.05); }
+        .share-btn { flex: 1; padding: 12px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .share-btn.whatsapp { background: #25D366; color: white; }
         .share-btn.facebook { background: #1877F2; color: white; }
         .share-btn.twitter { background: #1DA1F2; color: white; }
@@ -135,59 +118,23 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .pending-list { max-height: 500px; overflow-y: auto; }
-        .pending-item { background: rgba(30,41,59,0.6); border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; transition: all 0.2s; }
-        .pending-item:hover { background: rgba(30,41,59,0.8); transform: translateX(5px); }
+        .pending-item { background: rgba(30,41,59,0.6); border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; }
         .item-details { flex: 2; }
         .item-details p { margin: 4px 0; font-size: 0.85rem; }
         .item-details strong { color: #f59e0b; }
         .item-actions { display: flex; gap: 8px; }
-        .success-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 8px 16px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .success-btn:hover { transform: scale(1.05); }
-        .decline-btn { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; transition: all 0.2s; }
-        .decline-btn:hover { background: rgba(239,68,68,0.3); transform: scale(1.05); }
-        .copy-btn { background: rgba(245,158,11,0.2); border: none; padding: 5px 10px; border-radius: 20px; color: #f59e0b; cursor: pointer; font-size: 0.7rem; margin-left: 10px; transition: all 0.2s; }
-        .copy-btn:hover { background: rgba(245,158,11,0.3); }
+        .success-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 8px 16px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; }
+        .decline-btn { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; }
+        .copy-btn { background: rgba(245,158,11,0.2); border: none; padding: 5px 10px; border-radius: 20px; color: #f59e0b; cursor: pointer; font-size: 0.7rem; margin-left: 10px; }
         .empty-orders { text-align: center; padding: 40px; color: #94a3b8; }
-        
-        /* Overlay Styles */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 5000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
-        .overlay-card { background: linear-gradient(135deg, #0f1923, #1a1a2e); border: 2px solid #f59e0b; border-radius: 32px; padding: 40px; text-align: center; max-width: 450px; width: 90%; animation: slideUp 0.4s ease; }
-        .overlay-card h2 { color: #f59e0b; font-size: 1.8rem; margin-bottom: 15px; }
-        .overlay-card p { color: #94a3b8; margin-bottom: 20px; }
-        .overlay-card input { width: 100%; padding: 14px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; margin: 15px 0; outline: none; text-align: center; }
-        .overlay-card button { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 14px 30px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.2s; }
-        .overlay-card button:hover { transform: scale(1.05); }
-        .skip-link { display: block; margin-top: 15px; color: #64748b; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
-        .network-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0; }
-        .network-option { flex: 1; padding: 12px; border-radius: 40px; background: rgba(30,41,59,0.6); border: 2px solid rgba(255,255,255,0.08); text-align: center; cursor: pointer; transition: all 0.2s; }
-        .network-option:hover { background: rgba(30,41,59,0.8); transform: scale(1.05); }
-        .network-option.selected { border-color: #f59e0b; background: rgba(245,158,11,0.15); }
-        
-        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 6000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
-        .loading-card { background: linear-gradient(135deg, #0f1923, #1a1a2e); border: 2px solid #f59e0b; border-radius: 32px; padding: 40px; text-align: center; max-width: 400px; width: 90%; animation: slideUp 0.4s ease; }
-        .loading-spinner { width: 60px; height: 60px; border: 4px solid rgba(245,158,11,0.2); border-top-color: #f59e0b; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .success-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 6000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
-        .success-card { background: linear-gradient(135deg, #0f1923, #1a1a2e); border: 2px solid #10b981; border-radius: 32px; padding: 40px; text-align: center; max-width: 450px; width: 90%; animation: slideUp 0.4s ease; }
-        .success-card .check-icon { font-size: 80px; color: #10b981; margin-bottom: 20px; animation: bounce 0.6s ease; }
-        .success-card h2 { color: #10b981; font-size: 1.8rem; margin-bottom: 15px; }
-        .success-card p { color: #94a3b8; margin-bottom: 10px; }
-        .success-card button { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 12px 30px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; transition: all 0.2s; }
-        .success-card button:hover { transform: scale(1.05); }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes bounce { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        
         .toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1100; }
         .toast { background: rgba(15,25,35,0.95); backdrop-filter: blur(12px); padding: 12px 24px; border-radius: 50px; font-size: 0.875rem; display: flex; align-items: center; gap: 8px; animation: slideUp 0.3s ease; }
         .toast.success { border-left: 3px solid #10b981; }
         .toast.error { border-left: 3px solid #ef4444; }
         .footer { background: rgba(5,5,5,0.9); padding: 40px 24px 20px; text-align: center; margin-top: 40px; }
         .footer p { color: #94a3b8; font-size: 0.8rem; }
-        
-        @media (max-width: 768px) { .hero-title { font-size: 2rem; } .plans-grid { grid-template-columns: repeat(2, 1fr); } .pending-item { flex-direction: column; } .item-actions { width: 100%; justify-content: center; } .amount-buttons { justify-content: center; } .payment-methods { flex-direction: column; } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @media (max-width: 768px) { .hero-title { font-size: 2rem; } .plans-grid { grid-template-columns: repeat(2, 1fr); } .pending-item { flex-direction: column; } .item-actions { width: 100%; justify-content: center; } }
     </style>
 </head>
 <body>
@@ -239,28 +186,18 @@
 
     <!-- Dashboard Content -->
     <div id="dashboardContent" class="dashboard-content">
-        <section class="hero">
-            <div class="hero-content">
-                <div class="hero-badge"><span class="badge-pulse"></span>Buy Data</div>
-                <h1 class="hero-title">Buy Cheap Data<br><span class="gradient-text">All Networks Available</span></h1>
-                <p class="hero-subtitle">Fund your wallet, then buy data bundles for any network!</p>
-            </div>
-        </section>
         <div class="container">
-            <!-- Fund Wallet Section -->
             <div class="fund-section">
                 <div class="section-title"><i class="fas fa-wallet"></i> Fund Your Wallet</div>
                 <button class="fund-main-btn" id="fundMainBtn"><i class="fas fa-plus-circle"></i> Fund Wallet</button>
-                
                 <div id="accountDetails" class="account-details">
                     <p><strong><i class="fas fa-university"></i> Bank:</strong> Moniepoint MFB</p>
                     <p><strong><i class="fas fa-user"></i> Account Name:</strong> Sunday Ijeoma Anastasia</p>
                     <p><strong><i class="fas fa-credit-card"></i> Account Number:</strong> <span id="accountNumber">9066051034</span></p>
                     <button class="copy-account-btn" onclick="copyAccountNumber()"><i class="fas fa-copy"></i> Copy Account Number</button>
                 </div>
-                
                 <div id="amountSection" class="amount-section">
-                    <div class="charge-note"><i class="fas fa-info-circle"></i> ₦50 service charge applies to all transactions</div>
+                    <div class="charge-note"><i class="fas fa-info-circle"></i> ₦50 service charge applies</div>
                     <div class="amount-buttons">
                         <button class="amount-btn" data-amount="400">₦400</button>
                         <button class="amount-btn" data-amount="500">₦500</button>
@@ -275,23 +212,20 @@
                     </div>
                     <button id="proceedPaymentBtn" class="proceed-payment-btn">I Have Paid - Proceed</button>
                 </div>
-                
                 <div id="paymentSection" class="payment-section">
                     <div class="payment-methods">
-                        <button class="payment-method" data-method="bank_transfer" onclick="selectFundingMethod('bank_transfer')"><i class="fas fa-exchange-alt"></i><span>Bank Transfer</span></button>
-                        <button class="payment-method" data-method="ussd" onclick="selectFundingMethod('ussd')"><i class="fas fa-mobile-alt"></i><span>USSD</span></button>
-                        <button class="payment-method" data-method="pos" onclick="selectFundingMethod('pos')"><i class="fas fa-credit-card"></i><span>POS</span></button>
-                        <button class="payment-method" data-method="card" onclick="selectFundingMethod('card')"><i class="fas fa-credit-card"></i><span>Card</span></button>
+                        <button class="payment-method" data-method="bank_transfer" onclick="selectFundingMethod('bank_transfer')"><i class="fas fa-exchange-alt"></i> Bank Transfer</button>
+                        <button class="payment-method" data-method="ussd" onclick="selectFundingMethod('ussd')"><i class="fas fa-mobile-alt"></i> USSD</button>
+                        <button class="payment-method" data-method="pos" onclick="selectFundingMethod('pos')"><i class="fas fa-credit-card"></i> POS</button>
                     </div>
                     <input type="text" id="fundingTransactionRef" class="confirm-input" placeholder="Transaction reference">
-                    <button class="submit-funding-btn" onclick="submitFundingConfirm()"><i class="fas fa-check-circle"></i> Submit Request</button>
+                    <button class="submit-funding-btn" onclick="submitFundingConfirm()">Submit Request</button>
                 </div>
             </div>
 
-            <!-- Buy Data Section -->
             <div class="data-section">
                 <div class="section-title"><i class="fas fa-database"></i> Buy Data</div>
-                <div class="charge-note" style="margin-bottom: 15px;"><i class="fas fa-info-circle"></i> ₦50 service charge applies</div>
+                <div class="charge-note"><i class="fas fa-info-circle"></i> ₦50 service charge applies</div>
                 <div class="network-buttons">
                     <button class="network-btn mtn" onclick="selectNetwork('mtn')">MTN</button>
                     <button class="network-btn airtel" onclick="selectNetwork('airtel')">Airtel</button>
@@ -299,13 +233,12 @@
                     <button class="network-btn nine" onclick="selectNetwork('9mobile')">9mobile</button>
                 </div>
                 <div id="plansContainer" class="plans-grid"><div class="empty-orders">Select a network</div></div>
-                <input type="tel" id="purchasePhone" class="confirm-input" placeholder="Phone number for data">
+                <input type="tel" id="purchasePhone" class="confirm-input" placeholder="Phone number">
                 <button class="buy-data-btn" id="buyDataBtn" onclick="submitPurchase()" disabled>Buy Data</button>
             </div>
 
-            <!-- Referral Section -->
             <div class="referral-section">
-                <div class="referral-header"><i class="fas fa-users"></i><h3>Refer & Earn 500MB</h3></div>
+                <div class="section-title"><i class="fas fa-users"></i> Refer & Earn 500MB</div>
                 <div class="referral-code-box">
                     <span class="referral-code" id="userReferralCode">Loading...</span>
                     <button class="copy-referral-btn" onclick="copyReferralCode()">Copy Code</button>
@@ -314,7 +247,6 @@
                     <button class="share-btn whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button>
                     <button class="share-btn facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook"></i> Facebook</button>
                     <button class="share-btn twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</button>
-                    <button class="share-btn telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram"></i> Telegram</button>
                 </div>
                 <div class="referral-stats">
                     <div class="referral-stat"><div>Referrals</div><div id="referralCount" style="font-size:1.5rem; color:#f59e0b;">0</div></div>
@@ -323,7 +255,6 @@
             </div>
         </div>
 
-        <!-- Admin Panel -->
         <div id="adminPanelContainer" style="display: none;">
             <div class="admin-panel" id="adminPanel">
                 <div class="admin-header" onclick="toggleAdminPanel()">
@@ -345,31 +276,20 @@
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
-    <footer class="footer"><p>&copy; 2024 OnSlot. All rights reserved. | Buy Cheap Data</p></footer>
+    <footer class="footer"><p>&copy; 2024 OnSlot. All rights reserved.</p></footer>
 
     <script>
         // ============================================
-        // COMPLETE FRESH START - NO ONE IS LOGGED IN
+        // COMPLETE FRESH START - CLEAR EVERYTHING
         // ============================================
         
-        // FORCE CLEAR EVERYTHING on every page load
+        // FORCE CLEAR ALL STORAGE
         sessionStorage.clear();
         localStorage.clear();
         
         // Clear all cookies
         document.cookie.split(";").forEach(function(c) { 
             document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-        });
-        
-        // Clear form fields manually
-        window.addEventListener('load', function() {
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPassword').value = '';
-            document.getElementById('signupName').value = '';
-            document.getElementById('signupEmail').value = '';
-            document.getElementById('signupPhone').value = '';
-            document.getElementById('signupPassword').value = '';
-            document.getElementById('referralCodeInput').value = '';
         });
         
         const API_URL = 'https://onslot.onrender.com/api';
@@ -379,199 +299,26 @@
         let selectedFundingMethod = "bank_transfer";
         let selectedNetwork = null;
         let selectedPlan = null;
-        let dataPlans = [];
         let pendingFunding = [];
         let pendingPurchases = [];
         let pendingReferrals = [];
-        let fundingPollingInterval = null;
-        let purchasePollingInterval = null;
-        let referralPollingInterval = null;
-        let hasShownWelcomeOverlay = false;
-        let hasShownReferralOverlay = false;
         
         const planData = {
-            mtn: [
-                { size: "500MB", price: 200, validity: "7 days" },
-                { size: "1GB", price: 350, validity: "7 days" },
-                { size: "2GB", price: 800, validity: "7 days" },
-                { size: "3GB", price: 1200, validity: "30 days" },
-                { size: "5GB", price: 1900, validity: "30 days" }
-            ],
-            airtel: [
-                { size: "300MB", price: 200, validity: "2 days" },
-                { size: "600MB", price: 300, validity: "2 days" },
-                { size: "1.5GB", price: 350, validity: "2 days" },
-                { size: "2GB", price: 400, validity: "2 days" },
-                { size: "6GB", price: 2600, validity: "7 days" }
-            ],
-            glo: [
-                { size: "200MB", price: 99, validity: "2 days" },
-                { size: "500MB", price: 200, validity: "2 days" },
-                { size: "1GB", price: 350, validity: "7 days" },
-                { size: "2GB", price: 700, validity: "7 days" },
-                { size: "5GB", price: 1500, validity: "7 days" }
-            ],
-            "9mobile": [
-                { size: "250MB", price: 100, validity: "7 days" },
-                { size: "500MB", price: 200, validity: "7 days" },
-                { size: "1GB", price: 450, validity: "7 days" },
-                { size: "2GB", price: 800, validity: "7 days" },
-                { size: "5.2GB", price: 2300, validity: "30 days" }
-            ]
+            mtn: [{ size: "500MB", price: 200 }, { size: "1GB", price: 350 }, { size: "2GB", price: 800 }, { size: "3GB", price: 1200 }, { size: "5GB", price: 1900 }],
+            airtel: [{ size: "300MB", price: 200 }, { size: "600MB", price: 300 }, { size: "1.5GB", price: 350 }, { size: "2GB", price: 400 }, { size: "6GB", price: 2600 }],
+            glo: [{ size: "200MB", price: 99 }, { size: "500MB", price: 200 }, { size: "1GB", price: 350 }, { size: "2GB", price: 700 }, { size: "5GB", price: 1500 }],
+            "9mobile": [{ size: "250MB", price: 100 }, { size: "500MB", price: 200 }, { size: "1GB", price: 450 }, { size: "2GB", price: 800 }, { size: "5.2GB", price: 2300 }]
         };
         
-        function isAdminUser(email) {
-            return email && email.endsWith('%%');
-        }
+        function isAdminUser(email) { return email && email.endsWith('%%'); }
         
-        function showToast(message, type) {
+        function showToast(msg, type) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
-        }
-        
-        function showLoadingOverlay(message) {
-            const existing = document.querySelector('.loading-overlay');
-            if (existing) existing.remove();
-            const overlay = document.createElement('div');
-            overlay.className = 'loading-overlay';
-            overlay.innerHTML = `<div class="loading-card"><div class="loading-spinner"></div><p>${message}</p></div>`;
-            document.body.appendChild(overlay);
-        }
-        
-        function hideLoadingOverlay() {
-            const overlay = document.querySelector('.loading-overlay');
-            if (overlay) overlay.remove();
-        }
-        
-        function showWelcomeOverlay() {
-            if (hasShownWelcomeOverlay) return;
-            hasShownWelcomeOverlay = true;
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            overlay.innerHTML = `<div class="overlay-card"><div style="font-size:60px;">👋</div><h2>Welcome to OnSlot!</h2><p>You're ready to buy cheap data!</p><button onclick="this.parentElement.parentElement.remove()">Get Started</button></div>`;
-            document.body.appendChild(overlay);
-        }
-        
-        function showFundingSuccessOverlay(amount) {
-            const existing = document.querySelector('.success-overlay');
-            if (existing) existing.remove();
-            const overlay = document.createElement('div');
-            overlay.className = 'success-overlay';
-            overlay.innerHTML = `<div class="success-card"><div class="check-icon"><i class="fas fa-check-circle"></i></div><h2>Wallet Funded! 🎉</h2><p>Credited with <strong>₦${amount}</strong>!</p><button onclick="this.parentElement.parentElement.remove()">Continue</button></div>`;
-            document.body.appendChild(overlay);
-        }
-        
-        function showPurchaseSuccessOverlay(planSize, phoneNumber, planPrice) {
-            const existing = document.querySelector('.success-overlay');
-            if (existing) existing.remove();
-            const overlay = document.createElement('div');
-            overlay.className = 'success-overlay';
-            overlay.innerHTML = `<div class="success-card"><div class="check-icon"><i class="fas fa-check-circle"></i></div><h2>Purchase Successful! 🎉</h2><p>${planSize} sent to ${phoneNumber}!</p><button onclick="this.parentElement.parentElement.remove()">Continue</button></div>`;
-            document.body.appendChild(overlay);
-        }
-        
-        function showReferralSuccessOverlay() {
-            const existing = document.querySelector('.success-overlay');
-            if (existing) existing.remove();
-            const overlay = document.createElement('div');
-            overlay.className = 'success-overlay';
-            overlay.innerHTML = `<div class="success-card"><div class="check-icon"><i class="fas fa-check-circle"></i></div><h2>Reward Credited! 🎉</h2><p>500MB added to your wallet!</p><button onclick="this.parentElement.parentElement.remove()">Continue</button></div>`;
-            document.body.appendChild(overlay);
-        }
-        
-        function showReferralRewardOverlay() {
-            if (hasShownReferralOverlay) return;
-            hasShownReferralOverlay = true;
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            overlay.id = 'referralRewardOverlay';
-            overlay.innerHTML = `<div class="overlay-card"><div style="font-size:60px;">🎉</div><h2>Congratulations!</h2><p>You've reached 5 referrals!</p><p>You've earned <strong>500MB Data</strong>!</p><div class="network-buttons"><div class="network-option" onclick="selectReferralNetwork('mtn')">MTN</div><div class="network-option" onclick="selectReferralNetwork('airtel')">Airtel</div><div class="network-option" onclick="selectReferralNetwork('glo')">Glo</div><div class="network-option" onclick="selectReferralNetwork('9mobile')">9mobile</div></div><input type="tel" id="referralPhone" placeholder="Your phone number"><button onclick="claimReferralReward()">Claim Reward</button><a class="skip-link" onclick="closeReferralRewardOverlay()">Later</a></div>`;
-            document.body.appendChild(overlay);
-            window.selectedReferralNetwork = null;
-        }
-        
-        function selectReferralNetwork(network) {
-            window.selectedReferralNetwork = network;
-            document.querySelectorAll('#referralRewardOverlay .network-option').forEach(opt => opt.classList.remove('selected'));
-            const clicked = Array.from(document.querySelectorAll('#referralRewardOverlay .network-option')).find(opt => opt.innerText.toLowerCase().includes(network));
-            if (clicked) clicked.classList.add('selected');
-        }
-        
-        function closeReferralRewardOverlay() {
-            const overlay = document.getElementById('referralRewardOverlay');
-            if (overlay) overlay.remove();
-        }
-        
-        async function claimReferralReward() {
-            const phone = document.getElementById('referralPhone')?.value;
-            if (!window.selectedReferralNetwork || !phone) {
-                showToast("Select network and enter phone number", "error");
-                return;
-            }
-            const result = await callAPI('/submit-referral-reward', 'POST', {
-                userEmail: currentUser.email, userName: currentUser.name, phone, network: window.selectedReferralNetwork, amount: 400
-            });
-            if (result?.success) {
-                closeReferralRewardOverlay();
-                startReferralPolling();
-                await loadAdminData();
-            } else showToast("Failed to submit request", "error");
-        }
-        
-        function startFundingPolling() {
-            if (fundingPollingInterval) clearInterval(fundingPollingInterval);
-            fundingPollingInterval = setInterval(async () => {
-                const result = await callAPI('/admin/pending-funding');
-                if (result) {
-                    const completed = result.find(p => p.user_email === currentUser?.email && p.status === 'completed');
-                    if (completed && fundingPollingInterval) {
-                        clearInterval(fundingPollingInterval);
-                        fundingPollingInterval = null;
-                        showFundingSuccessOverlay(completed.amount);
-                        await loadAdminData();
-                        const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
-                        if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
-                    }
-                }
-            }, 3000);
-        }
-        
-        function startPurchasePolling() {
-            if (purchasePollingInterval) clearInterval(purchasePollingInterval);
-            purchasePollingInterval = setInterval(async () => {
-                const result = await callAPI('/admin/pending-purchases');
-                if (result) {
-                    const completed = result.find(p => p.user_email === currentUser?.email && p.status === 'completed');
-                    if (completed && purchasePollingInterval) {
-                        clearInterval(purchasePollingInterval);
-                        purchasePollingInterval = null;
-                        showPurchaseSuccessOverlay(completed.plan_size, completed.phone_number, completed.plan_price);
-                        await loadAdminData();
-                    }
-                }
-            }, 3000);
-        }
-        
-        function startReferralPolling() {
-            if (referralPollingInterval) clearInterval(referralPollingInterval);
-            referralPollingInterval = setInterval(async () => {
-                const result = await callAPI('/admin/pending-referrals');
-                if (result) {
-                    const completed = result.find(r => r.user_email === currentUser?.email && r.status === 'completed');
-                    if (completed && referralPollingInterval) {
-                        clearInterval(referralPollingInterval);
-                        referralPollingInterval = null;
-                        showReferralSuccessOverlay();
-                        await loadAdminData();
-                        const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
-                        if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
-                    }
-                }
-            }, 3000);
         }
         
         async function callAPI(endpoint, method = 'GET', body = null) {
@@ -582,12 +329,11 @@
                 return await response.json();
             } catch (error) {
                 console.error('API Error:', error);
-                showToast('Network error. Please check connection.', 'error');
+                showToast('Network error. Cannot connect to server.', 'error');
                 return null;
             }
         }
         
-        // ============ AUTH ============
         async function signup() {
             const name = document.getElementById("signupName").value.trim();
             const email = document.getElementById("signupEmail").value.trim().toLowerCase();
@@ -604,9 +350,7 @@
                 return;
             }
             
-            showLoadingOverlay("Creating account...");
             const result = await callAPI('/signup', 'POST', { name, email, phone, password, referralCode });
-            hideLoadingOverlay();
             
             if (result?.success) {
                 showToast("Account created! Please login", "success");
@@ -637,10 +381,6 @@
                 sessionStorage.setItem('userEmail', currentUser.email);
                 showToast("Login successful!", "success");
                 await loadDashboard();
-                showWelcomeOverlay();
-                if (currentUser.referral_count >= 5 && !currentUser.referral_reward_claimed) {
-                    setTimeout(() => showReferralRewardOverlay(), 1500);
-                }
             } else {
                 showToast(result?.error || "Invalid email or password", "error");
             }
@@ -649,11 +389,6 @@
         function logout() {
             currentUser = null;
             sessionStorage.removeItem('userEmail');
-            hasShownWelcomeOverlay = false;
-            hasShownReferralOverlay = false;
-            if (fundingPollingInterval) clearInterval(fundingPollingInterval);
-            if (purchasePollingInterval) clearInterval(purchasePollingInterval);
-            if (referralPollingInterval) clearInterval(referralPollingInterval);
             document.getElementById("authSection").style.display = "flex";
             document.getElementById("dashboardContent").style.display = "none";
             document.getElementById("userInfo").style.display = "none";
@@ -666,7 +401,6 @@
         function showLogin() { 
             document.getElementById("loginForm").style.display = "block"; 
             document.getElementById("signupForm").style.display = "none";
-            // Clear login form fields
             document.getElementById("loginEmail").value = "";
             document.getElementById("loginPassword").value = "";
         }
@@ -674,12 +408,6 @@
         function showSignup() { 
             document.getElementById("loginForm").style.display = "none"; 
             document.getElementById("signupForm").style.display = "block";
-            // Clear signup form fields
-            document.getElementById("signupName").value = "";
-            document.getElementById("signupEmail").value = "";
-            document.getElementById("signupPhone").value = "";
-            document.getElementById("signupPassword").value = "";
-            document.getElementById("referralCodeInput").value = "";
         }
         
         async function loadDashboard() {
@@ -698,22 +426,16 @@
                     document.getElementById("referralsNeeded").innerHTML = `${5 - (currentUser.referral_count || 0)} left = 500MB`;
                     
                     const isAdmin = isAdminUser(currentUser.email);
-                    const adminBtnContainer = document.getElementById("adminButtonContainer");
-                    const adminPanelContainer = document.getElementById("adminPanelContainer");
-                    
                     if (isAdmin) {
-                        adminBtnContainer.style.display = "block";
-                        adminPanelContainer.style.display = "block";
+                        document.getElementById("adminButtonContainer").style.display = "block";
+                        document.getElementById("adminPanelContainer").style.display = "block";
                         document.getElementById("adminFlagBtn").onclick = () => {
                             const panel = document.getElementById("adminPanel");
                             panel.style.display = panel.style.display === "none" ? "block" : "none";
                             if (panel.style.display === "block") loadAdminData();
                         };
                         await loadAdminData();
-                        setInterval(() => { if (isAdminUser(currentUser?.email)) loadAdminData(); }, 10000);
-                    } else {
-                        adminBtnContainer.style.display = "none";
-                        adminPanelContainer.style.display = "none";
+                        setInterval(loadAdminData, 10000);
                     }
                     
                     setupEventListeners();
@@ -740,10 +462,10 @@
                 return;
             }
             container.innerHTML = plans.map(plan => `
-                <div class="plan-card" data-plan-size="${plan.size}" data-plan-price="${plan.price}" data-plan-validity="${plan.validity}">
+                <div class="plan-card" data-plan-size="${plan.size}" data-plan-price="${plan.price}">
                     <div class="plan-size">${plan.size}</div>
                     <div class="plan-price">₦${plan.price}</div>
-                    <div style="font-size:0.7rem;">+₦${SERVICE_CHARGE} service</div>
+                    <div style="font-size:0.7rem;">+₦${SERVICE_CHARGE}</div>
                 </div>
             `).join("");
             
@@ -753,8 +475,7 @@
                     card.classList.add("selected");
                     selectedPlan = {
                         size: card.dataset.planSize,
-                        price: parseInt(card.dataset.planPrice),
-                        validity: card.dataset.planValidity
+                        price: parseInt(card.dataset.planPrice)
                     };
                     document.getElementById("buyDataBtn").disabled = false;
                     showToast(`Total: ₦${selectedPlan.price + SERVICE_CHARGE}`, "success");
@@ -771,7 +492,7 @@
         
         function copyAccountNumber() {
             navigator.clipboard.writeText("9066051034");
-            showToast("Account number copied!", "success");
+            showToast("Copied!", "success");
         }
         
         async function submitFundingConfirm() {
@@ -780,20 +501,19 @@
                 showToast("Select amount and enter reference", "error");
                 return;
             }
-            showLoadingOverlay("Submitting...");
             const result = await callAPI('/submit-funding', 'POST', {
                 userEmail: currentUser.email, userName: currentUser.name, userPhone: currentUser.phone,
                 amount: selectedAmount, serviceCharge: SERVICE_CHARGE, transactionRef, paymentMethod: selectedFundingMethod
             });
             if (result?.success) {
-                startFundingPolling();
+                showToast("Funding request submitted!", "success");
                 document.getElementById("amountSection").classList.remove("show");
                 document.getElementById("paymentSection").classList.remove("show");
                 document.getElementById("fundingTransactionRef").value = "";
                 selectedAmount = null;
-                showToast("Funding request submitted!", "success");
-            } else showToast(result?.error || "Failed", "error");
-            hideLoadingOverlay();
+            } else {
+                showToast(result?.error || "Failed", "error");
+            }
         }
         
         async function submitPurchase() {
@@ -811,40 +531,35 @@
                 showToast(`Insufficient balance. Need ₦${total}`, "error");
                 return;
             }
-            showLoadingOverlay("Processing...");
             const result = await callAPI('/submit-purchase', 'POST', {
                 userEmail: currentUser.email, userName: currentUser.name, userPhone: currentUser.phone,
                 network: selectedNetwork, planSize: selectedPlan.size, planPrice: selectedPlan.price,
                 serviceCharge: SERVICE_CHARGE, phoneNumber: phone
             });
             if (result?.success) {
-                startPurchasePolling();
                 currentUser.wallet_balance -= total;
                 document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`;
                 document.getElementById("purchasePhone").value = "";
                 document.getElementById("buyDataBtn").disabled = true;
                 selectedPlan = null;
                 showToast("Purchase submitted!", "success");
-            } else showToast(result?.error || "Purchase failed", "error");
-            hideLoadingOverlay();
+            } else {
+                showToast(result?.error || "Purchase failed", "error");
+            }
         }
         
         async function loadAdminData() {
             if (!isAdminUser(currentUser?.email)) return;
-            await Promise.all([
-                (async () => {
-                    const result = await callAPI('/admin/pending-funding');
-                    if (result) { pendingFunding = result; renderFundingList(); }
-                })(),
-                (async () => {
-                    const result = await callAPI('/admin/pending-purchases');
-                    if (result) { pendingPurchases = result; renderPurchasesList(); }
-                })(),
-                (async () => {
-                    const result = await callAPI('/admin/pending-referrals');
-                    if (result) { pendingReferrals = result; renderReferralsList(); }
-                })()
-            ]);
+            
+            const funding = await callAPI('/admin/pending-funding');
+            if (funding) { pendingFunding = funding; renderFundingList(); }
+            
+            const purchases = await callAPI('/admin/pending-purchases');
+            if (purchases) { pendingPurchases = purchases; renderPurchasesList(); }
+            
+            const referrals = await callAPI('/admin/pending-referrals');
+            if (referrals) { pendingReferrals = referrals; renderReferralsList(); }
+            
             updateAdminBadge();
         }
         
@@ -858,7 +573,7 @@
             }
             container.innerHTML = pending.map(f => `
                 <div class="pending-item">
-                    <div><strong>${f.user_name}</strong><br>₦${f.amount} + ₦${f.service_charge || SERVICE_CHARGE}<br>${f.transaction_ref}</div>
+                    <div><strong>${f.user_name}</strong><br>₦${f.amount}<br>${f.transaction_ref}</div>
                     <div><button class="success-btn" onclick="approveFunding(${f.id})">Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})">Decline</button></div>
                 </div>
             `).join("");
@@ -874,7 +589,7 @@
             }
             container.innerHTML = pending.map(p => `
                 <div class="pending-item">
-                    <div><strong>${p.user_name}</strong><br>${p.network} - ${p.plan_size}<br>Phone: ${p.phone_number}</div>
+                    <div><strong>${p.user_name}</strong><br>${p.network} - ${p.plan_size}<br>${p.phone_number}</div>
                     <div><button class="success-btn" onclick="approvePurchase(${p.id})">Approve</button><button class="decline-btn" onclick="declinePurchase(${p.id})">Decline</button></div>
                 </div>
             `).join("");
@@ -890,7 +605,7 @@
             }
             container.innerHTML = pending.map(r => `
                 <div class="pending-item">
-                    <div><strong>${r.user_name}</strong><br>${r.network}<br>Phone: ${r.phone}</div>
+                    <div><strong>${r.user_name}</strong><br>${r.network}<br>${r.phone}</div>
                     <div><button class="success-btn" onclick="approveReferral(${r.id})">Approve</button><button class="decline-btn" onclick="declineReferral(${r.id})">Decline</button></div>
                 </div>
             `).join("");
@@ -899,7 +614,7 @@
         async function approveFunding(id) {
             const result = await callAPI(`/admin/approve-funding/${id}`, 'POST');
             if (result?.success) {
-                showToast("Funding approved!", "success");
+                showToast("Approved!", "success");
                 await loadAdminData();
                 const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
                 if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
@@ -908,17 +623,17 @@
         
         async function declineFunding(id) {
             const result = await callAPI(`/admin/decline-funding/${id}`, 'POST');
-            if (result?.success) { showToast("Funding declined", "error"); await loadAdminData(); }
+            if (result?.success) { showToast("Declined", "error"); await loadAdminData(); }
         }
         
         async function approvePurchase(id) {
             const result = await callAPI(`/admin/approve-purchase/${id}`, 'POST');
-            if (result?.success) { showToast("Purchase approved!", "success"); await loadAdminData(); }
+            if (result?.success) { showToast("Approved!", "success"); await loadAdminData(); }
         }
         
         async function declinePurchase(id) {
             const result = await callAPI(`/admin/decline-purchase/${id}`, 'POST');
-            if (result?.success) { showToast("Purchase declined", "error"); await loadAdminData(); }
+            if (result?.success) { showToast("Declined", "error"); await loadAdminData(); }
         }
         
         async function approveReferral(id) {
@@ -928,7 +643,7 @@
         
         async function declineReferral(id) {
             const result = await callAPI(`/admin/decline-referral/${id}`, 'POST');
-            if (result?.success) { showToast("Referral declined", "error"); await loadAdminData(); }
+            if (result?.success) { showToast("Declined", "error"); await loadAdminData(); }
         }
         
         function updateAdminBadge() {
@@ -951,12 +666,11 @@
             document.getElementById("referralTabCount").textContent = referralCount;
         }
         
-        function getReferralMessage() { return `Join OnSlot! Use my code: ${currentUser.referral_code}\nhttps://onslot-frontend.onrender.com`; }
+        function getReferralMessage() { return `Join OnSlot! Use my code: ${currentUser.referral_code}`; }
         function copyReferralCode() { navigator.clipboard.writeText(getReferralMessage()); showToast("Copied!", "success"); }
         function shareOnWhatsApp() { window.open(`https://wa.me/?text=${encodeURIComponent(getReferralMessage())}`, "_blank"); }
         function shareOnFacebook() { window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin)}&quote=${encodeURIComponent(getReferralMessage())}`, "_blank"); }
         function shareOnTwitter() { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(getReferralMessage())}`, "_blank"); }
-        function shareOnTelegram() { window.open(`https://t.me/share/url?url=${window.location.origin}&text=${encodeURIComponent(getReferralMessage())}`, "_blank"); }
         
         function setupEventListeners() {
             document.getElementById("fundMainBtn").onclick = () => {
@@ -1004,28 +718,10 @@
             }
         }
         
-        // Initialize - ALWAYS show login page first, NO auto-login
         document.addEventListener("DOMContentLoaded", () => {
-            // Triple clear to be safe
             sessionStorage.clear();
             localStorage.clear();
-            
-            // Clear all cookies
-            document.cookie.split(";").forEach(function(c) { 
-                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-            });
-            
-            // Force show login form
             showLogin();
-            
-            // Clear all input fields
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPassword').value = '';
-            document.getElementById('signupName').value = '';
-            document.getElementById('signupEmail').value = '';
-            document.getElementById('signupPhone').value = '';
-            document.getElementById('signupPassword').value = '';
-            document.getElementById('referralCodeInput').value = '';
         });
     </script>
 </body>
