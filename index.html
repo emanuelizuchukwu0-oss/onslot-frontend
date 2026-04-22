@@ -894,47 +894,82 @@
     function copyAccountNumber() { navigator.clipboard.writeText("9066051034"); showToast("Account number copied!", "success"); }
     
     async function submitFundingConfirm() {
-        const transactionRef = document.getElementById("fundingTransactionRef").value;
-        if (!selectedAmount) { showToast("Select amount", "error"); return; }
-        if (!transactionRef) { showToast("Enter transaction reference", "error"); return; }
-        
-        const amountToAdd = selectedAmount - SERVICE_CHARGE;
-        if (amountToAdd < 0) { showToast("Amount must be ₦400+", "error"); return; }
-        
-        showProcessingOverlay(
-            `💰 Funding Request\n\nYou send: ₦${selectedAmount}\nFee deducted: ₦${SERVICE_CHARGE}\nAmount to add: ₦${amountToAdd}\n\nWaiting for admin approval...`,
-            "funding",
-            null,
-            { amountToAdd: amountToAdd }
-        );
-        
-        const result = await callAPI('/submit-funding', 'POST', { 
-            userEmail: currentUser.email, 
-            userName: currentUser.name, 
-            userPhone: currentUser.phone, 
-            amount: amountToAdd,
-            serviceCharge: SERVICE_CHARGE, 
-            totalAmount: amountToAdd,
-            transactionRef: transactionRef, 
-            paymentMethod: selectedFundingMethod 
-        });
+    console.log("=== SUBMIT FUNDING STARTED ===");
+    
+    const transactionRef = document.getElementById("fundingTransactionRef").value;
+    console.log("Transaction Ref:", transactionRef);
+    console.log("Selected Amount:", selectedAmount);
+    
+    if (!selectedAmount) { 
+        showToast("Please select an amount first", "error"); 
+        return; 
+    }
+    if (!transactionRef) { 
+        showToast("Please enter transaction reference", "error");
+        return; 
+    }
+    
+    // Calculate amount after fee deduction (user gets this much)
+    const amountToAdd = selectedAmount - SERVICE_CHARGE;
+    console.log("User sends: ₦" + selectedAmount);
+    console.log("Fee: ₦" + SERVICE_CHARGE);
+    console.log("User gets: ₦" + amountToAdd);
+    
+    if (amountToAdd < 0) { 
+        showToast("Amount must be at least ₦" + (SERVICE_CHARGE + 1), "error");
+        return; 
+    }
+    
+    // Prepare the data to send - MAKE SURE ALL FIELDS MATCH BACKEND EXPECTATIONS
+    const requestData = { 
+        userEmail: currentUser.email, 
+        userName: currentUser.name, 
+        userPhone: currentUser.phone, 
+        amount: amountToAdd,  // Amount after fee (what goes to wallet)
+        amountSent: selectedAmount,  // Amount user actually sent
+        serviceCharge: SERVICE_CHARGE, 
+        totalAmount: amountToAdd,
+        transactionRef: transactionRef, 
+        paymentMethod: selectedFundingMethod 
+    };
+    
+    console.log("Sending request data:", requestData);
+    
+    showProcessingOverlay(
+        `💰 Funding Request\n\nYou send: ₦${selectedAmount}\nFee deducted: ₦${SERVICE_CHARGE}\nAmount to add: ₦${amountToAdd}\n\nSubmitting...`,
+        "funding",
+        null,
+        { amountToAdd: amountToAdd }
+    );
+    
+    try {
+        const result = await callAPI('/submit-funding', 'POST', requestData);
+        console.log("API Response:", result);
         
         if (result && result.success) {
+            console.log("SUCCESS: Funding request submitted");
+            
+            // Check for pending request
             const pending = await callAPI('/admin/pending-funding');
+            console.log("Pending funding list:", pending);
+            
             const latest = pending?.find(p => p.user_email === currentUser.email && p.status === 'pending');
+            
+            if (currentProcessingOverlay) currentProcessingOverlay.remove();
+            
             if (latest) {
-                if (currentProcessingOverlay) currentProcessingOverlay.remove();
+                console.log("Found pending request with ID:", latest.id);
                 showProcessingOverlay(
-                    `💰 Funding Request\n\nYou send: ₦${selectedAmount}\nFee deducted: ₦${SERVICE_CHARGE}\nAmount to add: ₦${amountToAdd}\n\nWaiting for admin approval...`,
+                    `💰 Funding Request\n\nYou send: ₦${selectedAmount}\nFee: ₦${SERVICE_CHARGE}\nYou get: ₦${amountToAdd}\n\nWaiting for admin approval...`,
                     'funding',
                     latest.id,
                     { amountToAdd: amountToAdd }
                 );
             } else {
-                closeProcessingOverlay();
                 showSuccessOverlay(`Funding request submitted! ₦${amountToAdd} will be added upon approval.`, "Request Submitted!");
             }
             
+            // Reset form
             document.getElementById("accountDetails").style.display = "none";
             document.getElementById("amountSection").classList.remove("show");
             document.getElementById("paymentSection").classList.remove("show");
@@ -943,11 +978,18 @@
             document.getElementById("customAmount").value = "";
             selectedAmount = null;
             await loadAdminData();
-        } else { 
-            closeProcessingOverlay();
-            showErrorOverlay("Failed to submit request", "Error"); 
+            
+        } else {
+            console.log("ERROR: API returned failure:", result);
+            if (currentProcessingOverlay) currentProcessingOverlay.remove();
+            showErrorOverlay(result?.error || "Failed to submit request. Please try again.", "Error");
         }
+    } catch (error) {
+        console.log("EXCEPTION:", error);
+        if (currentProcessingOverlay) currentProcessingOverlay.remove();
+        showErrorOverlay("Network error. Please check your connection.", "Error");
     }
+}
     
     async function submitPurchase() {
         if (!selectedNetwork) { showToast("Select network", "error"); return; }
