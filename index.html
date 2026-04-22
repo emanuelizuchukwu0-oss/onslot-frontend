@@ -178,9 +178,13 @@
         .footer { background: rgba(5,5,5,0.9); padding: 40px 24px 20px; text-align: center; }
         .footer p { color: #94a3b8; font-size: 0.8rem; }
         @media (max-width: 768px) { .hero-title { font-size: 2rem; } .plans-grid { grid-template-columns: repeat(2, 1fr); } .pending-item { flex-direction: column; } .item-actions { width: 100%; justify-content: center; } .amount-buttons { justify-content: center; } .payment-methods { flex-direction: column; } .custom-amount-container { flex-direction: column; } .custom-amount-container button { width: 100%; } }
+        
+        /* Debug styles */
+        .debug-console { position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #0f0; font-family: monospace; font-size: 10px; padding: 5px; border-radius: 5px; z-index: 9999; max-width: 300px; max-height: 150px; overflow: auto; display: none; }
     </style>
 </head>
 <body>
+    <div class="debug-console" id="debugConsole"></div>
     <div class="bg-animation"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
     <nav class="navbar"><div class="nav-container"><div class="logo"><div class="logo-icon"><i class="fas fa-bolt"></i></div><span>OnSlot</span></div><div class="user-info" id="userInfo" style="display: none;"><span class="user-name" id="userNameDisplay"></span><span class="wallet-balance" id="walletBalance">₦0</span><div style="position:relative;"><button class="admin-flag" id="adminFlagBtn"><i class="fas fa-flag-checkered"></i> Admin<span id="adminNotificationBadge" class="notification-badge" style="display:none;">0</span></button></div><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
 
@@ -278,6 +282,22 @@
         let hasShownWelcomeOverlay = false;
         let hasShownReferralOverlay = false;
         
+        // Debug function
+        function debugLog(msg) {
+            console.log(msg);
+            const debugDiv = document.getElementById('debugConsole');
+            if (debugDiv) {
+                debugDiv.style.display = 'block';
+                debugDiv.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${msg}</div>`;
+                debugDiv.scrollTop = debugDiv.scrollHeight;
+                setTimeout(() => {
+                    if (debugDiv.children.length > 10) {
+                        debugDiv.innerHTML = '';
+                    }
+                }, 5000);
+            }
+        }
+        
         // Data Plans Configuration
         const planData = {
             mtn: [
@@ -314,9 +334,13 @@
         };
         
         async function checkExistingSession() {
+            debugLog("Checking existing session...");
             const savedEmail = sessionStorage.getItem('userEmail');
             if (savedEmail) {
+                debugLog(`Found saved email: ${savedEmail}`);
                 await loadDashboard();
+            } else {
+                debugLog("No saved session found");
             }
         }
         
@@ -324,6 +348,7 @@
         function showWelcomeOverlay() {
             if (hasShownWelcomeOverlay) return;
             hasShownWelcomeOverlay = true;
+            debugLog("Showing welcome overlay");
             const overlay = document.createElement('div');
             overlay.className = 'overlay';
             overlay.innerHTML = `<div class="overlay-card"><div style="font-size: 60px;">👋</div><h2>Welcome to OnSlot!</h2><p>You're ready to start buying cheap data!</p><p style="background: rgba(245,158,11,0.1); padding: 10px; border-radius: 12px; margin: 15px 0;">💡 <strong>Quick Tip:</strong> ₦50 service charge applies to all transactions</p><button onclick="this.parentElement.parentElement.remove()">Get Started</button></div>`;
@@ -337,7 +362,6 @@
             overlay.className = 'loading-overlay';
             overlay.innerHTML = `<div class="loading-card"><div class="loading-spinner"></div><p>${message}</p><p style="font-size: 0.8rem; margin-top: 10px;">⏰ Please wait a moment</p></div>`;
             document.body.appendChild(overlay);
-            // Don't auto-hide - let it be hidden when response comes
         }
         
         function hideLoadingOverlay() {
@@ -472,10 +496,14 @@
             const options = { method, headers: { 'Content-Type': 'application/json' } };
             if (body) options.body = JSON.stringify(body);
             try {
+                debugLog(`API Call: ${method} ${endpoint}`);
                 const response = await fetch(`${API_URL}${endpoint}`, options);
-                return await response.json();
+                const data = await response.json();
+                debugLog(`API Response: ${JSON.stringify(data).substring(0, 200)}`);
+                return data;
             } catch (error) {
                 console.error('API Error:', error);
+                debugLog(`API Error: ${error.message}`);
                 showToast('Network error. Please check your connection.', 'error');
                 return null;
             }
@@ -498,20 +526,26 @@
             const email = document.getElementById("loginEmail").value;
             const password = document.getElementById("loginPassword").value;
             if (!email || !password) { showToast("Please enter email and password", "error"); return; }
+            debugLog(`Attempting login for: ${email}`);
             const result = await callAPI('/login', 'POST', { email, password });
             if (result && result.success) {
                 currentUser = result.user;
                 sessionStorage.setItem('userEmail', currentUser.email);
+                debugLog(`Login successful for: ${currentUser.name}`);
                 showToast("Login successful!", "success");
                 await loadDashboard();
                 showWelcomeOverlay();
                 if (currentUser.referral_count >= 5 && !currentUser.referral_reward_claimed) {
                     setTimeout(() => showReferralRewardOverlay(), 1500);
                 }
-            } else { showToast(result?.error || "Invalid email or password", "error"); }
+            } else { 
+                debugLog(`Login failed: ${result?.error}`);
+                showToast(result?.error || "Invalid email or password", "error"); 
+            }
         }
         
         function logout() {
+            debugLog("Logging out");
             currentUser = null;
             sessionStorage.removeItem('userEmail');
             hasShownWelcomeOverlay = false;
@@ -524,18 +558,36 @@
             showLogin();
         }
         
-        function showLogin() { document.getElementById("loginForm").style.display = "block"; document.getElementById("signupForm").style.display = "none"; }
-        function showSignup() { document.getElementById("loginForm").style.display = "none"; document.getElementById("signupForm").style.display = "block"; }
+        function showLogin() { 
+            document.getElementById("loginForm").style.display = "block"; 
+            document.getElementById("signupForm").style.display = "none"; 
+        }
+        function showSignup() { 
+            document.getElementById("loginForm").style.display = "none"; 
+            document.getElementById("signupForm").style.display = "block"; 
+        }
         
         async function loadDashboard() {
+            debugLog("Loading dashboard...");
             const savedEmail = sessionStorage.getItem('userEmail');
-            if (savedEmail) {
+            if (!savedEmail) {
+                debugLog("No saved email found");
+                return;
+            }
+            
+            try {
                 const userData = await callAPI(`/user/${encodeURIComponent(savedEmail)}`);
+                debugLog(`User data received: ${JSON.stringify(userData)}`);
+                
                 if (userData && userData.email) {
                     currentUser = userData;
+                    
+                    // Show dashboard and hide auth section
                     document.getElementById("authSection").style.display = "none";
                     document.getElementById("dashboardContent").style.display = "block";
                     document.getElementById("userInfo").style.display = "flex";
+                    
+                    // Update user info
                     document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
                     document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance || 0}`;
                     document.getElementById("userReferralCode").textContent = currentUser.referral_code;
@@ -543,12 +595,23 @@
                     const referralsLeft = 5 - (currentUser.referral_count || 0);
                     document.getElementById("referralsNeeded").innerHTML = `${referralsLeft > 0 ? referralsLeft : 0} referrals left = 500MB`;
                     
+                    // Setup admin flag
                     const adminFlag = document.getElementById("adminFlagBtn");
-                    adminFlag.onclick = function() { const pwd = prompt("Enter admin code:"); if (pwd === "000") { document.getElementById("adminPanel").style.display = "block"; loadAdminData(); } else { showToast("Wrong admin code!", "error"); } };
+                    adminFlag.onclick = function() { 
+                        const pwd = prompt("Enter admin code:"); 
+                        if (pwd === "000") { 
+                            document.getElementById("adminPanel").style.display = "block"; 
+                            loadAdminData(); 
+                        } else { 
+                            showToast("Wrong admin code!", "error"); 
+                        } 
+                    };
                     
+                    // Load admin data
                     await loadAdminData();
                     setInterval(loadAdminData, 5000);
                     
+                    // Setup admin tabs
                     document.querySelectorAll(".admin-tab").forEach(tab => {
                         tab.onclick = () => {
                             document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
@@ -558,12 +621,14 @@
                         };
                     });
                     
+                    // Setup fund wallet button
                     const fundMainBtn = document.getElementById("fundMainBtn");
                     fundMainBtn.onclick = () => {
                         document.getElementById("accountDetails").style.display = "block";
                         document.getElementById("amountSection").classList.add("show");
                     };
                     
+                    // Setup amount buttons
                     document.querySelectorAll(".amount-btn").forEach(btn => {
                         btn.onclick = () => {
                             document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
@@ -573,22 +638,40 @@
                         };
                     });
                     
+                    // Setup custom amount
                     document.getElementById("setCustomAmountBtn").onclick = () => {
                         const customAmount = parseInt(document.getElementById("customAmount").value);
-                        if (isNaN(customAmount) || customAmount < 400) { showToast("Please enter a valid amount of ₦400 or more", "error"); return; }
+                        if (isNaN(customAmount) || customAmount < 400) { 
+                            showToast("Please enter a valid amount of ₦400 or more", "error"); 
+                            return; 
+                        }
                         document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
                         selectedAmount = customAmount;
                         document.getElementById("proceedPaymentBtn").classList.add("show");
                         showToast(`Custom amount ₦${selectedAmount} selected (+₦${SERVICE_CHARGE} fee)`, "success");
                     };
                     
+                    // Setup proceed payment button
                     document.getElementById("proceedPaymentBtn").onclick = () => {
-                        if (!selectedAmount) { showToast("Please select an amount first", "error"); return; }
+                        if (!selectedAmount) { 
+                            showToast("Please select an amount first", "error"); 
+                            return; 
+                        }
                         const total = selectedAmount + SERVICE_CHARGE;
                         showToast(`You'll pay ₦${selectedAmount} + ₦${SERVICE_CHARGE} fee = ₦${total}`, "info");
                         document.getElementById("paymentSection").classList.add("show");
                     };
+                    
+                    debugLog("Dashboard loaded successfully");
+                } else {
+                    debugLog("No user data received, clearing session");
+                    sessionStorage.removeItem('userEmail');
+                    showToast("Session expired. Please login again.", "error");
+                    logout();
                 }
+            } catch (error) {
+                debugLog(`Error loading dashboard: ${error.message}`);
+                showToast("Error loading dashboard. Please refresh.", "error");
             }
         }
         
@@ -856,7 +939,10 @@
         // Initialize admin content as visible
         document.getElementById("adminContent").style.display = "block";
         
-        document.addEventListener("DOMContentLoaded", () => { checkExistingSession(); });
+        document.addEventListener("DOMContentLoaded", () => { 
+            debugLog("DOM loaded, checking session...");
+            checkExistingSession(); 
+        });
     </script>
 </body>
 </html>
