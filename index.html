@@ -155,11 +155,12 @@
         .network-option:hover { background: rgba(30,41,59,0.8); }
         .network-option.selected { border-color: #f59e0b; background: rgba(245,158,11,0.15); }
         
-        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 6000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
-        .loading-card { background: linear-gradient(135deg, #0f1923, #1a1a2e); border: 2px solid #f59e0b; border-radius: 32px; padding: 40px; text-align: center; max-width: 400px; width: 90%; animation: slideUp 0.4s ease; }
-        .loading-spinner { width: 60px; height: 60px; border: 4px solid rgba(245,158,11,0.2); border-top-color: #f59e0b; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        .processing-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 6000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
+        .processing-card { background: linear-gradient(135deg, #0f1923, #1a1a2e); border: 2px solid #f59e0b; border-radius: 32px; padding: 40px; text-align: center; max-width: 450px; width: 90%; animation: slideUp 0.4s ease; }
+        .processing-spinner { width: 60px; height: 60px; border: 4px solid rgba(245,158,11,0.2); border-top-color: #f59e0b; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-card p { color: #94a3b8; margin-top: 15px; }
+        .processing-card p { color: #94a3b8; margin-top: 15px; }
+        .processing-status { font-size: 0.9rem; margin-top: 10px; color: #f59e0b; }
         
         .success-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 6000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
         .success-card { background: linear-gradient(135deg, #0f1923, #1a1a2e); border: 2px solid #10b981; border-radius: 32px; padding: 40px; text-align: center; max-width: 450px; width: 90%; animation: slideUp 0.4s ease; }
@@ -167,6 +168,13 @@
         .success-card h2 { color: #10b981; font-size: 1.8rem; margin-bottom: 15px; }
         .success-card p { color: #94a3b8; margin-bottom: 10px; }
         .success-card button { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 12px 30px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        
+        .error-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 6000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
+        .error-card { background: linear-gradient(135deg, #0f1923, #1a1a2e); border: 2px solid #ef4444; border-radius: 32px; padding: 40px; text-align: center; max-width: 450px; width: 90%; animation: slideUp 0.4s ease; }
+        .error-card .error-icon { font-size: 80px; color: #ef4444; margin-bottom: 20px; }
+        .error-card h2 { color: #ef4444; font-size: 1.8rem; margin-bottom: 15px; }
+        .error-card p { color: #94a3b8; margin-bottom: 10px; }
+        .error-card button { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 12px 30px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; margin-top: 20px; }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -278,6 +286,7 @@
         let statusPollingInterval = null;
         let hasShownWelcomeOverlay = false;
         let hasShownReferralOverlay = false;
+        let currentProcessingOverlay = null;
         
         // Data Plans Configuration
         const planData = {
@@ -314,43 +323,73 @@
             ]
         };
         
-        // Check session on page load - KEEP USER LOGGED IN
-        async function checkExistingSession() {
-            const savedUser = localStorage.getItem('onslot_user');
-            if (savedUser) {
-                try {
-                    currentUser = JSON.parse(savedUser);
-                    // Verify user still exists in database
-                    const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
-                    if (userData && userData.email) {
-                        currentUser = userData;
-                        localStorage.setItem('onslot_user', JSON.stringify(currentUser));
-                        await showDashboard();
-                    } else {
-                        // Session invalid, clear storage
-                        localStorage.removeItem('onslot_user');
-                    }
-                } catch (e) {
-                    localStorage.removeItem('onslot_user');
-                }
+        // Show processing overlay (stays until admin approves/declines)
+        function showProcessingOverlay(message, type = 'funding') {
+            // Remove any existing processing overlay
+            if (currentProcessingOverlay) {
+                currentProcessingOverlay.remove();
+            }
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'processing-overlay';
+            overlay.id = 'processingOverlay';
+            overlay.innerHTML = `
+                <div class="processing-card">
+                    <div class="processing-spinner"></div>
+                    <p>${message}</p>
+                    <p class="processing-status">⏳ Waiting for admin approval...</p>
+                    <p style="font-size: 0.8rem; margin-top: 15px; color: #64748b;">This window will update automatically once admin approves</p>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            currentProcessingOverlay = overlay;
+        }
+        
+        function hideProcessingOverlay() {
+            if (currentProcessingOverlay) {
+                currentProcessingOverlay.remove();
+                currentProcessingOverlay = null;
             }
         }
         
-        // Refresh wallet balance without refreshing page
-        async function refreshWalletBalance() {
-            if (currentUser) {
-                showToast("Refreshing balance...", "info");
-                const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
-                if (userData && userData.wallet_balance !== undefined) {
-                    currentUser.wallet_balance = userData.wallet_balance;
-                    localStorage.setItem('onslot_user', JSON.stringify(currentUser));
-                    document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance} <i class="fas fa-sync-alt" style="font-size: 10px;"></i>`;
-                    showToast(`Balance updated: ₦${currentUser.wallet_balance}`, "success");
-                }
-            }
+        function showSuccessOverlay(message, title = "Success!") {
+            hideProcessingOverlay();
+            const overlay = document.createElement('div');
+            overlay.className = 'success-overlay';
+            overlay.innerHTML = `
+                <div class="success-card">
+                    <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                    <h2>${title}</h2>
+                    <p>${message}</p>
+                    <button onclick="this.parentElement.parentElement.remove()">Continue</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                if (overlay && overlay.parentElement) overlay.remove();
+            }, 4000);
         }
         
-        // ============ OVERLAY FUNCTIONS ============
+        function showErrorOverlay(message, title = "Failed!") {
+            hideProcessingOverlay();
+            const overlay = document.createElement('div');
+            overlay.className = 'error-overlay';
+            overlay.innerHTML = `
+                <div class="error-card">
+                    <div class="error-icon"><i class="fas fa-times-circle"></i></div>
+                    <h2>${title}</h2>
+                    <p>${message}</p>
+                    <button onclick="this.parentElement.parentElement.remove()">Close</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                if (overlay && overlay.parentElement) overlay.remove();
+            }, 4000);
+        }
+        
         function showWelcomeOverlay() {
             if (hasShownWelcomeOverlay) return;
             hasShownWelcomeOverlay = true;
@@ -358,32 +397,6 @@
             overlay.className = 'overlay';
             overlay.innerHTML = `<div class="overlay-card"><div style="font-size: 60px;">👋</div><h2>Welcome to OnSlot!</h2><p>You're ready to start buying cheap data!</p><p style="background: rgba(245,158,11,0.1); padding: 10px; border-radius: 12px; margin: 15px 0;">💡 <strong>Quick Tip:</strong> There will be a charges fee of 50 naira</p><button onclick="this.parentElement.parentElement.remove()">Get Started</button></div>`;
             document.body.appendChild(overlay);
-            // Auto remove after 3 seconds
-            setTimeout(() => {
-                if (overlay && overlay.parentElement) overlay.remove();
-            }, 3000);
-        }
-        
-        function showLoadingOverlay(message = "Processing your request...") {
-            const existing = document.querySelector('.loading-overlay');
-            if (existing) existing.remove();
-            const overlay = document.createElement('div');
-            overlay.className = 'loading-overlay';
-            overlay.innerHTML = `<div class="loading-card"><div class="loading-spinner"></div><p>${message}</p></div>`;
-            document.body.appendChild(overlay);
-        }
-        
-        function hideLoadingOverlay() {
-            const overlay = document.querySelector('.loading-overlay');
-            if (overlay) overlay.remove();
-        }
-        
-        function showSuccessOverlay(message, title = "Success!") {
-            const overlay = document.createElement('div');
-            overlay.className = 'success-overlay';
-            overlay.innerHTML = `<div class="success-card"><div class="check-icon"><i class="fas fa-check-circle"></i></div><h2>${title}</h2><p>${message}</p><button onclick="this.parentElement.parentElement.remove()">Continue</button></div>`;
-            document.body.appendChild(overlay);
-            // Auto remove after 3 seconds
             setTimeout(() => {
                 if (overlay && overlay.parentElement) overlay.remove();
             }, 3000);
@@ -418,74 +431,162 @@
             const phone = document.getElementById('referralPhone').value;
             if (!window.selectedReferralNetwork) { showToast("Please select your network", "error"); return; }
             if (!phone || !/^(0[7-9][0-1]{1}[0-9]{8})$/.test(phone)) { showToast("Enter valid phone number", "error"); return; }
-            showLoadingOverlay("Submitting your referral reward request...");
+            
+            showProcessingOverlay("Submitting your referral reward request...", "referral");
             const result = await callAPI('/submit-referral-reward', 'POST', { userEmail: currentUser.email, userName: currentUser.name, phone: phone, network: window.selectedReferralNetwork, amount: 400 });
             if (result && result.success) {
                 closeReferralRewardOverlay();
-                hideLoadingOverlay();
-                showSuccessOverlay("Your referral reward request has been sent to admin for approval!", "Request Sent");
-                await refreshWalletBalance();
+                // Start polling for this specific referral request
+                const pending = await callAPI('/admin/pending-referrals');
+                const latest = pending?.find(r => r.user_email === currentUser.email && r.status === 'pending');
+                if (latest) { 
+                    startReferralPolling(latest.id); 
+                } else { 
+                    hideProcessingOverlay();
+                    showToast("Referral reward request sent to admin!", "success"); 
+                }
                 await loadAdminData();
-            } else { hideLoadingOverlay(); showToast("Failed to submit request", "error"); }
+            } else { 
+                hideProcessingOverlay(); 
+                showErrorOverlay("Failed to submit request", "Error"); 
+            }
         }
         
-        // ============ POLLING FUNCTIONS ============
-        function startFundingPolling(pendingId, amount) {
+        // Check session on page load - KEEP USER LOGGED IN
+        async function checkExistingSession() {
+            const savedUser = localStorage.getItem('onslot_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
+                    if (userData && userData.email) {
+                        currentUser = userData;
+                        localStorage.setItem('onslot_user', JSON.stringify(currentUser));
+                        await showDashboard();
+                    } else {
+                        localStorage.removeItem('onslot_user');
+                    }
+                } catch (e) {
+                    localStorage.removeItem('onslot_user');
+                }
+            }
+        }
+        
+        // Refresh wallet balance
+        async function refreshWalletBalance() {
+            if (currentUser) {
+                showToast("Refreshing balance...", "info");
+                const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
+                if (userData && userData.wallet_balance !== undefined) {
+                    currentUser.wallet_balance = userData.wallet_balance;
+                    localStorage.setItem('onslot_user', JSON.stringify(currentUser));
+                    document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance} <i class="fas fa-sync-alt" style="font-size: 10px;"></i>`;
+                    showToast(`Balance updated: ₦${currentUser.wallet_balance}`, "success");
+                }
+            }
+        }
+        
+        // ============ POLLING FUNCTIONS - REAL TIME ADMIN LISTENING ============
+        function startFundingPolling(pendingId, amountToAdd, userSent) {
             if (statusPollingInterval) clearInterval(statusPollingInterval);
+            
+            // Update overlay message
+            if (currentProcessingOverlay) {
+                const statusElement = currentProcessingOverlay.querySelector('.processing-status');
+                if (statusElement) {
+                    statusElement.innerHTML = `⏳ Waiting for admin approval...<br>Your request is pending. Admin will approve shortly.`;
+                }
+            }
+            
             statusPollingInterval = setInterval(async () => {
                 const result = await callAPI('/admin/pending-funding');
                 const item = result?.find(p => p.id == pendingId);
-                if (item && item.status === 'completed') {
-                    clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
-                    showSuccessOverlay(`Your wallet has been credited with ₦${amount}!`, "Wallet Funded!");
-                    await refreshWalletBalance();
-                    await loadAdminData();
-                } else if (item && item.status === 'declined') {
-                    clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
-                    showToast("Your funding request was declined.", "error");
+                
+                if (item) {
+                    if (item.status === 'completed') {
+                        clearInterval(statusPollingInterval);
+                        statusPollingInterval = null;
+                        hideProcessingOverlay();
+                        showSuccessOverlay(`Wallet funded successfully! ₦${amountToAdd} has been added to your wallet.`, "Funding Successful!");
+                        await refreshWalletBalance();
+                        await loadAdminData();
+                    } else if (item.status === 'declined') {
+                        clearInterval(statusPollingInterval);
+                        statusPollingInterval = null;
+                        hideProcessingOverlay();
+                        showErrorOverlay(`Your funding request was declined. Please contact support.`, "Funding Declined");
+                        await loadAdminData();
+                    }
                 }
-            }, 3000);
+            }, 2000); // Check every 2 seconds for real-time updates
         }
         
         function startPurchasePolling(pendingId, planSize, phoneNumber, totalAmount) {
             if (statusPollingInterval) clearInterval(statusPollingInterval);
+            
+            // Update overlay message
+            if (currentProcessingOverlay) {
+                const statusElement = currentProcessingOverlay.querySelector('.processing-status');
+                if (statusElement) {
+                    statusElement.innerHTML = `⏳ Waiting for admin approval...<br>Your purchase request is pending. Admin will process shortly.`;
+                }
+            }
+            
             statusPollingInterval = setInterval(async () => {
                 const result = await callAPI('/admin/pending-purchases');
                 const item = result?.find(p => p.id == pendingId);
-                if (item && item.status === 'completed') {
-                    clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
-                    showSuccessOverlay(`Your ${planSize} data has been sent to ${phoneNumber}! Total: ₦${totalAmount}`, "Purchase Successful!");
-                    await refreshWalletBalance();
-                    await loadAdminData();
-                } else if (item && item.status === 'declined') {
-                    clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
-                    showToast("Your purchase was declined. Amount refunded.", "error");
-                    await refreshWalletBalance();
+                
+                if (item) {
+                    if (item.status === 'completed') {
+                        clearInterval(statusPollingInterval);
+                        statusPollingInterval = null;
+                        hideProcessingOverlay();
+                        showSuccessOverlay(`Your ${planSize} data has been sent to ${phoneNumber}! Total charged: ₦${totalAmount}`, "Purchase Successful!");
+                        await refreshWalletBalance();
+                        await loadAdminData();
+                    } else if (item.status === 'declined') {
+                        clearInterval(statusPollingInterval);
+                        statusPollingInterval = null;
+                        hideProcessingOverlay();
+                        showErrorOverlay(`Your purchase was declined. Amount has been refunded to your wallet.`, "Purchase Declined");
+                        await refreshWalletBalance();
+                        await loadAdminData();
+                    }
                 }
-            }, 3000);
+            }, 2000);
         }
         
         function startReferralPolling(pendingId) {
             if (statusPollingInterval) clearInterval(statusPollingInterval);
+            
+            if (currentProcessingOverlay) {
+                const statusElement = currentProcessingOverlay.querySelector('.processing-status');
+                if (statusElement) {
+                    statusElement.innerHTML = `⏳ Waiting for admin approval...<br>Your reward request is pending.`;
+                }
+            }
+            
             statusPollingInterval = setInterval(async () => {
                 const result = await callAPI('/admin/pending-referrals');
                 const item = result?.find(r => r.id == pendingId);
-                if (item && item.status === 'completed') {
-                    clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
-                    showSuccessOverlay("Your 500MB referral reward has been added to your wallet!", "Reward Credited!");
-                    await refreshWalletBalance();
-                    await loadAdminData();
-                } else if (item && item.status === 'declined') {
-                    clearInterval(statusPollingInterval);
-                    hideLoadingOverlay();
-                    showToast("Your referral reward was declined.", "error");
+                
+                if (item) {
+                    if (item.status === 'completed') {
+                        clearInterval(statusPollingInterval);
+                        statusPollingInterval = null;
+                        hideProcessingOverlay();
+                        showSuccessOverlay("Your 500MB referral reward has been added to your wallet!", "Reward Credited!");
+                        await refreshWalletBalance();
+                        await loadAdminData();
+                    } else if (item.status === 'declined') {
+                        clearInterval(statusPollingInterval);
+                        statusPollingInterval = null;
+                        hideProcessingOverlay();
+                        showErrorOverlay("Your referral reward was declined.", "Reward Declined");
+                        await loadAdminData();
+                    }
                 }
-            }, 3000);
+            }, 2000);
         }
         
         async function callAPI(endpoint, method = 'GET', body = null) {
@@ -509,14 +610,16 @@
             const password = document.getElementById("signupPassword").value;
             const referralCode = document.getElementById("referralCodeInput").value;
             if (!name || !email || !phone || !password) { showToast("Please fill all fields", "error"); return; }
-            showLoadingOverlay("Creating account...");
+            
+            showProcessingOverlay("Creating your account...", "signup");
             const result = await callAPI('/signup', 'POST', { name, email, phone, password, referralCode });
-            hideLoadingOverlay();
+            hideProcessingOverlay();
+            
             if (result && result.success) { 
-                showToast("Account created! Please login", "success"); 
+                showSuccessOverlay("Account created successfully! Please login.", "Account Created!");
                 showLogin(); 
             } else { 
-                showToast(result?.error || "Signup failed", "error"); 
+                showErrorOverlay(result?.error || "Signup failed", "Error"); 
             }
         }
         
@@ -525,21 +628,21 @@
             const password = document.getElementById("loginPassword").value;
             if (!email || !password) { showToast("Please enter email and password", "error"); return; }
             
-            showLoadingOverlay("Logging in...");
+            showProcessingOverlay("Logging in...", "login");
             const result = await callAPI('/login', 'POST', { email, password });
-            hideLoadingOverlay();
+            hideProcessingOverlay();
             
             if (result && result.success) {
                 currentUser = result.user;
                 localStorage.setItem('onslot_user', JSON.stringify(currentUser));
-                showToast("Login successful!", "success");
+                showSuccessOverlay(`Welcome back, ${currentUser.name}!`, "Login Successful!");
                 await showDashboard();
                 showWelcomeOverlay();
                 if (currentUser.referral_count >= 5 && !currentUser.referral_reward_claimed) {
                     setTimeout(() => showReferralRewardOverlay(), 1500);
                 }
             } else { 
-                showToast(result?.error || "Invalid email or password", "error"); 
+                showErrorOverlay(result?.error || "Invalid email or password", "Login Failed"); 
             }
         }
         
@@ -571,7 +674,6 @@
             document.getElementById("dashboardContent").style.display = "block";
             document.getElementById("userInfo").style.display = "flex";
             
-            // Update user info
             document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
             document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance || 0} <i class="fas fa-sync-alt" style="font-size: 10px;"></i>`;
             document.getElementById("userReferralCode").textContent = currentUser.referral_code;
@@ -579,7 +681,6 @@
             const referralsLeft = 5 - (currentUser.referral_count || 0);
             document.getElementById("referralsNeeded").innerHTML = `${referralsLeft > 0 ? referralsLeft : 0} referrals left = 500MB`;
             
-            // Setup admin button
             const adminFlag = document.getElementById("adminFlagBtn");
             adminFlag.onclick = function() { 
                 const pwd = prompt("Enter admin code:"); 
@@ -591,14 +692,12 @@
                 } 
             };
             
-            // Setup fund wallet button
             const fundMainBtn = document.getElementById("fundMainBtn");
             fundMainBtn.onclick = () => {
                 document.getElementById("accountDetails").style.display = "block";
                 document.getElementById("amountSection").classList.add("show");
             };
             
-            // Setup amount buttons
             document.querySelectorAll(".amount-btn").forEach(btn => {
                 btn.onclick = () => {
                     document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
@@ -608,7 +707,6 @@
                 };
             });
             
-            // Setup custom amount
             document.getElementById("setCustomAmountBtn").onclick = () => {
                 const customAmount = parseInt(document.getElementById("customAmount").value);
                 if (isNaN(customAmount) || customAmount < 400) { 
@@ -621,7 +719,6 @@
                 showToast(`Custom amount ₦${selectedAmount} selected (₦50 fee will be deducted)`, "success");
             };
             
-            // Setup proceed payment - SHOW DEDUCTION NOT ADDITION
             document.getElementById("proceedPaymentBtn").onclick = () => {
                 if (!selectedAmount) { 
                     showToast("Please select an amount first", "error"); 
@@ -633,7 +730,6 @@
                 document.getElementById("paymentSection").classList.add("show");
             };
             
-            // Setup admin tabs
             document.querySelectorAll(".admin-tab").forEach(tab => {
                 tab.onclick = () => {
                     document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
@@ -696,19 +792,24 @@
             if (!selectedAmount) { showToast("Please select an amount", "error"); return; }
             if (!transactionRef) { showToast("Enter transaction reference", "error"); return; }
             
-            // DEDUCT the service charge - user gets less
             const amountToAdd = selectedAmount - SERVICE_CHARGE;
             if (amountToAdd < 0) {
                 showToast(`Amount must be at least ₦${SERVICE_CHARGE + 1} to cover fee`, "error");
                 return;
             }
             
-            showLoadingOverlay(`Processing: You send ₦${selectedAmount}, ₦${SERVICE_CHARGE} fee deducted, ₦${amountToAdd} will be added...`);
+            // Show processing overlay - THIS WILL STAY UNTIL ADMIN APPROVES
+            showProcessingOverlay(
+                `You send: ₦${selectedAmount}\nFee deducted: ₦${SERVICE_CHARGE}\nAmount to add: ₦${amountToAdd}\n\nPlease wait for admin approval...`,
+                "funding"
+            );
             
             const result = await callAPI('/submit-funding', 'POST', { 
-                userEmail: currentUser.email, userName: currentUser.name, userPhone: currentUser.phone, 
-                amount: amountToAdd, // Only add the amount after deduction
-                amountSent: selectedAmount, // Track what user sent
+                userEmail: currentUser.email, 
+                userName: currentUser.name, 
+                userPhone: currentUser.phone, 
+                amount: amountToAdd,
+                amountSent: selectedAmount,
                 serviceCharge: SERVICE_CHARGE, 
                 totalAmount: amountToAdd,
                 transactionRef: transactionRef, 
@@ -719,11 +820,13 @@
                 const pending = await callAPI('/admin/pending-funding');
                 const latest = pending?.find(p => p.user_email === currentUser.email && p.status === 'pending');
                 if (latest) { 
-                    startFundingPolling(latest.id, amountToAdd); 
+                    startFundingPolling(latest.id, amountToAdd, selectedAmount); 
                 } else { 
-                    hideLoadingOverlay(); 
+                    hideProcessingOverlay(); 
                     showToast(`Funding request submitted! ₦${amountToAdd} will be added upon approval.`, "success"); 
                 }
+                
+                // Reset form
                 document.getElementById("accountDetails").style.display = "none";
                 document.getElementById("amountSection").classList.remove("show");
                 document.getElementById("paymentSection").classList.remove("show");
@@ -733,7 +836,10 @@
                 document.getElementById("customAmount").value = "";
                 selectedAmount = null;
                 await loadAdminData();
-            } else { hideLoadingOverlay(); showToast("Failed to submit request", "error"); }
+            } else { 
+                hideProcessingOverlay(); 
+                showErrorOverlay("Failed to submit request. Please try again.", "Error"); 
+            }
         }
         
         // ============ PURCHASE ============
@@ -750,7 +856,11 @@
                 return; 
             }
             
-            showLoadingOverlay(`Processing: ₦${selectedPlan.price} + ₦${SERVICE_CHARGE} fee = ₦${totalAmount}...`);
+            // Show processing overlay - THIS WILL STAY UNTIL ADMIN APPROVES
+            showProcessingOverlay(
+                `Plan: ${selectedPlan.size}\nNetwork: ${selectedNetwork.toUpperCase()}\nPhone: ${phone}\nAmount: ₦${selectedPlan.price} + ₦${SERVICE_CHARGE} fee = ₦${totalAmount}\n\nPlease wait for admin approval...`,
+                "purchase"
+            );
             
             const purchaseData = {
                 userEmail: currentUser.email,
@@ -778,7 +888,7 @@
                 if (latest) { 
                     startPurchasePolling(latest.id, selectedPlan.size, phone, totalAmount); 
                 } else { 
-                    hideLoadingOverlay();
+                    hideProcessingOverlay();
                     showToast("Purchase request submitted! Admin will verify.", "success"); 
                 }
                 await loadAdminData();
@@ -789,8 +899,8 @@
                 document.getElementById("buyDataBtn").disabled = true;
                 document.getElementById("purchasePhone").value = "";
             } else { 
-                hideLoadingOverlay(); 
-                showToast(result?.error || "Purchase failed", "error"); 
+                hideProcessingOverlay(); 
+                showErrorOverlay(result?.error || "Purchase failed", "Error"); 
             }
         }
         
@@ -824,7 +934,7 @@
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending funding requests</div>'; return; }
             container.innerHTML = pending.map(f => {
                 const amountToAdd = f.amount || 0;
-                return `<div class="pending-item"><div class="item-details"><p><strong>👤 ${f.user_name}</strong></p><p>📧 ${f.user_email}</p><p>📱 ${f.user_phone || "N/A"} <button class="copy-btn" onclick="copyToClipboard('${f.user_phone || ""}')">Copy</button></p><p>💰 Amount to add: ₦${amountToAdd} (₦50 fee deducted)</p><p>💳 ${f.payment_method}</p><p>📝 ${f.transaction_ref}</p><p>⏰ ${f.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveFunding(${f.id})"><i class="fas fa-check"></i> Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})"><i class="fas fa-times"></i> Decline</button></div></div>`;
+                return `<div class="pending-item"><div class="item-details"><p><strong>👤 ${f.user_name}</strong></p><p>📧 ${f.user_email}</p><p>📱 ${f.user_phone || "N/A"} <button class="copy-btn" onclick="copyToClipboard('${f.user_phone || ""}')">Copy</button></p><p>💰 Amount to add: ₦${amountToAdd} (₦50 fee deducted)</p><p>💳 ${f.payment_method}</p><p>📝 ${f.transaction_ref}</p><p>⏰ ${f.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveFunding(${f.id})"><i class="fas fa-check"></i> Approve & Credit</button><button class="decline-btn" onclick="declineFunding(${f.id})"><i class="fas fa-times"></i> Decline</button></div></div>`;
             }).join("");
         }
         
@@ -836,7 +946,7 @@
             container.innerHTML = pending.map(p => {
                 const planPrice = p.plan_price || p.amount || 0;
                 const total = planPrice + SERVICE_CHARGE;
-                return `<div class="pending-item"><div class="item-details"><p><strong>👤 ${p.user_name}</strong></p><p>📧 ${p.user_email}</p><p>📱 Recipient: ${p.phone_number} <button class="copy-btn" onclick="copyToClipboard('${p.phone_number}')">Copy</button></p><p>🌐 ${p.network ? p.network.toUpperCase() : "N/A"} - ${p.plan_size} (${p.validity || 'N/A'})</p><p>💰 Plan: ₦${planPrice} + ₦${SERVICE_CHARGE} fee = ₦${total}</p><p>⏰ ${p.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approvePurchase(${p.id})"><i class="fas fa-check"></i> Data Sent</button><button class="decline-btn" onclick="declinePurchase(${p.id})"><i class="fas fa-times"></i> Refund</button></div></div>`;
+                return `<div class="pending-item"><div class="item-details"><p><strong>👤 ${p.user_name}</strong></p><p>📧 ${p.user_email}</p><p>📱 Recipient: ${p.phone_number} <button class="copy-btn" onclick="copyToClipboard('${p.phone_number}')">Copy</button></p><p>🌐 ${p.network ? p.network.toUpperCase() : "N/A"} - ${p.plan_size} (${p.validity || 'N/A'})</p><p>💰 Plan: ₦${planPrice} + ₦${SERVICE_CHARGE} fee = ₦${total}</p><p>⏰ ${p.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approvePurchase(${p.id})"><i class="fas fa-check"></i> Approve & Send Data</button><button class="decline-btn" onclick="declinePurchase(${p.id})"><i class="fas fa-times"></i> Decline & Refund</button></div></div>`;
             }).join("");
         }
         
@@ -845,37 +955,59 @@
             if (!container) return;
             const pending = pendingReferrals.filter(r => r.status === "pending");
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending referral rewards</div>'; return; }
-            container.innerHTML = pending.map(r => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${r.user_name}</strong></p><p>📧 ${r.user_email}</p><p>📱 Phone: ${r.phone} <button class="copy-btn" onclick="copyToClipboard('${r.phone}')">Copy</button></p><p>📡 Network: ${r.network ? r.network.toUpperCase() : "N/A"}</p><p>🎁 Referral Reward: 500MB</p><p>⏰ ${r.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})"><i class="fas fa-check"></i> Credit Sent</button><button class="decline-btn" onclick="declineReferral(${r.id})"><i class="fas fa-times"></i> Decline</button></div></div>`).join("");
+            container.innerHTML = pending.map(r => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${r.user_name}</strong></p><p>📧 ${r.user_email}</p><p>📱 Phone: ${r.phone} <button class="copy-btn" onclick="copyToClipboard('${r.phone}')">Copy</button></p><p>📡 Network: ${r.network ? r.network.toUpperCase() : "N/A"}</p><p>🎁 Referral Reward: 500MB</p><p>⏰ ${r.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})"><i class="fas fa-check"></i> Approve & Credit</button><button class="decline-btn" onclick="declineReferral(${r.id})"><i class="fas fa-times"></i> Decline</button></div></div>`).join("");
         }
         
         async function approveFunding(id) {
             const result = await callAPI(`/admin/approve-funding/${id}`, 'POST');
-            if (result && result.success) { showToast("Funding approved!", "success"); await loadAdminData(); await refreshWalletBalance(); }
+            if (result && result.success) { 
+                showToast("Funding approved and credited to user!", "success"); 
+                await loadAdminData(); 
+                await refreshWalletBalance();
+            }
         }
         
         async function declineFunding(id) {
             const result = await callAPI(`/admin/decline-funding/${id}`, 'POST');
-            if (result && result.success) { showToast("Funding declined.", "error"); await loadAdminData(); }
+            if (result && result.success) { 
+                showToast("Funding declined.", "error"); 
+                await loadAdminData(); 
+            }
         }
         
         async function approvePurchase(id) {
             const result = await callAPI(`/admin/approve-purchase/${id}`, 'POST');
-            if (result && result.success) { showToast("Purchase approved!", "success"); await loadAdminData(); await refreshWalletBalance(); }
+            if (result && result.success) { 
+                showToast("Purchase approved! Data sent to user.", "success"); 
+                await loadAdminData(); 
+                await refreshWalletBalance();
+            }
         }
         
         async function declinePurchase(id) {
             const result = await callAPI(`/admin/decline-purchase/${id}`, 'POST');
-            if (result && result.success) { showToast("Purchase declined. Amount refunded.", "error"); await loadAdminData(); await refreshWalletBalance(); }
+            if (result && result.success) { 
+                showToast("Purchase declined. Amount refunded.", "error"); 
+                await loadAdminData(); 
+                await refreshWalletBalance();
+            }
         }
         
         async function approveReferral(id) {
             const result = await callAPI(`/admin/approve-referral/${id}`, 'POST');
-            if (result && result.success) { showToast("Referral approved!", "success"); await loadAdminData(); await refreshWalletBalance(); }
+            if (result && result.success) { 
+                showToast("Referral reward credited!", "success"); 
+                await loadAdminData(); 
+                await refreshWalletBalance();
+            }
         }
         
         async function declineReferral(id) {
             const result = await callAPI(`/admin/decline-referral/${id}`, 'POST');
-            if (result && result.success) { showToast("Referral declined.", "error"); await loadAdminData(); }
+            if (result && result.success) { 
+                showToast("Referral declined.", "error"); 
+                await loadAdminData(); 
+            }
         }
         
         function updateAdminBadge() {
