@@ -22,7 +22,8 @@
         .logo span { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #fff, #f59e0b); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .user-info { display: flex; align-items: center; gap: 15px; position: relative; }
         .user-name { color: #f59e0b; font-weight: 500; }
-        .wallet-balance { background: rgba(16,185,129,0.2); padding: 5px 12px; border-radius: 30px; font-size: 0.8rem; border: 1px solid rgba(16,185,129,0.3); }
+        .wallet-balance { background: rgba(16,185,129,0.2); padding: 5px 12px; border-radius: 30px; font-size: 0.8rem; border: 1px solid rgba(16,185,129,0.3); cursor: pointer; }
+        .wallet-balance:hover { background: rgba(16,185,129,0.4); }
         .admin-flag { background: rgba(30,41,59,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 40px; color: #64748b; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; position: relative; }
         .admin-flag:hover { background: rgba(30,41,59,0.6); color: #94a3b8; }
         .notification-badge { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 6px; border-radius: 50px; min-width: 20px; text-align: center; animation: pulse 1.5s infinite; }
@@ -182,7 +183,7 @@
 </head>
 <body>
     <div class="bg-animation"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
-    <nav class="navbar"><div class="nav-container"><div class="logo"><div class="logo-icon"><i class="fas fa-bolt"></i></div><span>OnSlot</span></div><div class="user-info" id="userInfo" style="display: none;"><span class="user-name" id="userNameDisplay"></span><span class="wallet-balance" id="walletBalance">₦0</span><div style="position:relative;"><button class="admin-flag" id="adminFlagBtn"><i class="fas fa-flag-checkered"></i> Admin<span id="adminNotificationBadge" class="notification-badge" style="display:none;">0</span></button></div><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
+    <nav class="navbar"><div class="nav-container"><div class="logo"><div class="logo-icon"><i class="fas fa-bolt"></i></div><span>OnSlot</span></div><div class="user-info" id="userInfo" style="display: none;"><span class="user-name" id="userNameDisplay"></span><span class="wallet-balance" id="walletBalance" onclick="refreshWalletBalance()">₦0 <i class="fas fa-sync-alt" style="font-size: 10px;"></i></span><div style="position:relative;"><button class="admin-flag" id="adminFlagBtn"><i class="fas fa-flag-checkered"></i> Admin<span id="adminNotificationBadge" class="notification-badge" style="display:none;">0</span></button></div><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
 
     <div id="authSection" class="hero"><div class="hero-content"><div class="hero-badge"><span class="badge-pulse"></span>Welcome to OnSlot</div><h1 class="hero-title">Buy Cheap Data<br><span class="gradient-text">All Networks</span></h1><p class="hero-subtitle">Fund your wallet, buy data bundles at the best prices!</p>
         <div id="loginForm" class="auth-form"><div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email address"></div><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password"></div><button class="buy-btn" onclick="login()">Login <i class="fas fa-arrow-right"></i></button><div class="auth-switch">Don't have an account? <a onclick="showSignup()">Sign up</a></div></div>
@@ -206,7 +207,7 @@
                 
                 <div id="amountSection" class="amount-section">
                     <div class="charge-note">
-                        <i class="fas fa-info-circle"></i> ₦50 service charge applies to all transactions
+                        <i class="fas fa-info-circle"></i> There will be a charges fee of 50 naira
                     </div>
                     <div class="amount-buttons">
                         <div class="amount-btn" data-amount="400">₦400</div>
@@ -239,7 +240,7 @@
             <div class="data-section">
                 <div class="section-title"><i class="fas fa-database"></i> Buy Data</div>
                 <div class="charge-note">
-                    <i class="fas fa-info-circle"></i> ₦50 service charge applies to all data purchases
+                    <i class="fas fa-info-circle"></i> There will be a charges fee of 50 naira
                 </div>
                 <div class="network-buttons">
                     <div class="network-btn mtn" onclick="selectNetwork('mtn')"><i class="fas fa-tower-cell"></i><span>MTN</span></div>
@@ -313,10 +314,39 @@
             ]
         };
         
+        // Check session on page load - KEEP USER LOGGED IN
         async function checkExistingSession() {
-            const savedEmail = sessionStorage.getItem('userEmail');
-            if (savedEmail) {
-                await loadDashboard();
+            const savedUser = localStorage.getItem('onslot_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    // Verify user still exists in database
+                    const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
+                    if (userData && userData.email) {
+                        currentUser = userData;
+                        localStorage.setItem('onslot_user', JSON.stringify(currentUser));
+                        await showDashboard();
+                    } else {
+                        // Session invalid, clear storage
+                        localStorage.removeItem('onslot_user');
+                    }
+                } catch (e) {
+                    localStorage.removeItem('onslot_user');
+                }
+            }
+        }
+        
+        // Refresh wallet balance without refreshing page
+        async function refreshWalletBalance() {
+            if (currentUser) {
+                showToast("Refreshing balance...", "info");
+                const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
+                if (userData && userData.wallet_balance !== undefined) {
+                    currentUser.wallet_balance = userData.wallet_balance;
+                    localStorage.setItem('onslot_user', JSON.stringify(currentUser));
+                    document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance} <i class="fas fa-sync-alt" style="font-size: 10px;"></i>`;
+                    showToast(`Balance updated: ₦${currentUser.wallet_balance}`, "success");
+                }
             }
         }
         
@@ -326,11 +356,15 @@
             hasShownWelcomeOverlay = true;
             const overlay = document.createElement('div');
             overlay.className = 'overlay';
-            overlay.innerHTML = `<div class="overlay-card"><div style="font-size: 60px;">👋</div><h2>Welcome to OnSlot!</h2><p>You're ready to start buying cheap data!</p><p style="background: rgba(245,158,11,0.1); padding: 10px; border-radius: 12px; margin: 15px 0;">💡 <strong>Quick Tip:</strong> ₦50 service charge applies to all transactions</p><button onclick="this.parentElement.parentElement.remove()">Get Started</button></div>`;
+            overlay.innerHTML = `<div class="overlay-card"><div style="font-size: 60px;">👋</div><h2>Welcome to OnSlot!</h2><p>You're ready to start buying cheap data!</p><p style="background: rgba(245,158,11,0.1); padding: 10px; border-radius: 12px; margin: 15px 0;">💡 <strong>Quick Tip:</strong> There will be a charges fee of 50 naira</p><button onclick="this.parentElement.parentElement.remove()">Get Started</button></div>`;
             document.body.appendChild(overlay);
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (overlay && overlay.parentElement) overlay.remove();
+            }, 3000);
         }
         
-        function showLoadingOverlay(message = "Processing your request... Please wait a moment") {
+        function showLoadingOverlay(message = "Processing your request...") {
             const existing = document.querySelector('.loading-overlay');
             if (existing) existing.remove();
             const overlay = document.createElement('div');
@@ -344,28 +378,15 @@
             if (overlay) overlay.remove();
         }
         
-        function showFundingSuccessOverlay(amount) {
-            hideLoadingOverlay();
+        function showSuccessOverlay(message, title = "Success!") {
             const overlay = document.createElement('div');
             overlay.className = 'success-overlay';
-            overlay.innerHTML = `<div class="success-card"><div class="check-icon"><i class="fas fa-check-circle"></i></div><h2>Wallet Funded! 🎉</h2><p>Your wallet has been credited with <strong style="color: #10b981;">₦${amount}</strong>!</p><button onclick="this.parentElement.parentElement.remove()">Continue</button></div>`;
+            overlay.innerHTML = `<div class="success-card"><div class="check-icon"><i class="fas fa-check-circle"></i></div><h2>${title}</h2><p>${message}</p><button onclick="this.parentElement.parentElement.remove()">Continue</button></div>`;
             document.body.appendChild(overlay);
-        }
-        
-        function showPurchaseSuccessOverlay(planSize, phoneNumber, totalPrice) {
-            hideLoadingOverlay();
-            const overlay = document.createElement('div');
-            overlay.className = 'success-overlay';
-            overlay.innerHTML = `<div class="success-card"><div class="check-icon"><i class="fas fa-check-circle"></i></div><h2>Purchase Successful! 🎉</h2><p>Your ${planSize} data has been sent to ${phoneNumber}!</p><p>Total: ₦${totalPrice}</p><button onclick="this.parentElement.parentElement.remove()">Continue</button></div>`;
-            document.body.appendChild(overlay);
-        }
-        
-        function showReferralSuccessOverlay() {
-            hideLoadingOverlay();
-            const overlay = document.createElement('div');
-            overlay.className = 'success-overlay';
-            overlay.innerHTML = `<div class="success-card"><div class="check-icon"><i class="fas fa-check-circle"></i></div><h2>Reward Credited! 🎉</h2><p>Your 500MB referral reward has been added!</p><button onclick="this.parentElement.parentElement.remove()">Continue</button></div>`;
-            document.body.appendChild(overlay);
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (overlay && overlay.parentElement) overlay.remove();
+            }, 3000);
         }
         
         function showReferralRewardOverlay() {
@@ -401,10 +422,9 @@
             const result = await callAPI('/submit-referral-reward', 'POST', { userEmail: currentUser.email, userName: currentUser.name, phone: phone, network: window.selectedReferralNetwork, amount: 400 });
             if (result && result.success) {
                 closeReferralRewardOverlay();
-                const pending = await callAPI('/admin/pending-referrals');
-                const latest = pending?.find(r => r.user_email === currentUser.email && r.status === 'pending');
-                if (latest) { startReferralPolling(latest.id); }
-                else { hideLoadingOverlay(); showToast("Referral reward request sent to admin!", "success"); }
+                hideLoadingOverlay();
+                showSuccessOverlay("Your referral reward request has been sent to admin for approval!", "Request Sent");
+                await refreshWalletBalance();
                 await loadAdminData();
             } else { hideLoadingOverlay(); showToast("Failed to submit request", "error"); }
         }
@@ -417,10 +437,10 @@
                 const item = result?.find(p => p.id == pendingId);
                 if (item && item.status === 'completed') {
                     clearInterval(statusPollingInterval);
-                    showFundingSuccessOverlay(amount);
+                    hideLoadingOverlay();
+                    showSuccessOverlay(`Your wallet has been credited with ₦${amount}!`, "Wallet Funded!");
+                    await refreshWalletBalance();
                     await loadAdminData();
-                    const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
-                    if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
                 } else if (item && item.status === 'declined') {
                     clearInterval(statusPollingInterval);
                     hideLoadingOverlay();
@@ -436,14 +456,15 @@
                 const item = result?.find(p => p.id == pendingId);
                 if (item && item.status === 'completed') {
                     clearInterval(statusPollingInterval);
-                    showPurchaseSuccessOverlay(planSize, phoneNumber, totalAmount);
+                    hideLoadingOverlay();
+                    showSuccessOverlay(`Your ${planSize} data has been sent to ${phoneNumber}! Total: ₦${totalAmount}`, "Purchase Successful!");
+                    await refreshWalletBalance();
                     await loadAdminData();
                 } else if (item && item.status === 'declined') {
                     clearInterval(statusPollingInterval);
                     hideLoadingOverlay();
                     showToast("Your purchase was declined. Amount refunded.", "error");
-                    const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
-                    if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
+                    await refreshWalletBalance();
                 }
             }, 3000);
         }
@@ -455,10 +476,10 @@
                 const item = result?.find(r => r.id == pendingId);
                 if (item && item.status === 'completed') {
                     clearInterval(statusPollingInterval);
-                    showReferralSuccessOverlay();
+                    hideLoadingOverlay();
+                    showSuccessOverlay("Your 500MB referral reward has been added to your wallet!", "Reward Credited!");
+                    await refreshWalletBalance();
                     await loadAdminData();
-                    const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
-                    if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
                 } else if (item && item.status === 'declined') {
                     clearInterval(statusPollingInterval);
                     hideLoadingOverlay();
@@ -488,9 +509,15 @@
             const password = document.getElementById("signupPassword").value;
             const referralCode = document.getElementById("referralCodeInput").value;
             if (!name || !email || !phone || !password) { showToast("Please fill all fields", "error"); return; }
+            showLoadingOverlay("Creating account...");
             const result = await callAPI('/signup', 'POST', { name, email, phone, password, referralCode });
-            if (result && result.success) { showToast("Account created! Please login", "success"); showLogin(); }
-            else { showToast(result?.error || "Signup failed", "error"); }
+            hideLoadingOverlay();
+            if (result && result.success) { 
+                showToast("Account created! Please login", "success"); 
+                showLogin(); 
+            } else { 
+                showToast(result?.error || "Signup failed", "error"); 
+            }
         }
         
         async function login() {
@@ -500,105 +527,25 @@
             
             showLoadingOverlay("Logging in...");
             const result = await callAPI('/login', 'POST', { email, password });
+            hideLoadingOverlay();
             
             if (result && result.success) {
                 currentUser = result.user;
-                sessionStorage.setItem('userEmail', currentUser.email);
+                localStorage.setItem('onslot_user', JSON.stringify(currentUser));
                 showToast("Login successful!", "success");
-                hideLoadingOverlay();
-                
-                // Show dashboard immediately
-                document.getElementById("authSection").style.display = "none";
-                document.getElementById("dashboardContent").style.display = "block";
-                document.getElementById("userInfo").style.display = "flex";
-                
-                // Update user info
-                document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
-                document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance || 0}`;
-                document.getElementById("userReferralCode").textContent = currentUser.referral_code;
-                document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
-                const referralsLeft = 5 - (currentUser.referral_count || 0);
-                document.getElementById("referralsNeeded").innerHTML = `${referralsLeft > 0 ? referralsLeft : 0} referrals left = 500MB`;
-                
-                // Setup admin button
-                const adminFlag = document.getElementById("adminFlagBtn");
-                adminFlag.onclick = function() { 
-                    const pwd = prompt("Enter admin code:"); 
-                    if (pwd === "000") { 
-                        document.getElementById("adminPanel").style.display = "block"; 
-                        loadAdminData(); 
-                    } else { 
-                        showToast("Wrong admin code!", "error"); 
-                    } 
-                };
-                
-                // Setup fund wallet button
-                const fundMainBtn = document.getElementById("fundMainBtn");
-                fundMainBtn.onclick = () => {
-                    document.getElementById("accountDetails").style.display = "block";
-                    document.getElementById("amountSection").classList.add("show");
-                };
-                
-                // Setup amount buttons
-                document.querySelectorAll(".amount-btn").forEach(btn => {
-                    btn.onclick = () => {
-                        document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
-                        btn.classList.add("selected");
-                        selectedAmount = parseInt(btn.dataset.amount);
-                        document.getElementById("proceedPaymentBtn").classList.add("show");
-                    };
-                });
-                
-                // Setup custom amount
-                document.getElementById("setCustomAmountBtn").onclick = () => {
-                    const customAmount = parseInt(document.getElementById("customAmount").value);
-                    if (isNaN(customAmount) || customAmount < 400) { 
-                        showToast("Please enter a valid amount of ₦400 or more", "error"); 
-                        return; 
-                    }
-                    document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
-                    selectedAmount = customAmount;
-                    document.getElementById("proceedPaymentBtn").classList.add("show");
-                    showToast(`Custom amount ₦${selectedAmount} selected (+₦${SERVICE_CHARGE} fee)`, "success");
-                };
-                
-                // Setup proceed payment
-                document.getElementById("proceedPaymentBtn").onclick = () => {
-                    if (!selectedAmount) { 
-                        showToast("Please select an amount first", "error"); 
-                        return; 
-                    }
-                    const total = selectedAmount + SERVICE_CHARGE;
-                    showToast(`You'll pay ₦${selectedAmount} + ₦${SERVICE_CHARGE} fee = ₦${total}`, "info");
-                    document.getElementById("paymentSection").classList.add("show");
-                };
-                
-                // Setup admin tabs
-                document.querySelectorAll(".admin-tab").forEach(tab => {
-                    tab.onclick = () => {
-                        document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
-                        tab.classList.add("active");
-                        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-                        document.getElementById(`${tab.dataset.tab}Tab`).classList.add("active");
-                    };
-                });
-                
-                await loadAdminData();
-                setInterval(loadAdminData, 5000);
+                await showDashboard();
                 showWelcomeOverlay();
-                
                 if (currentUser.referral_count >= 5 && !currentUser.referral_reward_claimed) {
                     setTimeout(() => showReferralRewardOverlay(), 1500);
                 }
             } else { 
-                hideLoadingOverlay();
                 showToast(result?.error || "Invalid email or password", "error"); 
             }
         }
         
         function logout() {
             currentUser = null;
-            sessionStorage.removeItem('userEmail');
+            localStorage.removeItem('onslot_user');
             hasShownWelcomeOverlay = false;
             hasShownReferralOverlay = false;
             if (statusPollingInterval) clearInterval(statusPollingInterval);
@@ -607,6 +554,7 @@
             document.getElementById("userInfo").style.display = "none";
             document.getElementById("adminPanel").style.display = "none";
             showLogin();
+            showToast("Logged out successfully", "success");
         }
         
         function showLogin() { 
@@ -618,15 +566,85 @@
             document.getElementById("signupForm").style.display = "block"; 
         }
         
-        async function loadDashboard() {
-            // This is now handled in login() directly
-            // Keeping for session check
-            const savedEmail = sessionStorage.getItem('userEmail');
-            if (savedEmail && !currentUser) {
-                // Auto-login would go here, but for simplicity we'll just redirect to login
-                sessionStorage.removeItem('userEmail');
-                window.location.reload();
-            }
+        async function showDashboard() {
+            document.getElementById("authSection").style.display = "none";
+            document.getElementById("dashboardContent").style.display = "block";
+            document.getElementById("userInfo").style.display = "flex";
+            
+            // Update user info
+            document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
+            document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance || 0} <i class="fas fa-sync-alt" style="font-size: 10px;"></i>`;
+            document.getElementById("userReferralCode").textContent = currentUser.referral_code;
+            document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
+            const referralsLeft = 5 - (currentUser.referral_count || 0);
+            document.getElementById("referralsNeeded").innerHTML = `${referralsLeft > 0 ? referralsLeft : 0} referrals left = 500MB`;
+            
+            // Setup admin button
+            const adminFlag = document.getElementById("adminFlagBtn");
+            adminFlag.onclick = function() { 
+                const pwd = prompt("Enter admin code:"); 
+                if (pwd === "000") { 
+                    document.getElementById("adminPanel").style.display = "block"; 
+                    loadAdminData(); 
+                } else { 
+                    showToast("Wrong admin code!", "error"); 
+                } 
+            };
+            
+            // Setup fund wallet button
+            const fundMainBtn = document.getElementById("fundMainBtn");
+            fundMainBtn.onclick = () => {
+                document.getElementById("accountDetails").style.display = "block";
+                document.getElementById("amountSection").classList.add("show");
+            };
+            
+            // Setup amount buttons
+            document.querySelectorAll(".amount-btn").forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
+                    btn.classList.add("selected");
+                    selectedAmount = parseInt(btn.dataset.amount);
+                    document.getElementById("proceedPaymentBtn").classList.add("show");
+                };
+            });
+            
+            // Setup custom amount
+            document.getElementById("setCustomAmountBtn").onclick = () => {
+                const customAmount = parseInt(document.getElementById("customAmount").value);
+                if (isNaN(customAmount) || customAmount < 400) { 
+                    showToast("Please enter a valid amount of ₦400 or more", "error"); 
+                    return; 
+                }
+                document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
+                selectedAmount = customAmount;
+                document.getElementById("proceedPaymentBtn").classList.add("show");
+                showToast(`Custom amount ₦${selectedAmount} selected (₦50 fee will be deducted)`, "success");
+            };
+            
+            // Setup proceed payment - SHOW DEDUCTION NOT ADDITION
+            document.getElementById("proceedPaymentBtn").onclick = () => {
+                if (!selectedAmount) { 
+                    showToast("Please select an amount first", "error"); 
+                    return; 
+                }
+                const youPay = selectedAmount;
+                const youGet = selectedAmount - SERVICE_CHARGE;
+                showToast(`You send ₦${youPay}, ₦${SERVICE_CHARGE} fee deducted, ₦${youGet} added to wallet`, "info");
+                document.getElementById("paymentSection").classList.add("show");
+            };
+            
+            // Setup admin tabs
+            document.querySelectorAll(".admin-tab").forEach(tab => {
+                tab.onclick = () => {
+                    document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+                    tab.classList.add("active");
+                    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+                    document.getElementById(`${tab.dataset.tab}Tab`).classList.add("active");
+                };
+            });
+            
+            await loadAdminData();
+            setInterval(loadAdminData, 5000);
         }
         
         // ============ DATA PLANS ============
@@ -678,20 +696,34 @@
             if (!selectedAmount) { showToast("Please select an amount", "error"); return; }
             if (!transactionRef) { showToast("Enter transaction reference", "error"); return; }
             
-            const totalAmount = selectedAmount + SERVICE_CHARGE;
-            showLoadingOverlay(`Submitting funding: ₦${selectedAmount} + ₦${SERVICE_CHARGE} fee = ₦${totalAmount}...`);
+            // DEDUCT the service charge - user gets less
+            const amountToAdd = selectedAmount - SERVICE_CHARGE;
+            if (amountToAdd < 0) {
+                showToast(`Amount must be at least ₦${SERVICE_CHARGE + 1} to cover fee`, "error");
+                return;
+            }
+            
+            showLoadingOverlay(`Processing: You send ₦${selectedAmount}, ₦${SERVICE_CHARGE} fee deducted, ₦${amountToAdd} will be added...`);
             
             const result = await callAPI('/submit-funding', 'POST', { 
                 userEmail: currentUser.email, userName: currentUser.name, userPhone: currentUser.phone, 
-                amount: selectedAmount, serviceCharge: SERVICE_CHARGE, totalAmount: totalAmount,
-                transactionRef: transactionRef, paymentMethod: selectedFundingMethod 
+                amount: amountToAdd, // Only add the amount after deduction
+                amountSent: selectedAmount, // Track what user sent
+                serviceCharge: SERVICE_CHARGE, 
+                totalAmount: amountToAdd,
+                transactionRef: transactionRef, 
+                paymentMethod: selectedFundingMethod 
             });
             
             if (result && result.success) {
                 const pending = await callAPI('/admin/pending-funding');
                 const latest = pending?.find(p => p.user_email === currentUser.email && p.status === 'pending');
-                if (latest) { startFundingPolling(latest.id, selectedAmount); }
-                else { hideLoadingOverlay(); showToast(`Funding request submitted! ₦${totalAmount} will be added upon approval.`, "success"); }
+                if (latest) { 
+                    startFundingPolling(latest.id, amountToAdd); 
+                } else { 
+                    hideLoadingOverlay(); 
+                    showToast(`Funding request submitted! ₦${amountToAdd} will be added upon approval.`, "success"); 
+                }
                 document.getElementById("accountDetails").style.display = "none";
                 document.getElementById("amountSection").classList.remove("show");
                 document.getElementById("paymentSection").classList.remove("show");
@@ -738,7 +770,8 @@
             if (result && result.success) {
                 // Update local balance immediately
                 currentUser.wallet_balance -= totalAmount;
-                document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`;
+                localStorage.setItem('onslot_user', JSON.stringify(currentUser));
+                document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance} <i class="fas fa-sync-alt" style="font-size: 10px;"></i>`;
                 
                 const pending = await callAPI('/admin/pending-purchases');
                 const latest = pending?.find(p => p.user_email === currentUser.email && p.status === 'pending');
@@ -790,8 +823,8 @@
             const pending = pendingFunding.filter(f => f.status === "pending");
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending funding requests</div>'; return; }
             container.innerHTML = pending.map(f => {
-                const total = (f.amount || 0) + (f.service_charge || SERVICE_CHARGE);
-                return `<div class="pending-item"><div class="item-details"><p><strong>👤 ${f.user_name}</strong></p><p>📧 ${f.user_email}</p><p>📱 ${f.user_phone || "N/A"} <button class="copy-btn" onclick="copyToClipboard('${f.user_phone || ""}')">Copy</button></p><p>💰 Amount: ₦${f.amount} + ₦${f.service_charge || SERVICE_CHARGE} fee = ₦${total}</p><p>💳 ${f.payment_method}</p><p>📝 ${f.transaction_ref}</p><p>⏰ ${f.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveFunding(${f.id})"><i class="fas fa-check"></i> Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})"><i class="fas fa-times"></i> Decline</button></div></div>`;
+                const amountToAdd = f.amount || 0;
+                return `<div class="pending-item"><div class="item-details"><p><strong>👤 ${f.user_name}</strong></p><p>📧 ${f.user_email}</p><p>📱 ${f.user_phone || "N/A"} <button class="copy-btn" onclick="copyToClipboard('${f.user_phone || ""}')">Copy</button></p><p>💰 Amount to add: ₦${amountToAdd} (₦50 fee deducted)</p><p>💳 ${f.payment_method}</p><p>📝 ${f.transaction_ref}</p><p>⏰ ${f.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveFunding(${f.id})"><i class="fas fa-check"></i> Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})"><i class="fas fa-times"></i> Decline</button></div></div>`;
             }).join("");
         }
         
@@ -802,9 +835,8 @@
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending data purchases</div>'; return; }
             container.innerHTML = pending.map(p => {
                 const planPrice = p.plan_price || p.amount || 0;
-                const serviceCharge = p.service_charge || SERVICE_CHARGE;
-                const total = planPrice + serviceCharge;
-                return `<div class="pending-item"><div class="item-details"><p><strong>👤 ${p.user_name}</strong></p><p>📧 ${p.user_email}</p><p>📱 Recipient: ${p.phone_number} <button class="copy-btn" onclick="copyToClipboard('${p.phone_number}')">Copy</button></p><p>🌐 ${p.network ? p.network.toUpperCase() : "N/A"} - ${p.plan_size} (${p.validity || 'N/A'})</p><p>💰 Plan: ₦${planPrice} + ₦${serviceCharge} fee = ₦${total}</p><p>⏰ ${p.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approvePurchase(${p.id})"><i class="fas fa-check"></i> Data Sent</button><button class="decline-btn" onclick="declinePurchase(${p.id})"><i class="fas fa-times"></i> Refund</button></div></div>`;
+                const total = planPrice + SERVICE_CHARGE;
+                return `<div class="pending-item"><div class="item-details"><p><strong>👤 ${p.user_name}</strong></p><p>📧 ${p.user_email}</p><p>📱 Recipient: ${p.phone_number} <button class="copy-btn" onclick="copyToClipboard('${p.phone_number}')">Copy</button></p><p>🌐 ${p.network ? p.network.toUpperCase() : "N/A"} - ${p.plan_size} (${p.validity || 'N/A'})</p><p>💰 Plan: ₦${planPrice} + ₦${SERVICE_CHARGE} fee = ₦${total}</p><p>⏰ ${p.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approvePurchase(${p.id})"><i class="fas fa-check"></i> Data Sent</button><button class="decline-btn" onclick="declinePurchase(${p.id})"><i class="fas fa-times"></i> Refund</button></div></div>`;
             }).join("");
         }
         
@@ -818,7 +850,7 @@
         
         async function approveFunding(id) {
             const result = await callAPI(`/admin/approve-funding/${id}`, 'POST');
-            if (result && result.success) { showToast("Funding approved!", "success"); await loadAdminData(); }
+            if (result && result.success) { showToast("Funding approved!", "success"); await loadAdminData(); await refreshWalletBalance(); }
         }
         
         async function declineFunding(id) {
@@ -828,17 +860,17 @@
         
         async function approvePurchase(id) {
             const result = await callAPI(`/admin/approve-purchase/${id}`, 'POST');
-            if (result && result.success) { showToast("Purchase approved!", "success"); await loadAdminData(); }
+            if (result && result.success) { showToast("Purchase approved!", "success"); await loadAdminData(); await refreshWalletBalance(); }
         }
         
         async function declinePurchase(id) {
             const result = await callAPI(`/admin/decline-purchase/${id}`, 'POST');
-            if (result && result.success) { showToast("Purchase declined. Amount refunded.", "error"); await loadAdminData(); }
+            if (result && result.success) { showToast("Purchase declined. Amount refunded.", "error"); await loadAdminData(); await refreshWalletBalance(); }
         }
         
         async function approveReferral(id) {
             const result = await callAPI(`/admin/approve-referral/${id}`, 'POST');
-            if (result && result.success) { showToast("Referral approved!", "success"); await loadAdminData(); }
+            if (result && result.success) { showToast("Referral approved!", "success"); await loadAdminData(); await refreshWalletBalance(); }
         }
         
         async function declineReferral(id) {
