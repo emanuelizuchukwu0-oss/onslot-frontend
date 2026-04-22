@@ -23,7 +23,6 @@
         .user-info { display: flex; align-items: center; gap: 15px; position: relative; }
         .user-name { color: #f59e0b; font-weight: 500; }
         .wallet-balance { background: rgba(16,185,129,0.2); padding: 5px 12px; border-radius: 30px; font-size: 0.8rem; border: 1px solid rgba(16,185,129,0.3); }
-        .service-charge { background: rgba(245,158,11,0.2); padding: 3px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 8px; color: #f59e0b; }
         .admin-flag { background: rgba(30,41,59,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 40px; color: #64748b; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; position: relative; }
         .admin-flag:hover { background: rgba(30,41,59,0.6); color: #94a3b8; }
         .notification-badge { position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 6px; border-radius: 50px; min-width: 20px; text-align: center; animation: pulse 1.5s infinite; }
@@ -68,8 +67,6 @@
         .custom-amount-container input { flex: 2; padding: 12px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; font-size: 1rem; outline: none; }
         .custom-amount-container input:focus { border-color: #f59e0b; }
         .custom-amount-container button { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 12px 20px; border-radius: 40px; color: #f59e0b; cursor: pointer; }
-        .charge-note { background: rgba(245,158,11,0.1); border-radius: 12px; padding: 10px; margin: 15px 0; text-align: center; font-size: 0.8rem; }
-        .charge-note i { color: #f59e0b; margin-right: 5px; }
         .proceed-payment-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; margin-top: 10px; display: none; }
         .proceed-payment-btn.show { display: block; }
         .payment-section { display: none; margin-top: 20px; }
@@ -93,12 +90,11 @@
         .network-btn.glo.selected { border-color: #10b981; background: rgba(16,185,129,0.15); }
         .network-btn.nine.selected { border-color: #8b5cf6; background: rgba(139,92,246,0.15); }
         .network-btn i { font-size: 24px; margin-bottom: 8px; display: block; }
-        .plans-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 20px; }
+        .plans-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 20px; }
         .plan-card { background: rgba(30,41,59,0.6); border-radius: 16px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.08); }
         .plan-card:hover { transform: translateY(-2px); }
         .plan-card.selected { border-width: 2px; }
         .plan-size { font-size: 1rem; font-weight: 700; }
-        .plan-validity { font-size: 0.7rem; color: #94a3b8; margin-top: 3px; }
         .plan-price { font-size: 1.1rem; font-weight: bold; margin-top: 5px; color: #f59e0b; }
         .phone-input { margin: 15px 0; }
         .buy-data-btn { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -183,25 +179,11 @@
 </head>
 <body>
     <div class="bg-animation"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
-    <nav class="navbar"><div class="nav-container"><div class="logo"><div class="logo-icon"><i class="fas fa-bolt"></i></div><span>OnSlot</span></div><div class="user-info" id="userInfo" style="display: none;"><span class="user-name" id="userNameDisplay"></span><span class="wallet-balance" id="walletBalance">₦0</span><div id="adminButtonContainer" style="position:relative; display: none;"><button class="admin-flag" id="adminFlagBtn"><i class="fas fa-flag-checkered"></i> Admin<span id="adminNotificationBadge" class="notification-badge" style="display:none;">0</span></button></div><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
+    <nav class="navbar"><div class="nav-container"><div class="logo"><div class="logo-icon"><i class="fas fa-bolt"></i></div><span>OnSlot</span></div><div class="user-info" id="userInfo" style="display: none;"><span class="user-name" id="userNameDisplay"></span><span class="wallet-balance" id="walletBalance">₦0</span><div style="position:relative;"><button class="admin-flag" id="adminFlagBtn"><i class="fas fa-flag-checkered"></i> Admin<span id="adminNotificationBadge" class="notification-badge" style="display:none;">0</span></button></div><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
 
     <div id="authSection" class="hero"><div class="hero-content"><div class="hero-badge"><span class="badge-pulse"></span>Welcome to OnSlot</div><h1 class="hero-title">Buy Cheap Data<br><span class="gradient-text">All Networks</span></h1><p class="hero-subtitle">Fund your wallet, buy data bundles at the best prices!</p>
-        <!-- LOGIN FORM - Username instead of Email -->
-        <div id="loginForm" class="auth-form">
-            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="loginUsername" placeholder="Username"></div>
-            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password"></div>
-            <button class="buy-btn" onclick="login()">Login <i class="fas fa-arrow-right"></i></button>
-            <div class="auth-switch">Don't have an account? <a onclick="showSignup()">Sign up</a></div>
-        </div>
-        <!-- SIGNUP FORM - Email removed, Username added -->
-        <div id="signupForm" class="auth-form" style="display: none;">
-            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="signupUsername" placeholder="Username"></div>
-            <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="signupPhone" placeholder="Phone number"></div>
-            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="signupPassword" placeholder="Password"></div>
-            <div class="input-group"><i class="fas fa-gift"></i><input type="text" id="referralCodeInput" placeholder="Referral code (optional)"></div>
-            <button class="buy-btn" onclick="signup()">Create Account <i class="fas fa-user-plus"></i></button>
-            <div class="auth-switch">Already have an account? <a onclick="showLogin()">Login</a></div>
-        </div>
+        <div id="loginForm" class="auth-form"><div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email address"></div><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password"></div><button class="buy-btn" onclick="login()">Login <i class="fas fa-arrow-right"></i></button><div class="auth-switch">Don't have an account? <a onclick="showSignup()">Sign up</a></div></div>
+        <div id="signupForm" class="auth-form" style="display: none;"><div class="input-group"><i class="fas fa-user"></i><input type="text" id="signupName" placeholder="Full name"></div><div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="signupEmail" placeholder="Email address"></div><div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="signupPhone" placeholder="Phone number"></div><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="signupPassword" placeholder="Password"></div><div class="input-group"><i class="fas fa-gift"></i><input type="text" id="referralCodeInput" placeholder="Referral code (optional)"></div><button class="buy-btn" onclick="signup()">Create Account <i class="fas fa-user-plus"></i></button><div class="auth-switch">Already have an account? <a onclick="showLogin()">Login</a></div></div>
     </div></div>
 
     <div id="dashboardContent" class="dashboard-content">
@@ -220,9 +202,6 @@
                 </div>
                 
                 <div id="amountSection" class="amount-section">
-                    <div class="charge-note">
-                        <i class="fas fa-info-circle"></i> ₦50 service charge applies to all transactions
-                    </div>
                     <div class="amount-buttons">
                         <div class="amount-btn" data-amount="400">₦400</div>
                         <div class="amount-btn" data-amount="500">₦500</div>
@@ -253,9 +232,6 @@
             <!-- Buy Data Section -->
             <div class="data-section">
                 <div class="section-title"><i class="fas fa-database"></i> Buy Data</div>
-                <div class="charge-note" style="margin-bottom: 15px;">
-                    <i class="fas fa-info-circle"></i> ₦50 service charge applies to all data purchases
-                </div>
                 <div class="network-buttons">
                     <div class="network-btn mtn" onclick="selectNetwork('mtn')"><i class="fas fa-tower-cell"></i><span>MTN</span></div>
                     <div class="network-btn airtel" onclick="selectNetwork('airtel')"><i class="fas fa-broadcast-tower"></i><span>Airtel</span></div>
@@ -272,24 +248,7 @@
         </div>
 
         <!-- Admin Panel -->
-        <div id="adminPanelContainer" style="display: none;">
-            <div class="admin-panel" id="adminPanel">
-                <div class="admin-header" onclick="toggleAdminPanel()">
-                    <h3><i class="fas fa-clock"></i> Admin Dashboard <span class="order-count-badge" id="totalPendingBadge">0</span></h3>
-                    <i class="fas fa-chevron-down" id="adminChevron"></i>
-                </div>
-                <div class="admin-content" id="adminContent">
-                    <div class="admin-tabs">
-                        <div class="admin-tab active" data-tab="funding">💰 Wallet Funding (<span id="fundingTabCount">0</span>)</div>
-                        <div class="admin-tab" data-tab="purchases">📱 Data Purchases (<span id="purchaseTabCount">0</span>)</div>
-                        <div class="admin-tab" data-tab="referrals">🎁 Referral Rewards (<span id="referralTabCount">0</span>)</div>
-                    </div>
-                    <div id="fundingTab" class="tab-content active"><div class="pending-list" id="fundingList"><div class="empty-orders">No pending funding requests</div></div></div>
-                    <div id="purchasesTab" class="tab-content"><div class="pending-list" id="purchasesList"><div class="empty-orders">No pending data purchases</div></div></div>
-                    <div id="referralsTab" class="tab-content"><div class="pending-list" id="referralsList"><div class="empty-orders">No pending referral rewards</div></div></div>
-                </div>
-            </div>
-        </div>
+        <div class="admin-panel" id="adminPanel" style="display: none;"><div class="admin-header" onclick="toggleAdminPanel()"><h3><i class="fas fa-clock"></i> Admin Dashboard <span class="order-count-badge" id="totalPendingBadge">0</span></h3><i class="fas fa-chevron-down" id="adminChevron"></i></div><div class="admin-content" id="adminContent"><div class="admin-tabs"><div class="admin-tab active" data-tab="funding">💰 Wallet Funding (<span id="fundingTabCount">0</span>)</div><div class="admin-tab" data-tab="purchases">📱 Data Purchases (<span id="purchaseTabCount">0</span>)</div><div class="admin-tab" data-tab="referrals">🎁 Referral Rewards (<span id="referralTabCount">0</span>)</div></div><div id="fundingTab" class="tab-content active"><div class="pending-list" id="fundingList"><div class="empty-orders">No pending funding requests</div></div></div><div id="purchasesTab" class="tab-content"><div class="pending-list" id="purchasesList"><div class="empty-orders">No pending data purchases</div></div></div><div id="referralsTab" class="tab-content"><div class="pending-list" id="referralsList"><div class="empty-orders">No pending referral rewards</div></div></div></div></div>
     </div>
 
     <div class="toast-container" id="toastContainer"></div>
@@ -297,7 +256,6 @@
 
     <script>
         const API_URL = 'https://onslot.onrender.com/api';
-        const SERVICE_CHARGE = 50;
         let currentUser = null;
         let selectedAmount = null;
         let selectedFundingMethod = "bank_transfer";
@@ -307,235 +265,23 @@
         let pendingFunding = [];
         let pendingPurchases = [];
         let pendingReferrals = [];
-        let fundingPollingInterval = null;
-        let purchasePollingInterval = null;
-        let referralPollingInterval = null;
+        let statusPollingInterval = null;
         let hasShownWelcomeOverlay = false;
         let hasShownReferralOverlay = false;
         
-        // Data Plans Configuration
-        const planData = {
-            mtn: [
-                { size: "500MB", validity: "7 days", price: 200 },
-                { size: "1GB", validity: "7 days", price: 350 },
-                { size: "2GB", validity: "7 days", price: 800 },
-                { size: "3GB", validity: "1 month", price: 1200 },
-                { size: "5GB", validity: "1 month", price: 1900 }
-            ],
-            airtel: [
-                { size: "300MB", validity: "2 days", price: 200 },
-                { size: "600MB", validity: "2 days", price: 300 },
-                { size: "1.5GB", validity: "2 days", price: 350 },
-                { size: "2GB", validity: "2 days", price: 400 },
-                { size: "6GB", validity: "7 days", price: 2600 },
-                { size: "10GB", validity: "7 days", price: 399 }
-            ],
-            glo: [
-                { size: "200MB", validity: "2 days", price: 99 },
-                { size: "500MB", validity: "2 days", price: 200 },
-                { size: "1GB", validity: "7 days", price: 350 },
-                { size: "2GB", validity: "7 days", price: 700 },
-                { size: "5GB", validity: "7 days", price: 1500 },
-                { size: "10GB", validity: "1 month", price: 2500 }
-            ],
-            "9mobile": [
-                { size: "250MB", validity: "7 days", price: 100 },
-                { size: "500MB", validity: "7 days", price: 200 },
-                { size: "1GB", validity: "7 days", price: 450 },
-                { size: "2GB", validity: "7 days", price: 800 },
-                { size: "5.2GB", validity: "1 month", price: 2300 },
-                { size: "11.4GB", validity: "1 month", price: 5000 }
-            ]
-        };
-        
-        function isAdminUser(username) {
-            return username && username.endsWith('%%');
-        }
-        
-        // ============ AUTH ============
-    async function signup() {
-    let username = document.getElementById("signupUsername").value;
-    let phone = document.getElementById("signupPhone").value;
-    let password = document.getElementById("signupPassword").value;
-    let referralCode = document.getElementById("referralCodeInput").value;
-    
-    username = username.trim().toLowerCase();
-    phone = phone.trim();
-    
-    if (username === "" || phone === "" || password === "") {
-        showToast("Please fill all fields", "error");
-        return;
-    }
-    
-    const result = await callAPI('/signup', 'POST', {
-        username: username,
-        phone: phone,
-        password: password,
-        referralCode: referralCode
-    });
-    
-    if (result && result.success) {
-        showToast("Account created! Please login", "success");
-        showLogin();
-    } else {
-        if (result && result.error) {
-            showToast(result.error, "error");
-        }
-    }
-}
-
-        
-   async function login() {
-    let username = document.getElementById("loginUsername").value;
-    let password = document.getElementById("loginPassword").value;
-    
-    username = username.trim().toLowerCase();
-    
-    if (username === "" || password === "") {
-        showToast("Please enter username and password", "error");
-        return;
-    }
-    
-    const result = await callAPI('/login', 'POST', { 
-        username: username, 
-        password: password 
-    });
-    
-    if (result && result.success) {
-        currentUser = result.user;
-        sessionStorage.setItem('userUsername', currentUser.username);
-        showToast("Login successful!", "success");
-        await loadDashboard();
-        showWelcomeOverlay();
-    } else {
-        // Just show whatever error the backend sends, or nothing
-        if (result && result.error) {
-            showToast(result.error, "error");
-        }
-    }
-}
-        
-        function logout() {
-            currentUser = null;
-            sessionStorage.removeItem('userUsername');
-            hasShownWelcomeOverlay = false;
-            hasShownReferralOverlay = false;
-            if (fundingPollingInterval) clearInterval(fundingPollingInterval);
-            if (purchasePollingInterval) clearInterval(purchasePollingInterval);
-            if (referralPollingInterval) clearInterval(referralPollingInterval);
-            document.getElementById("authSection").style.display = "flex";
-            document.getElementById("dashboardContent").style.display = "none";
-            document.getElementById("userInfo").style.display = "none";
-            document.getElementById("adminButtonContainer").style.display = "none";
-            document.getElementById("adminPanelContainer").style.display = "none";
-            showLogin();
-        }
-        
-        function showLogin() { 
-            document.getElementById("loginForm").style.display = "block"; 
-            document.getElementById("signupForm").style.display = "none"; 
-        }
-        
-        function showSignup() { 
-            document.getElementById("loginForm").style.display = "none"; 
-            document.getElementById("signupForm").style.display = "block"; 
-        }
-        
-        async function loadDashboard() {
-            const savedUsername = sessionStorage.getItem('userUsername');
-            if (savedUsername) {
-                const userData = await callAPI(`/user/${encodeURIComponent(savedUsername)}`);
-                if (userData && userData.username) {
-                    currentUser = userData;
-                    document.getElementById("authSection").style.display = "none";
-                    document.getElementById("dashboardContent").style.display = "block";
-                    document.getElementById("userInfo").style.display = "flex";
-                    document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.username}`;
-                    document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance || 0}`;
-                    document.getElementById("userReferralCode").textContent = currentUser.referral_code || 'N/A';
-                    document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
-                    document.getElementById("referralsNeeded").innerHTML = `${5 - (currentUser.referral_count || 0)} referrals left = 500MB`;
-                    
-                    const isAdmin = isAdminUser(currentUser.username);
-                    const adminButtonContainer = document.getElementById("adminButtonContainer");
-                    const adminPanelContainer = document.getElementById("adminPanelContainer");
-                    
-                    if (isAdmin) {
-                        adminButtonContainer.style.display = "block";
-                        adminPanelContainer.style.display = "block";
-                        
-                        const adminFlagBtn = document.getElementById("adminFlagBtn");
-                        adminFlagBtn.onclick = function() {
-                            const adminPanel = document.getElementById("adminPanel");
-                            if (adminPanel.style.display === "none") {
-                                adminPanel.style.display = "block";
-                                loadAdminData();
-                            } else {
-                                adminPanel.style.display = "none";
-                            }
-                        };
-                    } else {
-                        adminButtonContainer.style.display = "none";
-                        adminPanelContainer.style.display = "none";
-                    }
-                    
-                    await loadDataPlans();
-                    await loadAdminData();
-                    setInterval(loadAdminData, 5000);
-                    
-                    document.querySelectorAll(".admin-tab").forEach(tab => {
-                        tab.onclick = () => {
-                            document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
-                            tab.classList.add("active");
-                            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-                            document.getElementById(`${tab.dataset.tab}Tab`).classList.add("active");
-                        };
-                    });
-                    
-                    const fundMainBtn = document.getElementById("fundMainBtn");
-                    fundMainBtn.onclick = () => {
-                        document.getElementById("accountDetails").style.display = "block";
-                        document.getElementById("amountSection").classList.add("show");
-                    };
-                    
-                    document.querySelectorAll(".amount-btn").forEach(btn => {
-                        btn.onclick = () => {
-                            document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
-                            btn.classList.add("selected");
-                            selectedAmount = parseInt(btn.dataset.amount);
-                            document.getElementById("proceedPaymentBtn").classList.add("show");
-                        };
-                    });
-                    
-                    document.getElementById("setCustomAmountBtn").onclick = () => {
-                        const customAmount = parseInt(document.getElementById("customAmount").value);
-                        if (isNaN(customAmount) || customAmount < 400) {
-                            showToast("Please enter a valid amount of ₦400 or more", "error");
-                            return;
-                        }
-                        document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
-                        selectedAmount = customAmount;
-                        document.getElementById("proceedPaymentBtn").classList.add("show");
-                        showToast(`Custom amount ₦${selectedAmount} selected (₦${SERVICE_CHARGE} service charge applies)`, "success");
-                    };
-                    
-                    document.getElementById("proceedPaymentBtn").onclick = () => {
-                        if (!selectedAmount) {
-                            showToast("Please select an amount first", "error");
-                            return;
-                        }
-                        const totalAmount = selectedAmount + SERVICE_CHARGE;
-                        showToast(`You will be charged ₦${selectedAmount} + ₦${SERVICE_CHARGE} service charge = ₦${totalAmount}`, "info");
-                        document.getElementById("paymentSection").classList.add("show");
-                    };
-                }
+        async function checkExistingSession() {
+            const savedEmail = sessionStorage.getItem('userEmail');
+            if (savedEmail) {
+                await loadDashboard();
             }
         }
         
         // ============ OVERLAY FUNCTIONS ============
+        
         function showWelcomeOverlay() {
             if (hasShownWelcomeOverlay) return;
             hasShownWelcomeOverlay = true;
+            
             const overlay = document.createElement('div');
             overlay.className = 'overlay';
             overlay.innerHTML = `
@@ -544,7 +290,7 @@
                     <h2>Welcome to OnSlot!</h2>
                     <p>You're ready to start buying cheap data!</p>
                     <p style="background: rgba(245,158,11,0.1); padding: 10px; border-radius: 12px; margin: 15px 0;">
-                        💡 <strong>Quick Tip:</strong> A ₦50 service charge applies to all transactions
+                        💡 <strong>Quick Tip:</strong> Fund your wallet to start buying data bundles!
                     </p>
                     <button onclick="this.parentElement.parentElement.remove()">Get Started</button>
                 </div>
@@ -552,9 +298,11 @@
             document.body.appendChild(overlay);
         }
         
+        // Loading overlay - appears briefly then disappears after 2 seconds
         function showLoadingOverlay(message = "Processing your request... Please wait a moment") {
             const existing = document.querySelector('.loading-overlay');
             if (existing) existing.remove();
+            
             const overlay = document.createElement('div');
             overlay.className = 'loading-overlay';
             overlay.innerHTML = `
@@ -565,7 +313,11 @@
                 </div>
             `;
             document.body.appendChild(overlay);
-            setTimeout(() => { hideLoadingOverlay(); }, 2000);
+            
+            // Auto-hide loading overlay after 2 seconds
+            setTimeout(() => {
+                hideLoadingOverlay();
+            }, 2000);
         }
         
         function hideLoadingOverlay() {
@@ -574,8 +326,6 @@
         }
         
         function showFundingSuccessOverlay(amount) {
-            const existing = document.querySelector('.success-overlay');
-            if (existing) existing.remove();
             const overlay = document.createElement('div');
             overlay.className = 'success-overlay';
             overlay.innerHTML = `
@@ -583,9 +333,6 @@
                     <div class="check-icon"><i class="fas fa-check-circle"></i></div>
                     <h2>Wallet Funded! 🎉</h2>
                     <p>Your wallet has been successfully credited with <strong style="color: #10b981;">₦${amount}</strong>!</p>
-                    <p style="background: rgba(245,158,11,0.1); padding: 10px; border-radius: 8px; margin-top: 10px;">
-                        <i class="fas fa-receipt"></i> Service Charge: <strong>₦${SERVICE_CHARGE}</strong>
-                    </p>
                     <p>You can now use your balance to buy data bundles.</p>
                     <button onclick="this.parentElement.parentElement.remove()">Continue</button>
                 </div>
@@ -593,10 +340,7 @@
             document.body.appendChild(overlay);
         }
         
-        function showPurchaseSuccessOverlay(planSize, phoneNumber, planPrice) {
-            const existing = document.querySelector('.success-overlay');
-            if (existing) existing.remove();
-            const total = planPrice + SERVICE_CHARGE;
+        function showPurchaseSuccessOverlay(planSize, phoneNumber) {
             const overlay = document.createElement('div');
             overlay.className = 'success-overlay';
             overlay.innerHTML = `
@@ -604,10 +348,22 @@
                     <div class="check-icon"><i class="fas fa-check-circle"></i></div>
                     <h2>Purchase Successful! 🎉</h2>
                     <p>Your <strong style="color: #f59e0b;">${planSize}</strong> data has been sent to <strong style="color: #10b981;">${phoneNumber}</strong>!</p>
-                    <p style="background: rgba(245,158,11,0.1); padding: 10px; border-radius: 8px; margin-top: 10px;">
-                        <i class="fas fa-receipt"></i> Plan Cost: ₦${planPrice} | Service Charge: ₦${SERVICE_CHARGE} | Total: ₦${total}
-                    </p>
                     <p>You should receive it shortly.</p>
+                    <button onclick="this.parentElement.parentElement.remove()">Continue</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+        
+        function showReferralSuccessOverlay() {
+            const overlay = document.createElement('div');
+            overlay.className = 'success-overlay';
+            overlay.innerHTML = `
+                <div class="success-card">
+                    <div class="check-icon"><i class="fas fa-check-circle"></i></div>
+                    <h2>Reward Credited! 🎉</h2>
+                    <p>Your 500MB referral reward has been added to your wallet!</p>
+                    <p>Thank you for inviting your friends!</p>
                     <button onclick="this.parentElement.parentElement.remove()">Continue</button>
                 </div>
             `;
@@ -617,6 +373,7 @@
         function showReferralRewardOverlay() {
             if (hasShownReferralOverlay) return;
             hasShownReferralOverlay = true;
+            
             const overlay = document.createElement('div');
             overlay.className = 'overlay';
             overlay.id = 'referralRewardOverlay';
@@ -665,16 +422,27 @@
                 showToast("Enter valid phone number", "error");
                 return;
             }
+            
             showLoadingOverlay("Submitting your referral reward request...");
+            
             const result = await callAPI('/submit-referral-reward', 'POST', {
-                username: currentUser.username,
+                userEmail: currentUser.email,
+                userName: currentUser.name,
                 phone: phone,
                 network: window.selectedReferralNetwork,
                 amount: 400
             });
+            
             if (result && result.success) {
                 closeReferralRewardOverlay();
-                startReferralPolling();
+                const pending = await callAPI('/admin/pending-referrals');
+                const latest = pending?.find(r => r.user_email === currentUser.email && r.status === 'pending');
+                if (latest) {
+                    startReferralPolling(latest.id);
+                } else {
+                    hideLoadingOverlay();
+                    showToast("Referral reward request sent to admin!", "success");
+                }
                 await loadAdminData();
             } else {
                 hideLoadingOverlay();
@@ -682,32 +450,220 @@
             }
         }
         
+        // ============ POLLING FUNCTIONS - Only shows success overlay when admin clicks success ============
+        
+        function startFundingPolling(pendingId, amount) {
+            if (statusPollingInterval) clearInterval(statusPollingInterval);
+            
+            statusPollingInterval = setInterval(async () => {
+                const result = await callAPI('/admin/pending-funding');
+                const item = result?.find(p => p.id == pendingId);
+                if (item && item.status === 'completed') {
+                    clearInterval(statusPollingInterval);
+                    showFundingSuccessOverlay(amount);
+                    await loadAdminData();
+                    const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
+                    if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
+                } else if (item && item.status === 'declined') {
+                    clearInterval(statusPollingInterval);
+                    showToast("Your funding request was declined.", "error");
+                }
+            }, 3000);
+        }
+        
+        function startPurchasePolling(pendingId, planSize, phoneNumber) {
+            if (statusPollingInterval) clearInterval(statusPollingInterval);
+            
+            statusPollingInterval = setInterval(async () => {
+                const result = await callAPI('/admin/pending-purchases');
+                const item = result?.find(p => p.id == pendingId);
+                if (item && item.status === 'completed') {
+                    clearInterval(statusPollingInterval);
+                    showPurchaseSuccessOverlay(planSize, phoneNumber);
+                    await loadAdminData();
+                } else if (item && item.status === 'declined') {
+                    clearInterval(statusPollingInterval);
+                    showToast("Your purchase was declined. Amount refunded.", "error");
+                    const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
+                    if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
+                }
+            }, 3000);
+        }
+        
+        function startReferralPolling(pendingId) {
+            if (statusPollingInterval) clearInterval(statusPollingInterval);
+            
+            statusPollingInterval = setInterval(async () => {
+                const result = await callAPI('/admin/pending-referrals');
+                const item = result?.find(r => r.id == pendingId);
+                if (item && item.status === 'completed') {
+                    clearInterval(statusPollingInterval);
+                    showReferralSuccessOverlay();
+                    await loadAdminData();
+                    const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
+                    if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
+                } else if (item && item.status === 'declined') {
+                    clearInterval(statusPollingInterval);
+                    showToast("Your referral reward was declined.", "error");
+                }
+            }, 3000);
+        }
+        
+        async function callAPI(endpoint, method = 'GET', body = null) {
+            const options = { method, headers: { 'Content-Type': 'application/json' } };
+            if (body) options.body = JSON.stringify(body);
+            try {
+                const response = await fetch(`${API_URL}${endpoint}`, options);
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                showToast('Network error. Please check your connection.', 'error');
+                return null;
+            }
+        }
+        
+        // ============ AUTH ============
+        async function signup() {
+            const name = document.getElementById("signupName").value;
+            const email = document.getElementById("signupEmail").value;
+            const phone = document.getElementById("signupPhone").value;
+            const password = document.getElementById("signupPassword").value;
+            const referralCode = document.getElementById("referralCodeInput").value;
+            if (!name || !email || !phone || !password) { showToast("Please fill all fields", "error"); return; }
+            const result = await callAPI('/signup', 'POST', { name, email, phone, password, referralCode });
+            if (result && result.success) { showToast("Account created! Please login", "success"); showLogin(); }
+            else { showToast(result?.error || "Signup failed", "error"); }
+        }
+        
+        async function login() {
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+            if (!email || !password) { showToast("Please enter email and password", "error"); return; }
+            const result = await callAPI('/login', 'POST', { email, password });
+            if (result && result.success) {
+                currentUser = result.user;
+                sessionStorage.setItem('userEmail', currentUser.email);
+                showToast("Login successful!", "success");
+                await loadDashboard();
+                showWelcomeOverlay();
+                if (currentUser.referral_count >= 5 && !currentUser.referral_reward_claimed) {
+                    setTimeout(() => showReferralRewardOverlay(), 1500);
+                }
+            } else { showToast(result?.error || "Invalid email or password", "error"); }
+        }
+        
+        function logout() {
+            currentUser = null;
+            sessionStorage.removeItem('userEmail');
+            hasShownWelcomeOverlay = false;
+            hasShownReferralOverlay = false;
+            if (statusPollingInterval) clearInterval(statusPollingInterval);
+            document.getElementById("authSection").style.display = "flex";
+            document.getElementById("dashboardContent").style.display = "none";
+            document.getElementById("userInfo").style.display = "none";
+            document.getElementById("adminPanel").style.display = "none";
+            showLogin();
+        }
+        
+        function showLogin() { document.getElementById("loginForm").style.display = "block"; document.getElementById("signupForm").style.display = "none"; }
+        function showSignup() { document.getElementById("loginForm").style.display = "none"; document.getElementById("signupForm").style.display = "block"; }
+        
+        async function loadDashboard() {
+            const savedEmail = sessionStorage.getItem('userEmail');
+            if (savedEmail) {
+                const userData = await callAPI(`/user/${encodeURIComponent(savedEmail)}`);
+                if (userData && userData.email) {
+                    currentUser = userData;
+                    document.getElementById("authSection").style.display = "none";
+                    document.getElementById("dashboardContent").style.display = "block";
+                    document.getElementById("userInfo").style.display = "flex";
+                    document.getElementById("userNameDisplay").innerHTML = `<i class="fas fa-user-circle"></i> ${currentUser.name}`;
+                    document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance || 0}`;
+                    document.getElementById("userReferralCode").textContent = currentUser.referral_code;
+                    document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
+                    document.getElementById("referralsNeeded").innerHTML = `${5 - (currentUser.referral_count || 0)} referrals left = 500MB`;
+                    
+                    const adminFlag = document.getElementById("adminFlagBtn");
+                    adminFlag.onclick = function() { const pwd = prompt("Enter admin code:"); if (pwd === "000") { document.getElementById("adminPanel").style.display = "block"; loadAdminData(); } else { showToast("Wrong admin code!", "error"); } };
+                    
+                    await loadDataPlans();
+                    await loadAdminData();
+                    setInterval(loadAdminData, 5000);
+                    
+                    document.querySelectorAll(".admin-tab").forEach(tab => {
+                        tab.onclick = () => {
+                            document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+                            tab.classList.add("active");
+                            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+                            document.getElementById(`${tab.dataset.tab}Tab`).classList.add("active");
+                        };
+                    });
+                    
+                    const fundMainBtn = document.getElementById("fundMainBtn");
+                    fundMainBtn.onclick = () => {
+                        document.getElementById("accountDetails").style.display = "block";
+                        document.getElementById("amountSection").classList.add("show");
+                    };
+                    
+                    document.querySelectorAll(".amount-btn").forEach(btn => {
+                        btn.onclick = () => {
+                            document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
+                            btn.classList.add("selected");
+                            selectedAmount = parseInt(btn.dataset.amount);
+                            document.getElementById("proceedPaymentBtn").classList.add("show");
+                        };
+                    });
+                    
+                    document.getElementById("setCustomAmountBtn").onclick = () => {
+                        const customAmount = parseInt(document.getElementById("customAmount").value);
+                        if (isNaN(customAmount) || customAmount < 400) {
+                            showToast("Please enter a valid amount of ₦400 or more", "error");
+                            return;
+                        }
+                        document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
+                        selectedAmount = customAmount;
+                        document.getElementById("proceedPaymentBtn").classList.add("show");
+                        showToast(`Custom amount ₦${selectedAmount} selected`, "success");
+                    };
+                    
+                    document.getElementById("proceedPaymentBtn").onclick = () => {
+                        if (!selectedAmount) {
+                            showToast("Please select an amount first", "error");
+                            return;
+                        }
+                        document.getElementById("paymentSection").classList.add("show");
+                    };
+                }
+            }
+        }
+        
         // ============ DATA PLANS ============
-        function loadDataPlans() { dataPlans = planData; }
+        async function loadDataPlans() {
+            const result = await callAPI('/data-plans');
+            if (result) { dataPlans = result; }
+        }
         
         function selectNetwork(network) {
             selectedNetwork = network;
             document.querySelectorAll(".network-btn").forEach(btn => btn.classList.remove("selected"));
             document.querySelector(`.network-btn.${network === '9mobile' ? 'nine' : network}`).classList.add("selected");
-            const plans = planData[network] || [];
+            
+            const filteredPlans = dataPlans.filter(p => p.network === network);
             const container = document.getElementById("plansContainer");
-            if (plans.length === 0) { container.innerHTML = '<div class="empty-orders">No plans available for this network</div>'; return; }
-            container.innerHTML = plans.map(plan => `
-                <div class="plan-card" data-plan-size="${plan.size}" data-plan-price="${plan.price}" data-plan-validity="${plan.validity}">
-                    <div class="plan-size">${plan.size}</div>
-                    <div class="plan-validity">📅 ${plan.validity}</div>
-                    <div class="plan-price">₦${plan.price}</div>
-                    <div class="plan-validity" style="color:#f59e0b; margin-top:5px;">+ ₦${SERVICE_CHARGE} service charge</div>
-                </div>
-            `).join("");
+            if (filteredPlans.length === 0) { container.innerHTML = '<div class="empty-orders">No plans available for this network</div>'; return; }
+            container.innerHTML = filteredPlans.map(plan => `<div class="plan-card" data-plan-id="${plan.id}" data-plan-price="${plan.price}" data-plan-size="${plan.plan_size}" data-plan-name="${plan.plan_name}"><div class="plan-size">${plan.plan_size}</div><div class="plan-price">₦${plan.price}</div></div>`).join("");
+            
             document.querySelectorAll(".plan-card").forEach(card => {
                 card.onclick = () => {
                     document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
                     card.classList.add("selected");
-                    selectedPlan = { size: card.dataset.planSize, price: parseInt(card.dataset.planPrice), validity: card.dataset.planValidity };
+                    selectedPlan = {
+                        id: card.dataset.planId,
+                        size: card.dataset.planSize,
+                        name: card.dataset.planName,
+                        price: parseInt(card.dataset.planPrice)
+                    };
                     document.getElementById("buyDataBtn").disabled = false;
-                    const totalPrice = selectedPlan.price + SERVICE_CHARGE;
-                    showToast(`Total: ₦${selectedPlan.price} + ₦${SERVICE_CHARGE} service charge = ₦${totalPrice}`, "info");
                 };
             });
         }
@@ -719,21 +675,31 @@
             document.querySelector(`.payment-method[data-method="${method}"]`).classList.add("selected");
         }
         
-        function copyAccountNumber() { navigator.clipboard.writeText("9066051034"); showToast("Account number copied!", "success"); }
+        function copyAccountNumber() {
+            navigator.clipboard.writeText("9066051034");
+            showToast("Account number copied!", "success");
+        }
         
         async function submitFundingConfirm() {
             const transactionRef = document.getElementById("fundingTransactionRef").value;
             if (!selectedAmount) { showToast("Please select an amount", "error"); return; }
             if (!transactionRef) { showToast("Enter transaction reference", "error"); return; }
-            const totalAmount = selectedAmount + SERVICE_CHARGE;
-            showLoadingOverlay(`Submitting your funding request of ₦${selectedAmount} + ₦${SERVICE_CHARGE} service charge...`);
+            
+            showLoadingOverlay("Submitting your funding request...");
+            
             const result = await callAPI('/submit-funding', 'POST', {
-                username: currentUser.username, phone: currentUser.phone,
-                amount: selectedAmount, serviceCharge: SERVICE_CHARGE,
-                transactionRef: transactionRef, paymentMethod: selectedFundingMethod
+                userEmail: currentUser.email, userName: currentUser.name, userPhone: currentUser.phone,
+                amount: selectedAmount, transactionRef: transactionRef, paymentMethod: selectedFundingMethod
             });
+            
             if (result && result.success) {
-                startFundingPolling();
+                const pending = await callAPI('/admin/pending-funding');
+                const latest = pending?.find(p => p.user_email === currentUser.email && p.status === 'pending');
+                if (latest) {
+                    startFundingPolling(latest.id, selectedAmount);
+                } else {
+                    showToast("Funding request submitted! Admin will verify.", "success");
+                }
                 document.getElementById("accountDetails").style.display = "none";
                 document.getElementById("amountSection").classList.remove("show");
                 document.getElementById("paymentSection").classList.remove("show");
@@ -743,7 +709,6 @@
                 document.getElementById("customAmount").value = "";
                 selectedAmount = null;
                 await loadAdminData();
-                showToast(`Funding request submitted! Will be added upon approval.`, "success");
             } else {
                 hideLoadingOverlay();
                 showToast("Failed to submit request", "error");
@@ -756,20 +721,25 @@
             if (!selectedPlan) { showToast("Select a data plan", "error"); return; }
             const phone = document.getElementById("purchasePhone").value;
             if (!phone || !/^(0[7-9][0-1]{1}[0-9]{8})$/.test(phone)) { showToast("Enter valid phone number", "error"); return; }
-            const totalAmount = selectedPlan.price + SERVICE_CHARGE;
-            if ((currentUser.wallet_balance || 0) < totalAmount) { 
-                showToast(`Insufficient wallet balance. Need ₦${totalAmount}. Please fund your wallet.`, "error"); 
-                return; 
-            }
-            showLoadingOverlay(`Processing your purchase of ${selectedPlan.size}... Total: ₦${totalAmount}`);
+            if ((currentUser.wallet_balance || 0) < selectedPlan.price) { showToast("Insufficient wallet balance. Please fund your wallet.", "error"); return; }
+            
+            showLoadingOverlay(`Processing your purchase of ${selectedPlan.size}...`);
+            
             const result = await callAPI('/submit-purchase', 'POST', {
-                username: currentUser.username, phone: currentUser.phone,
-                network: selectedNetwork, planSize: selectedPlan.size, planPrice: selectedPlan.price,
-                validity: selectedPlan.validity, serviceCharge: SERVICE_CHARGE, phoneNumber: phone
+                userEmail: currentUser.email, userName: currentUser.name, userPhone: currentUser.phone,
+                network: selectedNetwork, planId: selectedPlan.id, planName: selectedPlan.name,
+                planSize: selectedPlan.size, amount: selectedPlan.price, phoneNumber: phone
             });
+            
             if (result && result.success) {
-                startPurchasePolling();
-                currentUser.wallet_balance -= totalAmount;
+                const pending = await callAPI('/admin/pending-purchases');
+                const latest = pending?.find(p => p.user_email === currentUser.email && p.status === 'pending');
+                if (latest) {
+                    startPurchasePolling(latest.id, selectedPlan.size, phone);
+                } else {
+                    showToast("Purchase request submitted! Admin will verify.", "success");
+                }
+                currentUser.wallet_balance -= selectedPlan.price;
                 document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`;
                 await loadAdminData();
                 document.querySelectorAll(".plan-card").forEach(c => c.classList.remove("selected"));
@@ -782,70 +752,8 @@
             }
         }
         
-        // ============ POLLING ============
-        function startFundingPolling() {
-            if (fundingPollingInterval) clearInterval(fundingPollingInterval);
-            fundingPollingInterval = setInterval(async () => {
-                const result = await callAPI('/admin/pending-funding');
-                if (result) {
-                    const pendingItem = result.find(p => p.username === currentUser?.username && p.status === 'pending');
-                    if (!pendingItem) {
-                        const completedItem = result.find(p => p.username === currentUser?.username && p.status === 'completed');
-                        if (completedItem && fundingPollingInterval) {
-                            clearInterval(fundingPollingInterval);
-                            fundingPollingInterval = null;
-                            showFundingSuccessOverlay(completedItem.amount);
-                            await loadAdminData();
-                            const userData = await callAPI(`/user/${encodeURIComponent(currentUser.username)}`);
-                            if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
-                        }
-                    }
-                }
-            }, 3000);
-        }
-        
-        function startPurchasePolling() {
-            if (purchasePollingInterval) clearInterval(purchasePollingInterval);
-            purchasePollingInterval = setInterval(async () => {
-                const result = await callAPI('/admin/pending-purchases');
-                if (result) {
-                    const pendingItem = result.find(p => p.username === currentUser?.username && p.status === 'pending');
-                    if (!pendingItem) {
-                        const completedItem = result.find(p => p.username === currentUser?.username && p.status === 'completed');
-                        if (completedItem && purchasePollingInterval) {
-                            clearInterval(purchasePollingInterval);
-                            purchasePollingInterval = null;
-                            showPurchaseSuccessOverlay(completedItem.plan_size, completedItem.phone_number, completedItem.plan_price);
-                            await loadAdminData();
-                        }
-                    }
-                }
-            }, 3000);
-        }
-        
-        function startReferralPolling() {
-            if (referralPollingInterval) clearInterval(referralPollingInterval);
-            referralPollingInterval = setInterval(async () => {
-                const result = await callAPI('/admin/pending-referrals');
-                if (result) {
-                    const pendingItem = result.find(r => r.username === currentUser?.username && r.status === 'pending');
-                    if (!pendingItem) {
-                        const completedItem = result.find(r => r.username === currentUser?.username && r.status === 'completed');
-                        if (completedItem && referralPollingInterval) {
-                            clearInterval(referralPollingInterval);
-                            referralPollingInterval = null;
-                            hideLoadingOverlay();
-                            showToast("Referral reward credited!", "success");
-                            await loadAdminData();
-                        }
-                    }
-                }
-            }, 3000);
-        }
-        
-        // ============ ADMIN ============
+        // ============ ADMIN FUNCTIONS ============
         async function loadAdminData() {
-            if (!isAdminUser(currentUser?.username)) return;
             await loadPendingFunding();
             await loadPendingPurchases();
             await loadPendingReferrals();
@@ -872,7 +780,7 @@
             if (!container) return;
             const pending = pendingFunding.filter(p => p.status === "pending");
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending funding requests</div>'; return; }
-            container.innerHTML = pending.map(f => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${f.username}</strong></p><p>📱 ${f.phone || "N/A"}</p><p>💰 Amount: ₦${f.amount} + ₦${SERVICE_CHARGE} = ₦${f.amount + SERVICE_CHARGE}</p><p>📝 ${f.transaction_ref}</p></div><div class="item-actions"><button class="success-btn" onclick="approveFunding(${f.id})">Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})">Decline</button></div></div>`).join("");
+            container.innerHTML = pending.map(f => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${f.user_name}</strong></p><p>📧 ${f.user_email}</p><p>📱 ${f.user_phone || "N/A"} <button class="copy-btn" onclick="copyToClipboard('${f.user_phone || ""}')">Copy</button></p><p>💰 ₦${f.amount}</p><p>💳 ${f.payment_method}</p><p>📝 ${f.transaction_ref}</p><p>⏰ ${f.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveFunding(${f.id})"><i class="fas fa-check"></i> Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})"><i class="fas fa-times"></i> Decline</button></div></div>`).join("");
         }
         
         function renderPurchasesList() {
@@ -880,7 +788,7 @@
             if (!container) return;
             const pending = pendingPurchases.filter(p => p.status === "pending");
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending data purchases</div>'; return; }
-            container.innerHTML = pending.map(p => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${p.username}</strong></p><p>📱 ${p.phone_number}</p><p>🌐 ${p.network} - ${p.plan_size}</p><p>💰 ₦${p.plan_price} + ₦${SERVICE_CHARGE} = ₦${p.plan_price + SERVICE_CHARGE}</p></div><div class="item-actions"><button class="success-btn" onclick="approvePurchase(${p.id})">Approve</button><button class="decline-btn" onclick="declinePurchase(${p.id})">Decline</button></div></div>`).join("");
+            container.innerHTML = pending.map(p => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${p.user_name}</strong></p><p>📧 ${p.user_email}</p><p>📱 Recipient: ${p.phone_number} <button class="copy-btn" onclick="copyToClipboard('${p.phone_number}')">Copy</button></p><p>🌐 ${p.network.toUpperCase()} - ${p.plan_size}</p><p>💰 ₦${p.amount}</p><p>⏰ ${p.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approvePurchase(${p.id})"><i class="fas fa-check"></i> Data Sent</button><button class="decline-btn" onclick="declinePurchase(${p.id})"><i class="fas fa-times"></i> Refund</button></div></div>`).join("");
         }
         
         function renderReferralsList() {
@@ -888,37 +796,45 @@
             if (!container) return;
             const pending = pendingReferrals.filter(r => r.status === "pending");
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending referral rewards</div>'; return; }
-            container.innerHTML = pending.map(r => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${r.username}</strong></p><p>📱 ${r.phone}</p><p>📡 ${r.network}</p><p>🎁 500MB Reward</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})">Approve</button><button class="decline-btn" onclick="declineReferral(${r.id})">Decline</button></div></div>`).join("");
+            container.innerHTML = pending.map(r => `<div class="pending-item"><div class="item-details"><p><strong>👤 ${r.user_name}</strong></p><p>📧 ${r.user_email}</p><p>📱 Phone: ${r.phone} <button class="copy-btn" onclick="copyToClipboard('${r.phone}')">Copy</button></p><p>📡 Network: ${r.network ? r.network.toUpperCase() : "N/A"}</p><p>🎁 Referral Reward: 500MB</p><p>📝 5 referrals completed</p><p>⏰ ${r.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})"><i class="fas fa-check"></i> Credit Sent</button><button class="decline-btn" onclick="declineReferral(${r.id})"><i class="fas fa-times"></i> Decline</button></div></div>`).join("");
         }
         
         async function approveFunding(id) {
-            await callAPI(`/admin/approve-funding/${id}`, 'POST');
-            await loadAdminData();
+            const result = await callAPI(`/admin/approve-funding/${id}`, 'POST');
+            if (result && result.success) {
+                showToast("Funding approved! Wallet credited.", "success");
+                await loadAdminData();
+                const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
+                if (userData) { currentUser.wallet_balance = userData.wallet_balance; document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance}`; }
+            }
         }
         
         async function declineFunding(id) {
-            await callAPI(`/admin/decline-funding/${id}`, 'POST');
-            await loadAdminData();
+            const result = await callAPI(`/admin/decline-funding/${id}`, 'POST');
+            if (result && result.success) { showToast("Funding request declined.", "error"); await loadAdminData(); }
         }
         
         async function approvePurchase(id) {
-            await callAPI(`/admin/approve-purchase/${id}`, 'POST');
-            await loadAdminData();
+            const result = await callAPI(`/admin/approve-purchase/${id}`, 'POST');
+            if (result && result.success) { showToast("Data marked as sent!", "success"); await loadAdminData(); }
         }
         
         async function declinePurchase(id) {
-            await callAPI(`/admin/decline-purchase/${id}`, 'POST');
-            await loadAdminData();
+            const result = await callAPI(`/admin/decline-purchase/${id}`, 'POST');
+            if (result && result.success) { showToast("Purchase declined. Amount refunded.", "error"); await loadAdminData(); }
         }
         
         async function approveReferral(id) {
-            await callAPI(`/admin/approve-referral/${id}`, 'POST');
-            await loadAdminData();
+            const result = await callAPI(`/admin/approve-referral/${id}`, 'POST');
+            if (result && result.success) {
+                showToast("Referral reward credited to user's wallet!", "success");
+                await loadAdminData();
+            }
         }
         
         async function declineReferral(id) {
-            await callAPI(`/admin/decline-referral/${id}`, 'POST');
-            await loadAdminData();
+            const result = await callAPI(`/admin/decline-referral/${id}`, 'POST');
+            if (result && result.success) { showToast("Referral reward declined.", "error"); await loadAdminData(); }
         }
         
         function updateAdminBadge() {
@@ -935,38 +851,6 @@
             document.getElementById("referralTabCount").textContent = pendingReferralsCount;
         }
         
-        // ============ UTILITY ============
-        async function callAPI(endpoint, method = 'GET', body = null) {
-            const options = { method, headers: { 'Content-Type': 'application/json' } };
-            if (body) options.body = JSON.stringify(body);
-            try {
-                const response = await fetch(`${API_URL}${endpoint}`, options);
-                return await response.json();
-            } catch (error) {
-                console.error('API Error:', error);
-                showToast('Network error. Please check your connection.', 'error');
-                return null;
-            }
-        }
-        
-        function copyToClipboard(text) { navigator.clipboard.writeText(text); showToast("Copied!", "success"); }
-        
-        function showToast(msg, type) { 
-            const container = document.getElementById("toastContainer"); 
-            const toast = document.createElement("div"); 
-            toast.className = `toast ${type}`; 
-            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; 
-            container.appendChild(toast); 
-            setTimeout(() => toast.remove(), 3000); 
-        }
-        
-        function toggleAdminPanel() { 
-            const content = document.getElementById("adminContent"); 
-            const chevron = document.getElementById("adminChevron"); 
-            content.classList.toggle("show"); 
-            chevron.style.transform = content.classList.contains("show") ? "rotate(180deg)" : "rotate(0deg)"; 
-        }
-        
         // ============ REFERRAL SHARING ============
         function getReferralMessage() { return `Join OnSlot and buy cheap data! Use my code: ${currentUser.referral_code}\n\nhttps://onslot-frontend.onrender.com`; }
         function copyReferralCode() { navigator.clipboard.writeText(getReferralMessage()); showToast("Referral message copied!", "success"); }
@@ -975,13 +859,13 @@
         function shareOnTwitter() { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(getReferralMessage())}`, "_blank"); }
         function shareOnTelegram() { window.open(`https://t.me/share/url?url=${window.location.origin}&text=${encodeURIComponent(getReferralMessage())}`, "_blank"); }
         
-        // Load data plans and check for existing session
+        // ============ UTILITY ============
+        function copyToClipboard(text) { navigator.clipboard.writeText(text); showToast("Copied!", "success"); }
+        function showToast(msg, type) { const container = document.getElementById("toastContainer"); const toast = document.createElement("div"); toast.className = `toast ${type}`; toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`; container.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
+        function toggleAdminPanel() { const content = document.getElementById("adminContent"); const chevron = document.getElementById("adminChevron"); content.classList.toggle("show"); chevron.style.transform = content.classList.contains("show") ? "rotate(180deg)" : "rotate(0deg)"; }
+        
         document.addEventListener("DOMContentLoaded", () => { 
-            loadDataPlans();
-            const savedUsername = sessionStorage.getItem('userUsername');
-            if (savedUsername) {
-                loadDashboard();
-            }
+            checkExistingSession(); 
         });
     </script>
 </body>
