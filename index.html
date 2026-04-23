@@ -15,7 +15,6 @@
         .orb-2 { width: 400px; height: 400px; background: #8b5cf6; bottom: -150px; right: -150px; animation-delay: -5s; }
         .orb-3 { width: 300px; height: 300px; background: #10b981; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -10s; opacity: 0.15; }
         @keyframes float { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-30px) scale(1.1); } 66% { transform: translate(-20px,20px) scale(0.9); } }
-        
         .navbar { position: fixed; top: 0; width: 100%; background: rgba(15,25,35,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); z-index: 100; padding: 16px 24px; }
         .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
         .logo { display: flex; align-items: center; gap: 10px; }
@@ -27,8 +26,6 @@
         .wallet-balance:hover { background: rgba(16,185,129,0.4); }
         .admin-flag { background: rgba(30,41,59,0.4); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 40px; color: #64748b; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; }
         .admin-flag:hover { background: rgba(30,41,59,0.6); color: #94a3b8; }
-        .help-btn { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); padding: 8px 12px; border-radius: 40px; color: #f59e0b; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; }
-        .help-btn:hover { background: rgba(245,158,11,0.3); }
         .logout-btn { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; }
         .logout-btn:hover { background: #ef4444; color: white; }
         .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; max-width: 800px; margin: 0 auto; padding: 120px 24px 60px; position: relative; z-index: 1; }
@@ -50,7 +47,7 @@
         .auth-switch a { color: #f59e0b; text-decoration: none; cursor: pointer; }
         .dashboard-content { display: none; }
         
-        .fund-section { background: rgba(15,25,35,0.6); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.2); position: relative; }
+        .fund-section { background: rgba(15,25,35,0.6); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.2); }
         .section-title { font-size: 1.3rem; margin-bottom: 20px; color: #f59e0b; display: flex; align-items: center; gap: 10px; }
         .fund-main-btn { width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 18px; border-radius: 60px; color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .fund-main-btn:hover { transform: scale(1.02); box-shadow: 0 5px 20px rgba(245,158,11,0.3); }
@@ -79,92 +76,7 @@
         .payment-method:hover { background: rgba(30,41,59,0.8); }
         .payment-method.selected { border-color: #f59e0b; background: rgba(245,158,11,0.15); }
         .payment-method i { font-size: 24px; margin-bottom: 5px; display: block; }
-        .confirm-input { width: 100%; padding: 14px; background: rgba(30,41,59,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; margin: 15px 0; outline: none; }
-        .submit-funding-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        
-        /* Hand Indicator Animation */
-        .hand-indicator {
-            position: absolute;
-            font-size: 3rem;
-            animation: pointAndMove 1.5s ease-in-out infinite;
-            z-index: 1000;
-            pointer-events: none;
-            text-shadow: 0 0 10px rgba(245,158,11,0.5);
-        }
-        @keyframes pointAndMove {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            50% { transform: translateY(10px) scale(1.1); opacity: 0.9; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
-        
-        .warning-banner {
-            background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(245,158,11,0.15));
-            border: 2px solid #f59e0b;
-            border-radius: 20px;
-            padding: 25px 20px;
-            margin-bottom: 25px;
-            text-align: center;
-            animation: borderPulse 2s infinite;
-            position: relative;
-            overflow: hidden;
-        }
-        @keyframes borderPulse {
-            0% { border-color: #f59e0b; box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
-            50% { border-color: #ffb347; box-shadow: 0 0 0 5px rgba(245,158,11,0.2); }
-            100% { border-color: #f59e0b; box-shadow: 0 0 0 0 rgba(245,158,11,0); }
-        }
-        .warning-banner i {
-            font-size: 2rem;
-            color: #f59e0b;
-            margin-bottom: 10px;
-            display: inline-block;
-            animation: bounce 1s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        .warning-banner p {
-            color: #fff;
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .warning-banner .highlight {
-            background: #f59e0b;
-            color: #0a0a0a;
-            padding: 3px 10px;
-            border-radius: 20px;
-            display: inline-block;
-            margin: 3px 0;
-            font-weight: bold;
-        }
-        .warning-banner .big-highlight {
-            background: #f59e0b;
-            color: #0a0a0a;
-            padding: 8px 15px;
-            border-radius: 30px;
-            display: inline-block;
-            margin: 10px 0;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-        .warning-banner .refresh-text {
-            background: rgba(16,185,129,0.2);
-            border: 1px solid #10b981;
-            color: #10b981;
-            padding: 8px 15px;
-            border-radius: 30px;
-            display: inline-block;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-        .warning-banner .arrow-down {
-            font-size: 1.8rem;
-            display: block;
-            margin-top: 10px;
-            animation: bounce 1s infinite;
-        }
+        .submit-funding-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 14px; border-radius: 50px; width: 100%; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; }
         
         .data-section { background: rgba(15,25,35,0.6); backdrop-filter: blur(12px); border-radius: 28px; padding: 24px; margin-bottom: 30px; border: 1px solid rgba(245,158,11,0.2); }
         .network-buttons { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
@@ -220,6 +132,7 @@
         .item-actions { display: flex; gap: 8px; }
         .success-btn { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 8px 16px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; }
         .decline-btn { background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.3); padding: 8px 16px; border-radius: 40px; color: #ef4444; cursor: pointer; }
+        .copy-btn { background: rgba(245,158,11,0.2); border: none; padding: 5px 10px; border-radius: 20px; color: #f59e0b; cursor: pointer; font-size: 0.7rem; margin-left: 10px; }
         .empty-orders { text-align: center; padding: 40px; color: #94a3b8; }
         
         .processing-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(16px); z-index: 6000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
@@ -245,6 +158,7 @@
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes bounce { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
         
         .toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1100; }
         .toast { background: rgba(15,25,35,0.95); backdrop-filter: blur(12px); padding: 12px 24px; border-radius: 50px; font-size: 0.875rem; display: flex; align-items: center; gap: 8px; animation: slideUp 0.3s ease; }
@@ -253,12 +167,12 @@
         .toast.info { border-left: 3px solid #f59e0b; }
         .footer { background: rgba(5,5,5,0.9); padding: 40px 24px 20px; text-align: center; }
         .footer p { color: #94a3b8; font-size: 0.8rem; }
-        @media (max-width: 768px) { .hero-title { font-size: 2rem; } .plans-grid { grid-template-columns: repeat(2, 1fr); } .pending-item { flex-direction: column; } .item-actions { width: 100%; justify-content: center; } .warning-banner p { font-size: 0.85rem; } }
+        @media (max-width: 768px) { .hero-title { font-size: 2rem; } .plans-grid { grid-template-columns: repeat(2, 1fr); } .pending-item { flex-direction: column; } .item-actions { width: 100%; justify-content: center; } }
     </style>
 </head>
 <body>
     <div class="bg-animation"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
-    <nav class="navbar"><div class="nav-container"><div class="logo"><div class="logo-icon"><i class="fas fa-bolt"></i></div><span>OnSlot</span></div><div class="user-info" id="userInfo" style="display: none;"><span class="user-name" id="userNameDisplay"></span><span class="wallet-balance" id="walletBalance" onclick="refreshWalletBalance()">₦0 <i class="fas fa-sync-alt" style="font-size: 10px;"></i></span><button class="help-btn" id="helpBtn" onclick="showFundingGuide()" style="display: none;"><i class="fas fa-question-circle"></i> How to Fund</button><button class="admin-flag" id="adminBtn" style="display: none;" onclick="showAdminPanel()"><i class="fas fa-flag-checkered"></i> Admin</button><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
+    <nav class="navbar"><div class="nav-container"><div class="logo"><div class="logo-icon"><i class="fas fa-bolt"></i></div><span>OnSlot</span></div><div class="user-info" id="userInfo" style="display: none;"><span class="user-name" id="userNameDisplay"></span><span class="wallet-balance" id="walletBalance" onclick="refreshWalletBalance()">₦0 <i class="fas fa-sync-alt" style="font-size: 10px;"></i></span><button class="admin-flag" id="adminBtn" style="display: none;" onclick="showAdminPanel()"><i class="fas fa-flag-checkered"></i> Admin</button><button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
 
     <div id="authSection" class="hero"><div class="hero-content"><div class="hero-badge"><span class="badge-pulse"></span>Welcome to OnSlot</div><h1 class="hero-title">Buy Cheap Data<br><span class="gradient-text">All Networks</span></h1><p class="hero-subtitle">Fund your wallet, buy data bundles at the best prices!</p>
         <div id="loginForm" class="auth-form"><div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email address"></div><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password"></div><button class="buy-btn" onclick="login()">Login <i class="fas fa-arrow-right"></i></button><div class="auth-switch">Don't have an account? <a onclick="showSignup()">Sign up</a></div></div>
@@ -269,23 +183,8 @@
         <section class="hero"><div class="hero-content"><div class="hero-badge"><span class="badge-pulse"></span>Buy Data</div><h1 class="hero-title">Buy Cheap Data<br><span class="gradient-text">All Networks Available</span></h1><p class="hero-subtitle">Fund your wallet, then buy data bundles for any network!</p></div></section>
         <div class="container">
             <!-- Fund Wallet Section -->
-            <div class="fund-section" id="fundSection">
+            <div class="fund-section">
                 <div class="section-title"><i class="fas fa-wallet"></i> Fund Your Wallet</div>
-                
-                <!-- Warning Banner with exact text -->
-                <div class="warning-banner" id="warningBanner">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>
-                        If amount is <span class="highlight">NOT selected</span> or your <span class="highlight">CUSTOM AMOUNT ISN'T TYPED IN</span> and you didn't tap on the <span class="big-highlight">"Confirm & Submit"</span> button, your wallet will <strong style="color: #ff6b6b;">NOT be funded!</strong>
-                    </p>
-                    <div class="refresh-text">
-                        <i class="fas fa-sync-alt"></i> PLSS REFRESH PAGE AFTER FUNDING <i class="fas fa-sync-alt"></i>
-                    </div>
-                    <div class="arrow-down">
-                        👇 <strong>Follow the steps below</strong> 👇
-                    </div>
-                </div>
-                
                 <button class="fund-main-btn" id="fundMainBtn"><i class="fas fa-plus-circle"></i> Fund Wallet</button>
                 
                 <div id="accountDetails" class="account-details">
@@ -312,27 +211,40 @@
                     <button id="proceedPaymentBtn" class="proceed-payment-btn">I Have Paid - Proceed</button>
                 </div>
                 
-                <div id="paymentSection" class="payment-section">
-                    <div class="charge-note" style="margin-bottom: 15px;">
-                        <i class="fas fa-info-circle"></i> Please send payment to: <strong>Sunday Ijeoma Anastasia</strong> (Moniepoint MFB)
-                    </div>
-                    <div class="payment-methods">
-                        <div class="payment-method" data-method="bank_transfer" onclick="selectFundingMethod('bank_transfer')"><i class="fas fa-exchange-alt"></i><span>Bank Transfer</span></div>
-                        <div class="payment-method" data-method="ussd" onclick="selectFundingMethod('ussd')"><i class="fas fa-mobile-alt"></i><span>USSD Transfer</span></div>
-                        <div class="payment-method" data-method="pos" onclick="selectFundingMethod('pos')"><i class="fas fa-credit-card"></i><span>Local POS</span></div>
-                        <div class="payment-method" data-method="card" onclick="selectFundingMethod('card')"><i class="fas fa-credit-card"></i><span>Card Payment</span></div>
-                    </div>
-                    <input type="text" id="accountName" class="confirm-input" placeholder="Your full name as it appears on bank account" required>
-                    <input type="text" id="fundingTransactionRef" class="confirm-input" placeholder="Transaction reference / Receipt code">
-                    <button class="submit-funding-btn" onclick="submitFundingConfirm()"><i class="fas fa-check-circle"></i> Confirm & Submit</button>
-                </div>
-            </div>
+               <!-- Payment Section with Bank Name Input -->
+<div id="paymentSection" class="payment-section">
+    <div class="payment-methods">
+        <div class="payment-method" data-method="bank_transfer" onclick="selectFundingMethod('bank_transfer')">
+            <i class="fas fa-exchange-alt"></i>
+            <span>Bank Transfer</span>
+        </div>
+        <div class="payment-method" data-method="ussd" onclick="selectFundingMethod('ussd')">
+            <i class="fas fa-mobile-alt"></i>
+            <span>USSD Transfer</span>
+        </div>
+        <div class="payment-method" data-method="pos" onclick="selectFundingMethod('pos')">
+            <i class="fas fa-credit-card"></i>
+            <span>Local POS</span>
+        </div>
+        <div class="payment-method" data-method="card" onclick="selectFundingMethod('card')">
+            <i class="fas fa-credit-card"></i>
+            <span>Card Payment</span>
+        </div>
+    </div>
+    
+    <!-- Bank Name Input - User must fill this -->
+    <input type="text" id="bankNameInput" class="confirm-input" placeholder="Enter your bank name (e.g., GTBank, UBA, Access)" style="margin-top: 10px;">
+    
+    <button class="submit-funding-btn" onclick="submitFundingConfirm()">
+        <i class="fas fa-check-circle"></i> Confirm & Submit
+    </button>
+</div>
 
             <!-- Buy Data Section -->
-            <div class="data-section" id="dataSection">
+            <div class="data-section">
                 <div class="section-title"><i class="fas fa-database"></i> Buy Data</div>
                 <div class="charge-note"><i class="fas fa-info-circle"></i> There will be a charges fee of 50 naira</div>
-                <div class="network-buttons" id="networkButtons">
+                <div class="network-buttons">
                     <div class="network-btn mtn" onclick="selectNetwork('mtn')"><i class="fas fa-tower-cell"></i><span>MTN</span></div>
                     <div class="network-btn airtel" onclick="selectNetwork('airtel')"><i class="fas fa-broadcast-tower"></i><span>Airtel</span></div>
                     <div class="network-btn glo" onclick="selectNetwork('glo')"><i class="fas fa-globe"></i><span>Glo</span></div>
@@ -344,7 +256,7 @@
             </div>
 
             <!-- Referral Section -->
-            <div class="referral-section" id="referralSection"><div class="referral-header"><i class="fas fa-users"></i><h3>Refer & Earn 500MB</h3></div><div class="referral-code-box"><span class="referral-code" id="userReferralCode">Loading...</span><button class="copy-referral-btn" onclick="copyReferralCode()">Copy Code</button></div><div class="share-buttons"><button class="share-btn whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook"></i> Facebook</button><button class="share-btn twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</button><button class="share-btn telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram"></i> Telegram</button></div><div class="referral-stats"><div class="referral-stat"><div class="label">Referrals Made</div><div class="value" id="referralCount">0</div></div><div class="referral-stat"><div class="label">Next Reward</div><div class="value" id="referralsNeeded">5 referrals = 500MB</div></div></div></div>
+            <div class="referral-section"><div class="referral-header"><i class="fas fa-users"></i><h3>Refer & Earn 500MB</h3></div><div class="referral-code-box"><span class="referral-code" id="userReferralCode">Loading...</span><button class="copy-referral-btn" onclick="copyReferralCode()">Copy Code</button></div><div class="share-buttons"><button class="share-btn whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button><button class="share-btn facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook"></i> Facebook</button><button class="share-btn twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</button><button class="share-btn telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram"></i> Telegram</button></div><div class="referral-stats"><div class="referral-stat"><div class="label">Referrals Made</div><div class="value" id="referralCount">0</div></div><div class="referral-stat"><div class="label">Next Reward</div><div class="value" id="referralsNeeded">5 referrals = 500MB</div></div></div></div>
         </div>
 
         <!-- Admin Panel -->
@@ -368,12 +280,10 @@
         let pendingReferrals = [];
         let hasShownWelcomeOverlay = false;
         let hasShownReferralOverlay = false;
-        let hasShownFundingGuide = false;
         let currentProcessingOverlay = null;
         let pollingInterval = null;
-        let handIndicator = null;
         
-        // Data Plans Configuration
+        // Data Plans
         const planData = {
             mtn: [
                 { size: "500MB", validity: "7 days", price: 200 },
@@ -388,7 +298,7 @@
                 { size: "1.5GB", validity: "2 days", price: 350 },
                 { size: "2GB", validity: "2 days", price: 400 },
                 { size: "6GB", validity: "7 days", price: 2600 },
-                { size: "10GB", validity: "7 days", price: 3999 }
+                { size: "10GB", validity: "7 days", price: 399 }
             ],
             glo: [
                 { size: "200MB", validity: "2 days", price: 99 },
@@ -408,53 +318,7 @@
             ]
         };
         
-        // Show funding guide with hand pointer
-        function showFundingGuide() {
-            if (handIndicator) handIndicator.remove();
-            
-            // Scroll to fund section
-            document.getElementById('fundSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // Highlight the fund section
-            const fundSection = document.getElementById('fundSection');
-            fundSection.style.boxShadow = '0 0 0 4px #f59e0b, 0 0 0 8px rgba(245,158,11,0.3)';
-            fundSection.style.transition = 'all 0.3s';
-            
-            // Get position of the Fund Wallet button
-            const fundBtn = document.getElementById('fundMainBtn');
-            const rect = fundBtn.getBoundingClientRect();
-            
-            // Create hand indicator pointing to Fund Wallet button
-            handIndicator = document.createElement('div');
-            handIndicator.className = 'hand-indicator';
-            handIndicator.innerHTML = '👇 Click here 👇';
-            handIndicator.style.position = 'fixed';
-            handIndicator.style.top = (rect.top - 50) + 'px';
-            handIndicator.style.left = (rect.left + rect.width / 2 - 60) + 'px';
-            handIndicator.style.fontSize = '2rem';
-            document.body.appendChild(handIndicator);
-            
-            // Show toast message
-            showToast("👉 Click 'Fund Wallet' to add money! Remember to select amount and click 'Confirm & Submit'!", "info");
-            
-            // Remove highlight after 8 seconds
-            setTimeout(() => {
-                if (fundSection) fundSection.style.boxShadow = '';
-                if (handIndicator) handIndicator.remove();
-            }, 8000);
-            
-            hasShownFundingGuide = true;
-        }
-        
-        // Show welcome guide for first time users
-        function showWelcomeFundingGuide() {
-            if (hasShownFundingGuide) return;
-            setTimeout(() => {
-                showFundingGuide();
-            }, 2000);
-        }
-        
-        // Start polling for status updates
+        // Polling for status updates
         function startStatusPolling(requestId, type, details) {
             if (pollingInterval) clearInterval(pollingInterval);
             
@@ -466,54 +330,28 @@
                     if (item && item.status !== 'pending') {
                         clearInterval(pollingInterval);
                         pollingInterval = null;
-                        if (currentProcessingOverlay) {
-                            currentProcessingOverlay.remove();
-                            currentProcessingOverlay = null;
-                        }
+                        if (currentProcessingOverlay) currentProcessingOverlay.remove();
                         if (item.status === 'completed') {
-                            showSuccessOverlay(`✅ Funding Successful!\n\n₦${details.amountToAdd} has been added to your wallet!\n\n🔄 Please refresh the page to see your updated balance.`, "Funding Approved!");
+                            showSuccessOverlay(`✅ Funding Successful!\n\n₦${details.amountToAdd} has been added to your wallet!`, "Funding Approved!");
                             await refreshWalletBalance();
                         } else if (item.status === 'declined') {
-                            showErrorOverlay(`❌ Funding Declined!\n\nYour funding request was declined by admin.`, "Funding Declined");
+                            showErrorOverlay(`❌ Funding Declined!\n\nYour funding request was declined.`, "Funding Declined");
                         }
                         await loadAdminData();
                     }
-                } 
-                else if (type === 'purchase') {
+                } else if (type === 'purchase') {
                     result = await callAPI('/admin/pending-purchases');
                     const item = result?.find(p => p.id == requestId);
                     if (item && item.status !== 'pending') {
                         clearInterval(pollingInterval);
                         pollingInterval = null;
-                        if (currentProcessingOverlay) {
-                            currentProcessingOverlay.remove();
-                            currentProcessingOverlay = null;
-                        }
+                        if (currentProcessingOverlay) currentProcessingOverlay.remove();
                         if (item.status === 'completed') {
-                            showSuccessOverlay(`✅ Purchase Successful!\n\n${details.planSize} data has been sent to ${details.phoneNumber}!\nTotal charged: ₦${details.totalAmount}`, "Data Purchase Successful!");
+                            showSuccessOverlay(`✅ Purchase Successful!\n\n${details.planSize} data sent to ${details.phoneNumber}!`, "Purchase Successful!");
                             await refreshWalletBalance();
                         } else if (item.status === 'declined') {
-                            showErrorOverlay(`❌ Purchase Declined!\n\nYour purchase was declined. Amount has been refunded to your wallet.`, "Purchase Declined");
+                            showErrorOverlay(`❌ Purchase Declined!\n\nYour purchase was declined. Amount refunded.`, "Purchase Declined");
                             await refreshWalletBalance();
-                        }
-                        await loadAdminData();
-                    }
-                }
-                else if (type === 'referral') {
-                    result = await callAPI('/admin/pending-referrals');
-                    const item = result?.find(r => r.id == requestId);
-                    if (item && item.status !== 'pending') {
-                        clearInterval(pollingInterval);
-                        pollingInterval = null;
-                        if (currentProcessingOverlay) {
-                            currentProcessingOverlay.remove();
-                            currentProcessingOverlay = null;
-                        }
-                        if (item.status === 'completed') {
-                            showSuccessOverlay(`✅ Referral Reward Credited!\n\nYour 500MB data reward has been added to your wallet!`, "Reward Credited!");
-                            await refreshWalletBalance();
-                        } else if (item.status === 'declined') {
-                            showErrorOverlay(`❌ Referral Reward Declined!\n\nYour referral reward request was declined.`, "Reward Declined");
                         }
                         await loadAdminData();
                     }
@@ -522,78 +360,31 @@
         }
         
         function showProcessingOverlay(message, type, requestId, details) {
-            if (currentProcessingOverlay) {
-                currentProcessingOverlay.remove();
-            }
-            
+            if (currentProcessingOverlay) currentProcessingOverlay.remove();
             const overlay = document.createElement('div');
             overlay.className = 'processing-overlay';
-            overlay.id = 'processingOverlay';
-            overlay.innerHTML = `
-                <div class="processing-card">
-                    <div class="processing-spinner"></div>
-                    <p>${message}</p>
-                    <p class="processing-status">⏳ Waiting for admin approval...</p>
-                    <button class="close-overlay-btn" onclick="closeProcessingOverlay()">Close</button>
-                </div>
-            `;
+            overlay.innerHTML = `<div class="processing-card"><div class="processing-spinner"></div><p>${message}</p><button class="close-overlay-btn" onclick="this.parentElement.parentElement.remove()">Close</button></div>`;
             document.body.appendChild(overlay);
             currentProcessingOverlay = overlay;
-            
-            startStatusPolling(requestId, type, details);
-        }
-        
-        function closeProcessingOverlay() {
-            if (pollingInterval) {
-                clearInterval(pollingInterval);
-                pollingInterval = null;
-            }
-            if (currentProcessingOverlay) {
-                currentProcessingOverlay.remove();
-                currentProcessingOverlay = null;
-            }
+            if (requestId) startStatusPolling(requestId, type, details);
         }
         
         function showSuccessOverlay(message, title = "Success!") {
-            if (currentProcessingOverlay) {
-                currentProcessingOverlay.remove();
-                currentProcessingOverlay = null;
-            }
+            if (currentProcessingOverlay) currentProcessingOverlay.remove();
             const overlay = document.createElement('div');
             overlay.className = 'success-overlay';
-            overlay.innerHTML = `
-                <div class="success-card">
-                    <div class="check-icon"><i class="fas fa-check-circle"></i></div>
-                    <h2>${title}</h2>
-                    <p>${message}</p>
-                    <button onclick="this.parentElement.parentElement.remove()">Continue</button>
-                </div>
-            `;
+            overlay.innerHTML = `<div class="success-card"><div class="check-icon"><i class="fas fa-check-circle"></i></div><h2>${title}</h2><p>${message}</p><button onclick="this.parentElement.parentElement.remove()">Continue</button></div>`;
             document.body.appendChild(overlay);
-            setTimeout(() => {
-                if (overlay && overlay.parentElement) overlay.remove();
-            }, 5000);
+            setTimeout(() => overlay.remove(), 4000);
         }
         
         function showErrorOverlay(message, title = "Failed!") {
-            if (currentProcessingOverlay) {
-                currentProcessingOverlay.remove();
-                currentProcessingOverlay = null;
-            }
+            if (currentProcessingOverlay) currentProcessingOverlay.remove();
             const overlay = document.createElement('div');
             overlay.className = 'error-overlay';
-            overlay.innerHTML = `
-                <div class="error-card">
-                    <div class="error-icon"><i class="fas fa-times-circle"></i></div>
-                    <h2>${title}</h2>
-                    <p>${message}</p>
-                    <button onclick="this.parentElement.parentElement.remove()">Close</button>
-                </div>
-            `;
+            overlay.innerHTML = `<div class="error-card"><div class="error-icon"><i class="fas fa-times-circle"></i></div><h2>${title}</h2><p>${message}</p><button onclick="this.parentElement.parentElement.remove()">Close</button></div>`;
             document.body.appendChild(overlay);
-            setTimeout(() => {
-                if (overlay && overlay.parentElement) overlay.remove();
-            }, 5000);
+            setTimeout(() => overlay.remove(), 4000);
         }
         
         function showWelcomeOverlay() {
@@ -601,96 +392,27 @@
             hasShownWelcomeOverlay = true;
             const overlay = document.createElement('div');
             overlay.className = 'processing-overlay';
-            overlay.innerHTML = `<div class="processing-card"><div style="font-size: 60px;">👋</div><h2>Welcome to OnSlot!</h2><p>You're ready to start buying cheap data!</p><p style="background: rgba(245,158,11,0.1); padding: 10px; border-radius: 12px; margin: 15px 0;">💡 <strong>Quick Tip:</strong> There will be a charges fee of 50 naira</p><button onclick="this.parentElement.parentElement.remove(); showFundingGuide();">Show Me How to Fund →</button><button onclick="this.parentElement.parentElement.remove();" style="background: transparent; margin-top: 10px;">Skip</button></div>`;
+            overlay.innerHTML = `<div class="processing-card"><div style="font-size: 60px;">👋</div><h2>Welcome to OnSlot!</h2><p>You're ready to start buying cheap data!</p><button onclick="this.parentElement.parentElement.remove()">Get Started</button></div>`;
             document.body.appendChild(overlay);
-        }
-        
-        function showReferralRewardOverlay() {
-            if (hasShownReferralOverlay) return;
-            hasShownReferralOverlay = true;
-            const overlay = document.createElement('div');
-            overlay.className = 'processing-overlay';
-            overlay.id = 'referralRewardOverlay';
-            overlay.innerHTML = `<div class="processing-card"><div style="font-size: 60px;">🎉</div><h2>Congratulations!</h2><p>You've reached 5 referrals!</p><p>You've earned <strong style="color: #10b981;">500MB Data</strong>!</p><div class="network-buttons"><div class="network-option" onclick="selectReferralNetwork('mtn')">MTN</div><div class="network-option" onclick="selectReferralNetwork('airtel')">Airtel</div><div class="network-option" onclick="selectReferralNetwork('glo')">Glo</div><div class="network-option" onclick="selectReferralNetwork('9mobile')">9mobile</div></div><input type="tel" id="referralPhone" placeholder="Enter your phone number"><button onclick="claimReferralReward()">Claim My 500MB Reward</button><a class="skip-link" onclick="this.parentElement.parentElement.remove()">Maybe later</a></div>`;
-            document.body.appendChild(overlay);
-            window.selectedReferralNetwork = null;
-        }
-        
-        function selectReferralNetwork(network) {
-            window.selectedReferralNetwork = network;
-            document.querySelectorAll('#referralRewardOverlay .network-option').forEach(opt => opt.classList.remove('selected'));
-            document.querySelectorAll('#referralRewardOverlay .network-option').forEach(opt => {
-                if (opt.innerText.toLowerCase().includes(network)) opt.classList.add('selected');
-            });
-        }
-        
-        async function claimReferralReward() {
-            const phone = document.getElementById('referralPhone')?.value;
-            if (!window.selectedReferralNetwork) { showToast("Select network", "error"); return; }
-            if (!phone || !/^(0[7-9][0-1]{1}[0-9]{8})$/.test(phone)) { showToast("Enter valid phone number", "error"); return; }
-            
-            showProcessingOverlay("Submitting referral reward request...", "referral", null, {});
-            const result = await callAPI('/submit-referral-reward', 'POST', { 
-                userEmail: currentUser.email, 
-                userName: currentUser.name, 
-                phone: phone, 
-                network: window.selectedReferralNetwork, 
-                amount: 400 
-            });
-            if (result && result.success) {
-                document.getElementById('referralRewardOverlay')?.remove();
-                const pending = await callAPI('/admin/pending-referrals');
-                const latest = pending?.find(r => r.user_email === currentUser.email && r.status === 'pending');
-                if (latest) {
-                    if (currentProcessingOverlay) currentProcessingOverlay.remove();
-                    showProcessingOverlay(
-                        `📱 Referral Reward Request\n\nPhone: ${phone}\nNetwork: ${window.selectedReferralNetwork.toUpperCase()}\n\nWaiting for admin approval...`,
-                        'referral',
-                        latest.id,
-                        {}
-                    );
-                } else {
-                    closeProcessingOverlay();
-                    showSuccessOverlay("Referral reward request sent to admin!", "Request Sent");
-                }
-                await loadAdminData();
-            } else { 
-                closeProcessingOverlay();
-                showErrorOverlay("Failed to submit request", "Error"); 
-            }
+            setTimeout(() => overlay.remove(), 3000);
         }
         
         async function checkExistingSession() {
             const savedUser = localStorage.getItem('onslot_current_user');
             if (savedUser) {
-                try {
-                    currentUser = JSON.parse(savedUser);
-                    if (currentUser.email !== 'admin@onslot.com' && !currentUser.isAdmin) {
-                        const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
-                        if (userData && userData.email) {
-                            currentUser = userData;
-                            localStorage.setItem('onslot_current_user', JSON.stringify(currentUser));
-                        }
-                    }
-                    await showDashboard();
-                    // Show funding guide for new users
-                    if (!hasShownFundingGuide && !currentUser.isAdmin && currentUser.email !== 'admin@onslot.com') {
-                        showWelcomeFundingGuide();
-                    }
-                } catch (e) {
-                    console.log("Error checking session:", e);
-                }
+                currentUser = JSON.parse(savedUser);
+                await showDashboard();
             }
         }
         
         async function refreshWalletBalance() {
-            if (currentUser && !currentUser.isAdmin && currentUser.email !== 'admin@onslot.com') {
+            if (currentUser && !currentUser.isAdmin) {
                 const userData = await callAPI(`/user/${encodeURIComponent(currentUser.email)}`);
                 if (userData && userData.wallet_balance !== undefined) {
                     currentUser.wallet_balance = userData.wallet_balance;
                     localStorage.setItem('onslot_current_user', JSON.stringify(currentUser));
                     document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance} <i class="fas fa-sync-alt" style="font-size: 10px;"></i>`;
-                    showToast("Balance updated! Please refresh the page if balance doesn't show.", "success");
+                    showToast("Balance updated!", "success");
                 }
             }
         }
@@ -700,19 +422,16 @@
             if (body) options.body = JSON.stringify(body);
             try {
                 const response = await fetch(`${API_URL}${endpoint}`, options);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 return await response.json();
             } catch (error) {
                 console.error('API Error:', error);
-                if (endpoint !== '/admin/pending-funding' && endpoint !== '/admin/pending-purchases') {
-                    showToast('Network error. Please check your connection.', 'error');
-                }
+                if (!endpoint.includes('/admin/')) showToast('Network error. Check connection.', 'error');
                 return null;
             }
         }
         
+        // ============ AUTH ============
         async function signup() {
             const name = document.getElementById("signupName").value;
             let email = document.getElementById("signupEmail").value;
@@ -720,24 +439,14 @@
             const password = document.getElementById("signupPassword").value;
             const referralCode = document.getElementById("referralCodeInput").value;
             
-            const isAdminUser = (email === "admin");
-            if (isAdminUser) email = `admin_${Date.now()}@onslot.com`;
-            
             if (!name || !email || !phone || !password) { showToast("Please fill all fields", "error"); return; }
             
-            showProcessingOverlay("Creating account...", "signup", null, {});
             const result = await callAPI('/signup', 'POST', { name, email, phone, password, referralCode });
-            closeProcessingOverlay();
-            
-            if (result && result.success) { 
-                if (isAdminUser) {
-                    showSuccessOverlay("Admin account created! Login with email: admin, password: " + password, "Admin Account Created!");
-                } else {
-                    showSuccessOverlay("Account created successfully! Please login.", "Account Created!");
-                }
-                showLogin(); 
-            } else { 
-                showErrorOverlay(result?.error || "Signup failed", "Error"); 
+            if (result && result.success) {
+                showSuccessOverlay("Account created! Please login.", "Success!");
+                showLogin();
+            } else {
+                showErrorOverlay(result?.error || "Signup failed", "Error");
             }
         }
         
@@ -745,36 +454,18 @@
             let email = document.getElementById("loginEmail").value;
             const password = document.getElementById("loginPassword").value;
             
-            const isAdminLogin = (email === "admin");
-            
             if (!email || !password) { showToast("Please enter email and password", "error"); return; }
             
-            if (isAdminLogin) {
-                if (password === "admin123") {
-                    currentUser = {
-                        name: "Administrator",
-                        email: "admin@onslot.com",
-                        phone: "00000000000",
-                        wallet_balance: 0,
-                        referral_code: "ADMIN",
-                        referral_count: 0,
-                        isAdmin: true
-                    };
-                    localStorage.setItem('onslot_current_user', JSON.stringify(currentUser));
-                    showSuccessOverlay(`Welcome Admin!`, "Admin Login Successful!");
-                    await showDashboard();
-                    showWelcomeOverlay();
-                    return;
-                } else {
-                    showErrorOverlay("Invalid admin credentials. Use password: admin123", "Login Failed");
-                    return;
-                }
+            // Admin login
+            if (email === "admin" && password === "admin123") {
+                currentUser = { name: "Administrator", email: "admin@onslot.com", isAdmin: true, wallet_balance: 0 };
+                localStorage.setItem('onslot_current_user', JSON.stringify(currentUser));
+                showSuccessOverlay("Welcome Admin!", "Login Successful!");
+                await showDashboard();
+                return;
             }
             
-            showProcessingOverlay("Logging in...", "login", null, {});
             const result = await callAPI('/login', 'POST', { email, password });
-            closeProcessingOverlay();
-            
             if (result && result.success) {
                 currentUser = result.user;
                 currentUser.isAdmin = false;
@@ -782,40 +473,37 @@
                 showSuccessOverlay(`Welcome back, ${currentUser.name}!`, "Login Successful!");
                 await showDashboard();
                 showWelcomeOverlay();
-                if (currentUser.referral_count >= 5 && !currentUser.referral_reward_claimed) {
-                    setTimeout(() => showReferralRewardOverlay(), 1500);
-                }
-            } else { 
-                showErrorOverlay(result?.error || "Invalid email or password", "Login Failed"); 
+            } else {
+                showErrorOverlay(result?.error || "Invalid credentials", "Login Failed");
             }
         }
         
         function logout() {
             if (pollingInterval) clearInterval(pollingInterval);
-            if (handIndicator) handIndicator.remove();
             currentUser = null;
             localStorage.removeItem('onslot_current_user');
-            hasShownWelcomeOverlay = false;
-            hasShownReferralOverlay = false;
-            hasShownFundingGuide = false;
             document.getElementById("authSection").style.display = "flex";
             document.getElementById("dashboardContent").style.display = "none";
             document.getElementById("userInfo").style.display = "none";
             document.getElementById("adminPanel").style.display = "none";
             document.getElementById("adminBtn").style.display = "none";
-            document.getElementById("helpBtn").style.display = "none";
             showLogin();
-            showToast("Logged out successfully", "success");
+            showToast("Logged out", "success");
         }
         
         function showLogin() { document.getElementById("loginForm").style.display = "block"; document.getElementById("signupForm").style.display = "none"; }
         function showSignup() { document.getElementById("loginForm").style.display = "none"; document.getElementById("signupForm").style.display = "block"; }
         function showAdminPanel() { document.getElementById("adminPanel").style.display = "block"; loadAdminData(); }
-        function toggleAdminPanel() { 
-            const content = document.getElementById("adminContent"); 
-            const chevron = document.getElementById("adminChevron"); 
-            if (content.style.display === "none") { content.style.display = "block"; chevron.style.transform = "rotate(0deg)"; }
-            else { content.style.display = "none"; chevron.style.transform = "rotate(180deg)"; }
+        function toggleAdminPanel() {
+            const content = document.getElementById("adminContent");
+            const chevron = document.getElementById("adminChevron");
+            if (content.style.display === "none") {
+                content.style.display = "block";
+                chevron.style.transform = "rotate(0deg)";
+            } else {
+                content.style.display = "none";
+                chevron.style.transform = "rotate(180deg)";
+            }
         }
         
         async function loadAdminData() {
@@ -847,7 +535,7 @@
             const pending = pendingFunding.filter(f => f.status === "pending");
             if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending funding requests</div>'; return; }
             container.innerHTML = pending.map(f => `
-                <div class="pending-item"><div class="item-details"><p><strong>👤 ${f.user_name}</strong></p><p>📧 ${f.user_email}</p><p>🏦 Account: <strong style="color: #10b981;">${f.account_name || 'N/A'}</strong></p><p>📱 ${f.user_phone || "N/A"}</p><p>💰 Amount: ₦${f.amount} (₦50 fee deducted)</p><p>💳 ${f.payment_method}</p><p>📝 ${f.transaction_ref}</p><p>⏰ ${f.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveFunding(${f.id})"><i class="fas fa-check"></i> Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})"><i class="fas fa-times"></i> Decline</button></div></div>
+                <div class="pending-item"><div class="item-details"><p><strong>👤 ${f.user_name}</strong></p><p>📧 ${f.user_email}</p><p>💰 Amount: ₦${f.amount}</p><p>💳 ${f.payment_method}</p><p>⏰ ${f.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveFunding(${f.id})">Approve</button><button class="decline-btn" onclick="declineFunding(${f.id})">Decline</button></div></div>
             `).join("");
         }
         
@@ -855,9 +543,9 @@
             const container = document.getElementById("purchasesList");
             if (!container) return;
             const pending = pendingPurchases.filter(p => p.status === "pending");
-            if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending data purchases</div>'; return; }
+            if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending purchases</div>'; return; }
             container.innerHTML = pending.map(p => `
-                <div class="pending-item"><div class="item-details"><p><strong>👤 ${p.user_name}</strong></p><p>📧 ${p.user_email}</p><p>📱 Recipient: ${p.phone_number}</p><p>🌐 ${p.network} - ${p.plan_size}</p><p>💰 Total: ₦${p.total_amount}</p><p>⏰ ${p.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approvePurchase(${p.id})"><i class="fas fa-check"></i> Approve</button><button class="decline-btn" onclick="declinePurchase(${p.id})"><i class="fas fa-times"></i> Decline</button></div></div>
+                <div class="pending-item"><div class="item-details"><p><strong>👤 ${p.user_name}</strong></p><p>📧 ${p.user_email}</p><p>📱 Recipient: ${p.phone_number}</p><p>🌐 ${p.network} - ${p.plan_size}</p><p>💰 Total: ₦${p.total_amount}</p></div><div class="item-actions"><button class="success-btn" onclick="approvePurchase(${p.id})">Approve</button><button class="decline-btn" onclick="declinePurchase(${p.id})">Decline</button></div></div>
             `).join("");
         }
         
@@ -865,62 +553,40 @@
             const container = document.getElementById("referralsList");
             if (!container) return;
             const pending = pendingReferrals.filter(r => r.status === "pending");
-            if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending referral rewards</div>'; return; }
+            if (pending.length === 0) { container.innerHTML = '<div class="empty-orders">No pending referrals</div>'; return; }
             container.innerHTML = pending.map(r => `
-                <div class="pending-item"><div class="item-details"><p><strong>👤 ${r.user_name}</strong></p><p>📧 ${r.user_email}</p><p>📱 Phone: ${r.phone}</p><p>📡 Network: ${r.network}</p><p>🎁 Reward: 500MB</p><p>⏰ ${r.timestamp}</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})"><i class="fas fa-check"></i> Approve</button><button class="decline-btn" onclick="declineReferral(${r.id})"><i class="fas fa-times"></i> Decline</button></div></div>
+                <div class="pending-item"><div class="item-details"><p><strong>👤 ${r.user_name}</strong></p><p>📧 ${r.user_email}</p><p>📱 Phone: ${r.phone}</p><p>📡 Network: ${r.network}</p></div><div class="item-actions"><button class="success-btn" onclick="approveReferral(${r.id})">Approve</button><button class="decline-btn" onclick="declineReferral(${r.id})">Decline</button></div></div>
             `).join("");
         }
         
         async function approveFunding(id) {
             const result = await callAPI(`/admin/approve-funding/${id}`, 'POST');
-            if (result && result.success) { 
-                showToast("Funding approved!", "success"); 
-                await loadAdminData(); 
-                await refreshWalletBalance();
-            }
+            if (result?.success) { showToast("Funding approved!", "success"); await loadAdminData(); await refreshWalletBalance(); }
         }
         
         async function declineFunding(id) {
             const result = await callAPI(`/admin/decline-funding/${id}`, 'POST');
-            if (result && result.success) { 
-                showToast("Funding declined.", "error"); 
-                await loadAdminData(); 
-            }
+            if (result?.success) { showToast("Funding declined.", "error"); await loadAdminData(); }
         }
         
         async function approvePurchase(id) {
             const result = await callAPI(`/admin/approve-purchase/${id}`, 'POST');
-            if (result && result.success) { 
-                showToast("Purchase approved!", "success"); 
-                await loadAdminData(); 
-                await refreshWalletBalance();
-            }
+            if (result?.success) { showToast("Purchase approved!", "success"); await loadAdminData(); await refreshWalletBalance(); }
         }
         
         async function declinePurchase(id) {
             const result = await callAPI(`/admin/decline-purchase/${id}`, 'POST');
-            if (result && result.success) { 
-                showToast("Purchase declined.", "error"); 
-                await loadAdminData(); 
-                await refreshWalletBalance();
-            }
+            if (result?.success) { showToast("Purchase declined.", "error"); await loadAdminData(); await refreshWalletBalance(); }
         }
         
         async function approveReferral(id) {
             const result = await callAPI(`/admin/approve-referral/${id}`, 'POST');
-            if (result && result.success) { 
-                showToast("Referral approved!", "success"); 
-                await loadAdminData(); 
-                await refreshWalletBalance();
-            }
+            if (result?.success) { showToast("Referral approved!", "success"); await loadAdminData(); await refreshWalletBalance(); }
         }
         
         async function declineReferral(id) {
             const result = await callAPI(`/admin/decline-referral/${id}`, 'POST');
-            if (result && result.success) { 
-                showToast("Referral declined.", "error"); 
-                await loadAdminData(); 
-            }
+            if (result?.success) { showToast("Referral declined.", "error"); await loadAdminData(); }
         }
         
         function updateAdminBadge() {
@@ -928,14 +594,10 @@
             const pendingPurchasesCount = pendingPurchases.filter(p => p.status === "pending").length;
             const pendingReferralsCount = pendingReferrals.filter(r => r.status === "pending").length;
             const total = pendingFundingCount + pendingPurchasesCount + pendingReferralsCount;
-            const totalBadge = document.getElementById("totalPendingBadge");
-            if (totalBadge) totalBadge.textContent = total;
-            const fundingTab = document.getElementById("fundingTabCount");
-            const purchaseTab = document.getElementById("purchaseTabCount");
-            const referralTab = document.getElementById("referralTabCount");
-            if (fundingTab) fundingTab.textContent = pendingFundingCount;
-            if (purchaseTab) purchaseTab.textContent = pendingPurchasesCount;
-            if (referralTab) referralTab.textContent = pendingReferralsCount;
+            document.getElementById("totalPendingBadge").textContent = total;
+            document.getElementById("fundingTabCount").textContent = pendingFundingCount;
+            document.getElementById("purchaseTabCount").textContent = pendingPurchasesCount;
+            document.getElementById("referralTabCount").textContent = pendingReferralsCount;
         }
         
         async function showDashboard() {
@@ -947,33 +609,21 @@
             document.getElementById("walletBalance").innerHTML = `₦${currentUser.wallet_balance || 0} <i class="fas fa-sync-alt" style="font-size: 10px;"></i>`;
             document.getElementById("userReferralCode").textContent = currentUser.referral_code || "N/A";
             document.getElementById("referralCount").textContent = currentUser.referral_count || 0;
-            const referralsLeft = 5 - (currentUser.referral_count || 0);
-            document.getElementById("referralsNeeded").innerHTML = `${referralsLeft > 0 ? referralsLeft : 0} referrals left = 500MB`;
+            document.getElementById("referralsNeeded").innerHTML = `${5 - (currentUser.referral_count || 0)} referrals left = 500MB`;
             
+            // Show admin button only for admin users
             if (currentUser.isAdmin || currentUser.email === "admin@onslot.com") {
                 document.getElementById("adminBtn").style.display = "flex";
                 await loadAdminData();
                 setInterval(loadAdminData, 5000);
             } else {
                 document.getElementById("adminBtn").style.display = "none";
-                document.getElementById("helpBtn").style.display = "flex";
             }
             
-            document.querySelectorAll(".admin-tab").forEach(tab => {
-                tab.onclick = () => {
-                    document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
-                    tab.classList.add("active");
-                    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-                    document.getElementById(`${tab.dataset.tab}Tab`).classList.add("active");
-                };
-            });
-            
+            // Setup event listeners
             document.getElementById("fundMainBtn").onclick = () => {
                 document.getElementById("accountDetails").style.display = "block";
                 document.getElementById("amountSection").classList.add("show");
-                // Remove hand indicator when user clicks
-                if (handIndicator) handIndicator.remove();
-                showToast("📋 Step 2: Select an amount or enter custom amount, then click 'I Have Paid'", "info");
             };
             
             document.querySelectorAll(".amount-btn").forEach(btn => {
@@ -982,7 +632,6 @@
                     btn.classList.add("selected");
                     selectedAmount = parseInt(btn.dataset.amount);
                     document.getElementById("proceedPaymentBtn").classList.add("show");
-                    showToast(`✅ Amount ₦${selectedAmount} selected! Click "I Have Paid" to continue.`, "success");
                 };
             });
             
@@ -992,13 +641,13 @@
                 document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
                 selectedAmount = customAmount;
                 document.getElementById("proceedPaymentBtn").classList.add("show");
-                showToast(`✅ Custom amount ₦${selectedAmount} selected! Click "I Have Paid" to continue.`, "success");
+                showToast(`Custom amount ₦${selectedAmount} (₦50 fee deducted)`, "success");
             };
             
             document.getElementById("proceedPaymentBtn").onclick = () => {
                 if (!selectedAmount) { showToast("Select amount first", "error"); return; }
                 const youGet = selectedAmount - SERVICE_CHARGE;
-                showToast(`📝 Step 3: You send ₦${selectedAmount}, ₦${SERVICE_CHARGE} fee deducted, ₦${youGet} added to wallet. Fill in your details and submit!`, "info");
+                showToast(`You send ₦${selectedAmount}, ₦${SERVICE_CHARGE} fee deducted, ₦${youGet} added`, "info");
                 document.getElementById("paymentSection").classList.add("show");
             };
         }
@@ -1031,8 +680,7 @@
                         validity: card.dataset.planValidity
                     };
                     document.getElementById("buyDataBtn").disabled = false;
-                    const total = selectedPlan.price + SERVICE_CHARGE;
-                    showToast(`Total: ₦${total}`, "info");
+                    showToast(`Total: ₦${selectedPlan.price + SERVICE_CHARGE}`, "info");
                 };
             });
         }
@@ -1043,81 +691,83 @@
             document.querySelector(`.payment-method[data-method="${method}"]`).classList.add("selected");
         }
         
-        function copyAccountNumber() { 
-            navigator.clipboard.writeText("9066051034"); 
-            showToast("Account number copied! Make payment then come back to confirm.", "success");
-            showToast("📝 Step 1: Send money to this account, then come back to complete the process!", "info");
+        function copyAccountNumber() { navigator.clipboard.writeText("9066051034"); showToast("Account number copied!", "success"); }
+        
+async function submitFundingConfirm() {
+    console.log("=== SUBMIT FUNDING STARTED ===");
+    
+    if (!selectedAmount) { 
+        showToast("Please select an amount first", "error"); 
+        return; 
+    }
+    
+    // Get bank name - User must enter this
+    const bankName = document.getElementById("bankNameInput").value;
+    if (!bankName || bankName.trim() === "") { 
+        showToast("Please enter your bank name", "error"); 
+        return; 
+    }
+    
+    const amountToAdd = selectedAmount - SERVICE_CHARGE;
+    if (amountToAdd < 0) { 
+        showToast("Amount must be ₦400 or more", "error"); 
+        return; 
+    }
+    
+    // Generate automatic transaction reference (no user input needed)
+    const transactionRef = "FUND_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6);
+    
+    const requestData = {
+        userEmail: currentUser.email,
+        userName: currentUser.name,
+        userPhone: currentUser.phone,
+        bankName: bankName,
+        amount: amountToAdd,
+        serviceCharge: SERVICE_CHARGE,
+        totalAmount: amountToAdd,
+        transactionRef: transactionRef,
+        paymentMethod: selectedFundingMethod
+    };
+    
+    console.log("Sending request:", requestData);
+    
+    showProcessingOverlay(
+        `💰 Funding Request\n\nBank: ${bankName}\nYou send: ₦${selectedAmount}\nFee: ₦${SERVICE_CHARGE}\nYou get: ₦${amountToAdd}\n\nWaiting for admin approval...`,
+        "funding", null, null
+    );
+    
+    const result = await callAPI('/submit-funding', 'POST', requestData);
+    console.log("API Response:", result);
+    
+    if (result && result.success) {
+        const pending = await callAPI('/admin/pending-funding');
+        const latest = pending?.find(p => p.user_email === currentUser.email && p.status === 'pending');
+        
+        if (currentProcessingOverlay) currentProcessingOverlay.remove();
+        
+        if (latest) {
+            showProcessingOverlay(
+                `💰 Funding Request\n\nBank: ${bankName}\nYou send: ₦${selectedAmount}\nFee: ₦${SERVICE_CHARGE}\nYou get: ₦${amountToAdd}\n\nWaiting for admin approval...`,
+                'funding', latest.id, { amountToAdd: amountToAdd }
+            );
+        } else {
+            showSuccessOverlay(`Funding request submitted! ₦${amountToAdd} will be added upon approval.`, "Request Submitted!");
         }
         
-        async function submitFundingConfirm() {
-            const accountName = document.getElementById("accountName")?.value;
-            const transactionRef = document.getElementById("fundingTransactionRef").value;
-            
-            if (!selectedAmount) { showToast("❌ Please select an amount first!", "error"); return; }
-            if (!accountName) { showToast("❌ Please enter your full name as it appears on your bank account", "error"); return; }
-            if (!transactionRef) { showToast("❌ Please enter transaction reference", "error"); return; }
-            
-            const amountToAdd = selectedAmount - SERVICE_CHARGE;
-            if (amountToAdd < 0) { showToast("Amount must be at least ₦" + (SERVICE_CHARGE + 1), "error"); return; }
-            
-            const requestData = { 
-                userEmail: currentUser.email, 
-                userName: currentUser.name, 
-                userPhone: currentUser.phone,
-                accountName: accountName,
-                amount: amountToAdd,
-                amountSent: selectedAmount,
-                serviceCharge: SERVICE_CHARGE, 
-                totalAmount: amountToAdd,
-                transactionRef: transactionRef, 
-                paymentMethod: selectedFundingMethod 
-            };
-            
-            showProcessingOverlay(
-                `💰 Funding Request\n\nAccount Name: ${accountName}\nYou send: ₦${selectedAmount}\nFee deducted: ₦${SERVICE_CHARGE}\nAmount to add: ₦${amountToAdd}\n\nSubmitting...`,
-                "funding",
-                null,
-                { amountToAdd: amountToAdd }
-            );
-            
-            try {
-                const result = await callAPI('/submit-funding', 'POST', requestData);
-                
-                if (result && result.success) {
-                    const pending = await callAPI('/admin/pending-funding');
-                    const latest = pending?.find(p => p.user_email === currentUser.email && p.status === 'pending');
-                    
-                    if (currentProcessingOverlay) currentProcessingOverlay.remove();
-                    
-                    if (latest) {
-                        showProcessingOverlay(
-                            `💰 Funding Request\n\nAccount: ${accountName}\nYou send: ₦${selectedAmount}\nFee: ₦${SERVICE_CHARGE}\nYou get: ₦${amountToAdd}\n\nWaiting for admin approval...\n\n🔄 Please refresh the page after approval to see your balance!`,
-                            'funding',
-                            latest.id,
-                            { amountToAdd: amountToAdd }
-                        );
-                    } else {
-                        showSuccessOverlay(`✅ Funding request submitted! ₦${amountToAdd} will be added upon admin approval.\n\n🔄 Please refresh the page after approval to see your balance.`, "Request Submitted!");
-                    }
-                    
-                    document.getElementById("accountDetails").style.display = "none";
-                    document.getElementById("amountSection").classList.remove("show");
-                    document.getElementById("paymentSection").classList.remove("show");
-                    document.getElementById("proceedPaymentBtn").classList.remove("show");
-                    document.getElementById("accountName").value = "";
-                    document.getElementById("fundingTransactionRef").value = "";
-                    document.getElementById("customAmount").value = "";
-                    selectedAmount = null;
-                    await loadAdminData();
-                } else {
-                    if (currentProcessingOverlay) currentProcessingOverlay.remove();
-                    showErrorOverlay(result?.error || "Failed to submit request. Please try again.", "Error");
-                }
-            } catch (error) {
-                if (currentProcessingOverlay) currentProcessingOverlay.remove();
-                showErrorOverlay("Network error. Please check your connection.", "Error");
-            }
-        }
+        // Reset form
+        document.getElementById("accountDetails").style.display = "none";
+        document.getElementById("amountSection").classList.remove("show");
+        document.getElementById("paymentSection").classList.remove("show");
+        document.getElementById("proceedPaymentBtn").classList.remove("show");
+        document.getElementById("bankNameInput").value = "";
+        document.getElementById("customAmount").value = "";
+        selectedAmount = null;
+        await loadAdminData();
+    } else {
+        if (currentProcessingOverlay) currentProcessingOverlay.remove();
+        showErrorOverlay("Failed to submit request. Please try again.", "Error");
+    }
+}
         
         async function submitPurchase() {
             if (!selectedNetwork) { showToast("Select network", "error"); return; }
@@ -1126,46 +776,42 @@
             if (!phone || !/^(0[7-9][0-1]{1}[0-9]{8})$/.test(phone)) { showToast("Enter valid phone number", "error"); return; }
             
             const totalAmount = selectedPlan.price + SERVICE_CHARGE;
-            if ((currentUser.wallet_balance || 0) < totalAmount) { 
-                showToast(`Insufficient balance. Need ₦${totalAmount}`, "error"); 
-                return; 
+            if ((currentUser.wallet_balance || 0) < totalAmount) {
+                showToast(`Insufficient balance. Need ₦${totalAmount}`, "error");
+                return;
             }
             
             showProcessingOverlay(
                 `📱 Purchase Request\n\nPlan: ${selectedPlan.size}\nNetwork: ${selectedNetwork.toUpperCase()}\nPhone: ${phone}\nTotal: ₦${totalAmount}\n\nWaiting for admin approval...`,
-                "purchase",
-                null,
-                { planSize: selectedPlan.size, phoneNumber: phone, totalAmount: totalAmount }
+                "purchase", null, null
             );
             
-            const result = await callAPI('/submit-purchase', 'POST', { 
-                userEmail: currentUser.email, 
-                userName: currentUser.name, 
-                userPhone: currentUser.phone, 
-                network: selectedNetwork, 
-                planSize: selectedPlan.size, 
+            const result = await callAPI('/submit-purchase', 'POST', {
+                userEmail: currentUser.email,
+                userName: currentUser.name,
+                userPhone: currentUser.phone,
+                network: selectedNetwork,
+                planSize: selectedPlan.size,
                 planPrice: selectedPlan.price,
-                serviceCharge: SERVICE_CHARGE, 
-                totalAmount: totalAmount, 
-                phoneNumber: phone, 
-                validity: selectedPlan.validity 
+                serviceCharge: SERVICE_CHARGE,
+                totalAmount: totalAmount,
+                phoneNumber: phone,
+                validity: selectedPlan.validity
             });
             
             if (result && result.success) {
                 await refreshWalletBalance();
-                
                 const pending = await callAPI('/admin/pending-purchases');
                 const latest = pending?.find(p => p.user_email === currentUser.email && p.status === 'pending');
+                
+                if (currentProcessingOverlay) currentProcessingOverlay.remove();
+                
                 if (latest) {
-                    if (currentProcessingOverlay) currentProcessingOverlay.remove();
                     showProcessingOverlay(
                         `📱 Purchase Request\n\nPlan: ${selectedPlan.size}\nNetwork: ${selectedNetwork.toUpperCase()}\nPhone: ${phone}\nTotal: ₦${totalAmount}\n\nWaiting for admin approval...`,
-                        'purchase',
-                        latest.id,
-                        { planSize: selectedPlan.size, phoneNumber: phone, totalAmount: totalAmount }
+                        'purchase', latest.id, { planSize: selectedPlan.size, phoneNumber: phone, totalAmount: totalAmount }
                     );
                 } else {
-                    closeProcessingOverlay();
                     showSuccessOverlay("Purchase request submitted! Admin will verify.", "Request Submitted!");
                 }
                 await loadAdminData();
@@ -1174,9 +820,9 @@
                 selectedPlan = null;
                 document.getElementById("buyDataBtn").disabled = true;
                 document.getElementById("purchasePhone").value = "";
-            } else { 
-                closeProcessingOverlay();
-                showErrorOverlay(result?.error || "Purchase failed", "Error"); 
+            } else {
+                if (currentProcessingOverlay) currentProcessingOverlay.remove();
+                showErrorOverlay(result?.error || "Purchase failed", "Error");
             }
         }
         
@@ -1194,11 +840,11 @@
             toast.className = `toast ${type}`;
             toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${msg}`;
             container.appendChild(toast);
-            setTimeout(() => toast.remove(), 4000);
+            setTimeout(() => toast.remove(), 3000);
         }
         
         document.getElementById("adminContent").style.display = "block";
-        document.addEventListener("DOMContentLoaded", () => { checkExistingSession(); });
+        document.addEventListener("DOMContentLoaded", () => checkExistingSession());
     </script>
 </body>
 </html>
